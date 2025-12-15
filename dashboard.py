@@ -3,8 +3,8 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from supabase import create_client
-import os
 import numpy as np
+from daily_tracker import TP_PCT, SCALE_PCT, STOP_OI_PCT
 
 # --- 1. SETUP & CONFIG ---
 st.set_page_config(
@@ -120,11 +120,6 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
         moonshot_ret_pct = 0.0
         is_winner = False
 
-        # Use hardcoded back-end rules for calculating PnL breakdown/realization
-        # Note: The back-end hardcodes 20% TP and 80% Scale-Out.
-        BACKEND_TP_PCT = 20.0
-        BACKEND_SCALE_PCT = 80.0
-
         # --- 1. If Trade has Final PnL saved (Realized PnL from DB: STOP_OI, EXPIRED, SCALED) ---
         if row['final_sim_pnl_pct'] is not None:
             final_ret_pct = row['final_sim_pnl_pct']
@@ -137,14 +132,14 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
             is_winner = pnl > 0  # A win is defined by a positive PnL
 
             # --- CORRECTED PNL BREAKDOWN (Calculate Components & Set Total PnL to Sum) ---
-            if row['status'] == 'SCALED' or row['final_tp_pnl_pct'] == BACKEND_TP_PCT:  # TP was hit
+            if row['status'] == 'SCALED' or row['final_tp_pnl_pct'] == TP_PCT:
                 # 1. Calculate Scale Component PnL
-                scale_pct_amount = BACKEND_SCALE_PCT / 100.0
-                scale_pnl_dollars = row['pos_size_dollars'] * scale_pct_amount * (BACKEND_TP_PCT / 100.0)
-                scale_ret_pct = BACKEND_TP_PCT
+                scale_pct_amount = SCALE_PCT / 100.0
+                scale_pnl_dollars = row['pos_size_dollars'] * scale_pct_amount * (TP_PCT / 100.0)
+                scale_ret_pct = TP_PCT
 
                 # 2. Calculate Moonshot Component PnL
-                moon_pct_amount = (100 - BACKEND_SCALE_PCT) / 100.0
+                moon_pct_amount = (100 - SCALE_PCT) / 100.0
                 moonshot_ret_pct = ((high - entry) / entry) * 100.0
                 moonshot_pnl_dollars = row['pos_size_dollars'] * moon_pct_amount * (moonshot_ret_pct / 100.0)
 
@@ -175,17 +170,17 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
                     is_winner = True
 
                     # 1. Scale Out PnL (80% at 20% gain)
-                    scale_pos_size = row['pos_size_dollars'] * (BACKEND_SCALE_PCT / 100.0)
-                    scale_pnl = scale_pos_size * (BACKEND_TP_PCT / 100.0)
-                    scale_ret_pct = BACKEND_TP_PCT
+                    scale_pos_size = row['pos_size_dollars'] * (SCALE_PCT / 100.0)
+                    scale_pnl = scale_pos_size * (TP_PCT / 100.0)
+                    scale_ret_pct = TP_PCT
 
                     # 2. Moonshot PnL (20% at Peak High)
-                    moon_pos_size = row['pos_size_dollars'] * ((100 - BACKEND_SCALE_PCT) / 100.0)
+                    moon_pos_size = row['pos_size_dollars'] * ((100 - SCALE_PCT) / 100.0)
                     moonshot_ret_pct = ((high - entry) / entry) * 100.0
                     moonshot_pnl = moon_pos_size * (moonshot_ret_pct / 100.0)
 
                     pnl = scale_pnl + moonshot_pnl  # <-- Total PnL is scale + moonshot peak
-                    tp_exit_pnl = row['pos_size_dollars'] * (BACKEND_TP_PCT / 100.0)
+                    tp_exit_pnl = row['pos_size_dollars'] * (TP_PCT / 100.0)
 
                     # Left on Table
                     max_ret_pct = ((high - entry) / entry) * 100.0
@@ -543,6 +538,17 @@ def main():
         stop_fixed = 0
 
         st.divider()
+
+        st.info(
+            f"""
+                    **📝 Key Strategy Assumptions:**
+                    * **Take Profit (TP):** +{TP_PCT:.0f}%
+                    * **Scale Out:** Sell {SCALE_PCT:.0f}% at TP.
+                    * **Moonshot:** Hold remaining {100 - SCALE_PCT:.0f}% to Peak High.
+                    * **Stop Loss:** Triggered if Open Interest drops > {100 - STOP_OI_PCT:.0f}%.
+                    """
+        )
+
         st.button("🔄 Refresh DB", on_click=st.cache_data.clear)
 
     # Run Sim (using hardcoded strategy parameters)

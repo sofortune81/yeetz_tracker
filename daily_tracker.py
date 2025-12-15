@@ -14,6 +14,14 @@ from theta_api_client import (
     get_theta_date_int      # <-- NEW IMPORT
 )
 
+
+# --- STRATEGY CONFIGURATION (Single Source of Truth) ---
+TP_PCT = 20.0       # Take Profit target (+20%)
+SCALE_PCT = 80.0    # Percentage of position to sell at TP (80%)
+MOON_PCT = 100.0 - SCALE_PCT
+STOP_OI_PCT = 20.0  # Stop loss if OI drops below 20% of entry
+# -------------------------------------------------------
+
 # --- CONFIGURATION ---
 load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -232,10 +240,6 @@ def calculate_trade_pnl_percentages(trade, high, exit_price):
 
     Returns: (final_sim_pnl_pct, final_tp_pnl_pct) as a percentage (e.g., 20.0 for 20%)
     """
-
-    # Use hardcoded defaults (should be configured or stored in DB for production)
-    TP_PCT = 20.0
-    SCALE_PCT = 80.0
 
     entry = float(trade['entry_price'])
     # Avoid division by zero
