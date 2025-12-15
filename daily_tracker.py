@@ -30,8 +30,10 @@ THETA_HTTP_URL = "http://127.0.0.1:25503/v3"
 EST = pytz.timezone('US/Eastern')
 
 # Connect DB
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+else:
+    supabase = None
 
 # --- GENERAL HELPERS ---
 

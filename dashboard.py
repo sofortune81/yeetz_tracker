@@ -546,6 +546,7 @@ def main():
                     * **Scale Out:** Sell {SCALE_PCT:.0f}% at TP.
                     * **Moonshot:** Hold remaining {100 - SCALE_PCT:.0f}% to Peak High.
                     * **Stop Loss:** Triggered if Open Interest drops > {100 - STOP_OI_PCT:.0f}%.
+                    * **Other assumptions:** Assumes fill same as the flow alert fill which is unlikely
                     """
         )
 
