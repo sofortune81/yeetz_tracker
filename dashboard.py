@@ -352,7 +352,7 @@ def render_monthly_drilldown(df):
     st.info("The PnL for each month is based on the **trade entry date** (Discord Timestamp).")
 
     # 1. Prepare 12-Month Calendar Range
-    today = pd.Timestamp.now().tz_localize('US/Eastern').to_period('M')
+    today = pd.Timestamp.now(tz='US/Eastern').tz_localize(None).to_period('M')
     # Generate the 12 months from 11 months ago up to the current month
     month_range = pd.period_range(end=today, periods=12, freq='M')
     month_names = [m.strftime('%Y-%m') for m in month_range]
@@ -601,9 +601,15 @@ def main():
 
         col_u1.metric("Total Unrealized PnL", f"${total_unrealized_pnl:,.0f}",
                       help="Sum of PnL for trades currently in OPEN/SCALED status.")
-        col_u2.metric("Open/Scaled Positions", f"{num_unrealized_open:,}")
-        col_u3.metric("Max Potential Return", f"${df['sim_pnl'].sum():,.0f}",
-                      help="The total PnL assuming all SCALED trades hit their peak high.")
+        col_u2.metric("Open Positions", f"{num_unrealized_open:,}")
+        potential_winners = df[df['highest_price'] > df['entry_price']]
+        max_possible_pnl = (
+                ((potential_winners['highest_price'] - potential_winners['entry_price']) / potential_winners[
+                    'entry_price'])
+                * potential_winners['pos_size_dollars']
+        ).sum()
+        col_u3.metric("Max Potential Return", f"${max_possible_pnl:,.0f}",
+                      help="Total PnL if of all trades that hit at least 20% profit if you weren't such a pussy and held 100% of the entire position to the absolute highest price.")
 
         st.divider()
 

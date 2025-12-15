@@ -20,6 +20,30 @@ EST = pytz.timezone('US/Eastern')
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+def prompt_for_repopulate():
+    """Asks user if they want to repopulate the database."""
+    print("\n-----------------------------------------------------------------------------------")
+    print("🚨 WARNING: Full Repopulation will DELETE ALL data in 'whale_alerts' and 'whale_performance'.")
+    prompt = input("Do you want to run a FULL REPOPULATION (Delete all data first)? (yes/no, default=no): ").strip().lower()
+    print("-----------------------------------------------------------------------------------\n")
+    return prompt == 'yes'
+
+def prompt_for_lookback(default_days=30):
+    """Asks user how many days back to look."""
+    prompt = input(f"How many days back should we scan? (Enter number, default={default_days}): ").strip()
+    try:
+        days = int(prompt)
+        return days if days > 0 else default_days
+    except ValueError:
+        return default_days
+
+async def clear_database():
+    """Deletes all records from trade tables."""
+    print("🗑️ Clearing 'whale_performance'...")
+    supabase.table("whale_performance").delete().neq("id", 0).execute()
+    print("🗑️ Clearing 'whale_alerts'...")
+    supabase.table("whale_alerts").delete().neq("id", 0).execute()
+    print("✅ Database cleared.")
 
 class BackfillBot(discord.Client):
     async def on_ready(self):
@@ -28,69 +52,35 @@ class BackfillBot(discord.Client):
         await self.close()
 
     async def run_backfill(self):
-        global start_scan  # <-- IMPORTANT: Used by check_and_set_incremental_start to set scan time
         print("⏳ Starting Intelligent Backfill...")
         channel = self.get_channel(TARGET_CHANNEL_ID)
 
-        # --- NEW: Full Backfill Prompt and Execution ---
-        print("\n--- Backfill Mode ---")
-        prompt = input("⚠️ Do you want to perform a **FULL BACKFILL** (This will DELETE ALL data)? [yes/no]: ").lower()
-        print("---------------------\n")
-
-        if prompt == 'yes':
-            print("🛑 FULL BACKFILL SELECTED: Deleting all existing trade data...")
-
-            # Helper function for deletion
-            def delete_db_data():
-                # 1. Delete Trade History (whale_performance) first
-                supabase.table("whale_performance").delete().neq("alert_id", "0").execute()
-                # 2. Delete Trade Alerts (whale_alerts)
-                supabase.table("whale_alerts").delete().neq("id", "0").execute()
-
-            # Run the synchronous function in a separate thread
-            await asyncio.to_thread(delete_db_data)
-
-            print("✅ Database cleared. Now determining lookback period.")
-            # For FULL BACKFILL ('yes'), we fall through to the manual lookback prompt below.
-
-        # --- LOGIC TO DETERMINE DAYS LOOKBACK (Used for Full or Empty Incremental) ---
-
-        # Helper function to prompt user for lookback days
-        def prompt_for_lookback():
-            print("⚠️ We need to determine the start date for the backfill.")
-            while True:
-                days_input = input(
-                    "❓ Enter the number of days to look back (e.g., 30, 90, 365) [Default: 30]: ").strip()
-                if not days_input:
-                    days_lookback = 30
-                    print(f"Defaulting to {days_lookback} days.")
-                    break
-                try:
-                    days_lookback = int(days_input)
-                    if days_lookback > 0:
-                        break
-                    else:
-                        print("Please enter a positive number.")
-                except ValueError:
-                    print("Invalid input. Please enter a number.")
-            return days_lookback
-
-        # Check for Incremental Start Date (Only if FULL BACKFILL was not requested)
-        is_incremental_start_set = False
-        if prompt != 'yes':
-            # This calls the helper method to check the DB and set global start_scan if data is found.
-            is_incremental_start_set = await self.check_and_set_incremental_start()
-
-        # If the start was not set (i.e., Full Backfill OR Incremental with Empty DB), ask for days
-        if not is_incremental_start_set:
-            days_lookback = prompt_for_lookback()
-            # Set the scan start time based on user input
+        # --- 1. HANDLE REPOPULATION & LOOKBACK ---
+        repopulate = prompt_for_repopulate()
+        if repopulate:
+            await clear_database()
+            days_lookback = prompt_for_lookback(default_days=30)
             start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
-            print(f"🔎 Scanning the last {days_lookback} days, starting from {start_scan.date()}.")
+            print(f"🔎 FULL REPOPULATION: Scanning last {days_lookback} days from {start_scan.date()}.")
 
-        # The main 'start_scan' variable is now set. Proceed to fetching messages.
+        else:
+            # --- 2. DETERMINE INCREMENTAL GAP ---
+            # Find the most recent trade in DB to know where to start
+            last_db_entry = supabase.table("whale_alerts").select("discord_timestamp").order("discord_timestamp",
+                                                                                             desc=True).limit(
+                1).execute()
 
-        # 2. Fetch Messages
+            if last_db_entry.data:
+                last_dt = datetime.fromisoformat(last_db_entry.data[0]['discord_timestamp'])
+                start_scan = last_dt.astimezone(pytz.utc)
+                print(f"📅 Database has data up to {last_dt.date()}. Scanning after this...")
+            else:
+                # If database is empty, ask for a lookback period
+                days_lookback = prompt_for_lookback(default_days=30)
+                start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
+                print(f"⚠️ Database empty. Scanning last {days_lookback} days from {start_scan.date()}...")
+
+        # 3. Fetch Messages
         messages_to_process = []
         async for message in channel.history(after=start_scan, limit=None, oldest_first=True):
             if message.author == self.user: continue
@@ -192,10 +182,28 @@ class BackfillBot(discord.Client):
             while check_date <= today and not is_closed:
                 # Loop control
                 check_date_int = int(check_date.strftime('%Y%m%d'))
+
+                def check_history_exists(trade_id, date_iso):
+                    # Use a to_thread execution since Supabase client is not inherently async
+                    res = supabase.table("whale_performance").select("alert_id").eq("alert_id", trade_id).eq("date",
+                                                                                                             date_iso).limit(
+                        1).execute()
+                    return len(res.data) > 0
+
+                # Check if it's a weekend/holiday first to save an API/DB call
                 if check_date.weekday() >= 5:  # 5 is Saturday, 6 is Sunday
                     print(f"   ⏩ Skipping {check_date.isoformat()}. It's a weekend.")
                     check_date += timedelta(days=1)
                     continue
+
+                history_exists = await asyncio.to_thread(check_history_exists, trade_id, check_date.isoformat())
+
+                if history_exists:
+                    print(
+                        f"   ⏭️ History already exists for {check_date.isoformat()}. Skipping simulation for this day.")
+                    check_date += timedelta(days=1)
+                    continue
+
                 # Check Expiration
                 if check_date > exp_date:
                     print(f"   💀 Expired on {check_date}")
@@ -240,6 +248,7 @@ class BackfillBot(discord.Client):
 
                     # The lines before the block to replace (line 153):
                     if day_close == 0 and day_high == 0:
+                        # The block to replace:
                         # No data for this day (weekend/holiday), skip
                         check_date += timedelta(days=1)
                         continue
@@ -296,7 +305,7 @@ class BackfillBot(discord.Client):
 
                         # --- Run Daily OI Stop Check (Always on Day 1+) ---
                     if check_date > alert_dt.date() and trade['status'] not in ["STOP_OI", "EXPIRED"]:
-                        stop_oi = trade['stop_oi_level']
+                        stop_oi = int(trade['entry_size'] * 0.20)  # Use the corrected 20% stop
 
                         # Assuming Stop OI kills the moonshot if status is SCALED, or the whole trade if OPEN
                         if day_oi < stop_oi and day_oi > 0:
@@ -354,28 +363,30 @@ class BackfillBot(discord.Client):
         # last element is the last trade of the day, but it's the best data available.
         close = 0.0
         if data_list:
-            # Find the last trade price (must be after the alert, if applicable)
-            # The theta_api_client.fetch_trade_quote_data should provide a time-ordered list.
-            alert_time_seconds = alert_dt.hour * 3600 + alert_dt.minute * 60 + alert_dt.second
+            # Re-run the list to find the absolute last price *after* the alert
+            last_valid_trade = 0.0
+            alert_time_str = alert_dt.strftime('%H:%M:%S.%f')[:-3]
 
-            # Search backwards for the last trade after the alert
             for tick in reversed(data_list):
                 try:
-                    trade_timestamp = tick.get('trade_timestamp')  # UTC string
+                    trade_timestamp = tick.get('trade_timestamp')
                     price = float(tick.get('price', 0.0))
+
                     if not trade_timestamp: continue
 
                     # Convert UTC tick time to EST for comparison
                     dt_utc = datetime.fromisoformat(trade_timestamp.replace('Z', '+00:00'))
                     dt_est = dt_utc.astimezone(EST)
-                    trade_time_seconds = dt_est.hour * 3600 + dt_est.minute * 60 + dt_est.second
+                    trade_time_str = dt_est.strftime('%H:%M:%S.%f')[:-3]
 
-                    if trade_time_seconds >= alert_time_seconds and price > 0:
-                        close = price
+                    if trade_time_str >= alert_time_str and price > 0:
+                        last_valid_trade = price
                         break  # Found the last trade after alert
 
                 except (KeyError, ValueError, IndexError, AttributeError):
                     continue
+
+            close = last_valid_trade
 
         if high == 0.0:
             print(f"   ❌ Trade Quote error for {ticker}: No post-alert data returned.")
@@ -399,25 +410,7 @@ class BackfillBot(discord.Client):
         # FIX CONFIRMED: Ensures 5 values are returned on failure: (high, close, low, oi, iv)
         return 0.0, 0.0, 0.0, 0, 0.0
 
-    async def check_and_set_incremental_start(self):
-        """Checks the DB for the last entry and sets start_scan. Returns True if successful, False if DB is empty."""
-        global start_scan  # Need to declare global or pass/return it. Using global for simplicity.
 
-        # Helper function for fetching the last entry
-        def fetch_last_entry():
-            return supabase.table("whale_alerts").select("discord_timestamp").order("discord_timestamp",
-                                                                                    desc=True).limit(1).execute()
-
-        # Run the synchronous fetch in a separate thread
-        last_db_entry = await asyncio.to_thread(fetch_last_entry)
-
-        if last_db_entry.data:
-            last_dt = datetime.fromisoformat(last_db_entry.data[0]['discord_timestamp'])
-            start_scan = last_dt.astimezone(pytz.utc)
-            print(f"📅 Incremental Backfill: Database has data up to {last_dt}. Scanning after this...")
-            return True
-        else:
-            return False
 if __name__ == "__main__":
     if not DISCORD_TOKEN:
         print("❌ Error: DISCORD_TOKEN not found.")
