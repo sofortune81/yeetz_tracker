@@ -352,7 +352,8 @@ def render_monthly_drilldown(df):
     st.info("The PnL for each month is based on the **trade entry date** (Discord Timestamp).")
 
     # 1. Prepare 12-Month Calendar Range
-    today = pd.Timestamp.now(tz='US/Eastern').tz_localize(None).to_period('M')
+    current_month_str = pd.Timestamp.now(tz='US/Eastern').strftime('%Y-%m')
+    today = pd.Period(current_month_str, freq='M')
     # Generate the 12 months from 11 months ago up to the current month
     month_range = pd.period_range(end=today, periods=12, freq='M')
     month_names = [m.strftime('%Y-%m') for m in month_range]
@@ -431,12 +432,14 @@ def render_trade_finder(df):
 
     # --- INTERACTIVE TABLE ---
     # Configure grid options
+    # --- INTERACTIVE TABLE ---
+    # Configure grid options
     st.info("👆 Click on any row to open the Deep Dive Chart below.")
 
     event = st.dataframe(
         filtered[['discord_timestamp', 'ticker', 'expiration_date', 'strike', 'option_type', 'entry_price',
                   'last_price', 'highest_price', 'lowest_price',
-                  'sim_status', 'win_loss',  # <-- EDITED: Use 'win_loss' instead of 'is_winner'
+                  'sim_status', 'win_loss',
                   'scale_pnl_dollars', 'scale_pnl_pct', 'moonshot_pnl_dollars', 'moonshot_pnl_pct',
                   'sim_pnl', 'sim_ret_pct', 'max_drawdown_pct',
                   'unrealized_pnl_dollars', 'unrealized_pnl_pct']],
@@ -445,12 +448,18 @@ def render_trade_finder(df):
         on_select="rerun",
         selection_mode="single-row",
         column_config={
+            # --- NEW: Explicit Timestamp Formatting ---
+            "discord_timestamp": st.column_config.DatetimeColumn(
+                "Alert Time (EST)",
+                format="YYYY-MM-DD HH:mm"
+            ),
+            # ------------------------------------------
             "last_price": st.column_config.NumberColumn("Last Price ($)", format="$%.2f",
                                                         help="Most recent price fetched for this contract."),
-            "win_loss": st.column_config.TextColumn("W/L"),  # <-- EDITED: New W/L column config
+            "win_loss": st.column_config.TextColumn("W/L"),
             "entry_price": st.column_config.NumberColumn("Entry ($)", format="$%.2f"),
             "highest_price": st.column_config.NumberColumn("High ($)", format="$%.2f"),
-            "lowest_price": st.column_config.NumberColumn("Low ($)", format="$%.2f"),  # <-- NEW: Lowest Price Seen
+            "lowest_price": st.column_config.NumberColumn("Low ($)", format="$%.2f"),
             "expiration_date": st.column_config.DateColumn("Exp. Date", format="YYYY-MM-DD"),
 
             "scale_pnl_dollars": st.column_config.NumberColumn("Scale PnL ($)", format="$%.2f",
@@ -463,7 +472,7 @@ def render_trade_finder(df):
 
             "sim_pnl": st.column_config.NumberColumn("TOTAL PnL ($)", format="$%.2f"),
             "sim_ret_pct": st.column_config.NumberColumn("TOTAL Ret (%)", format="%.2f%%"),
-            "max_drawdown_pct": st.column_config.NumberColumn("Max DD (%)", format="%.2f%%",  # <-- NEW: Max Drawdown
+            "max_drawdown_pct": st.column_config.NumberColumn("Max DD (%)", format="%.2f%%",
                                                               help="Max drawdown from entry price."),
 
             "unrealized_pnl_dollars": st.column_config.NumberColumn("Unrealized PnL ($)", format="$%.2f",
