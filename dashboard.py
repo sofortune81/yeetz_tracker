@@ -237,7 +237,12 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
         })
 
     res_df = pd.DataFrame(results)
-    final_df = sim_df.merge(res_df, on='id')
+    # Drop any stale 'sim_pnl' or 'tp_exit_pnl' columns from the original trade data
+    # to ensure we only use the freshly calculated values from results.
+    cols_to_drop = [col for col in ['sim_pnl', 'tp_exit_pnl', 'max_drawdown_pct'] if col in sim_df.columns]
+
+    # Merge the original trade data with the new simulation results
+    final_df = sim_df.drop(columns=cols_to_drop, errors='ignore').merge(res_df, on='id')
     final_df = final_df.sort_values('discord_timestamp')
 
     # --- PnL and Equity Curve Calculations (Unrealized PnL is calculated here) ---
