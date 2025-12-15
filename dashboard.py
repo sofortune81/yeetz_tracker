@@ -136,29 +136,33 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
             left_on_table = 0.0  # Already finalized/realized
             is_winner = pnl > 0  # A win is defined by a positive PnL
 
-            # Back-calculate PnL Breakdown (always calculate if PnL is saved, using high for moonshot)
-            if entry != 0 and row['pos_size_dollars'] != 0 and row['status'] in ['SCALED', 'EXPIRED', 'STOP_OI']:
-                # PnL Breakdown ONLY happens if TP was hit. If TP was not hit (STOP_OI/EXPIRED)
-                # the breakdown is just the final realized PnL on 100% of the position.
+            # --- CORRECTED PNL BREAKDOWN (Calculate Components & Set Total PnL to Sum) ---
+            if row['status'] == 'SCALED' or row['final_tp_pnl_pct'] == BACKEND_TP_PCT:  # TP was hit
+                # 1. Calculate Scale Component PnL
+                scale_pct_amount = BACKEND_SCALE_PCT / 100.0
+                scale_pnl_dollars = row['pos_size_dollars'] * scale_pct_amount * (BACKEND_TP_PCT / 100.0)
+                scale_ret_pct = BACKEND_TP_PCT
 
-                if row['status'] == 'SCALED' or row['final_tp_pnl_pct'] == BACKEND_TP_PCT:  # Check if TP was hit
-                    # Scale Out PnL (80% at 20% gain)
-                    scale_pos_size = row['pos_size_dollars'] * (BACKEND_SCALE_PCT / 100.0)
-                    scale_pnl = scale_pos_size * (BACKEND_TP_PCT / 100.0)
-                    scale_ret_pct = BACKEND_TP_PCT
+                # 2. Calculate Moonshot Component PnL
+                moon_pct_amount = (100 - BACKEND_SCALE_PCT) / 100.0
+                moonshot_ret_pct = ((high - entry) / entry) * 100.0
+                moonshot_pnl_dollars = row['pos_size_dollars'] * moon_pct_amount * (moonshot_ret_pct / 100.0)
 
-                    # Moonshot PnL (20% at Highest Price achieved)
-                    moon_pos_size = row['pos_size_dollars'] * ((100 - BACKEND_SCALE_PCT) / 100.0)
-                    moonshot_ret_pct = ((high - entry) / entry) * 100.0
-                    moonshot_pnl = moon_pos_size * (moonshot_ret_pct / 100.0)
-                else:
-                    # For STOP_OI or EXPIRED without TP hit: 100% was closed at exit_price/0.
-                    # Display the total PnL as the 'scale_pnl' since no scaling occurred.
-                    scale_pnl = pnl
-                    scale_ret_pct = final_ret_pct
-                    moonshot_pnl = 0.0
-                    moonshot_ret_pct = 0.0
-            # Else: breakdown stays 0.0
+                # 3. SET FINAL VALUES
+                # The Total PnL MUST be the sum of the components, overriding the database's 'pnl'
+                pnl = scale_pnl_dollars + moonshot_pnl_dollars
+
+                scale_pnl = scale_pnl_dollars
+                moonshot_pnl = moonshot_pnl_dollars
+
+            else:
+                # For STOP_OI or EXPIRED without TP hit: Display the total realized PnL as the 'scale_pnl'.
+                # pnl is already set based on final_ret_pct from the DB.
+                scale_pnl = pnl
+                scale_ret_pct = final_ret_pct
+                moonshot_pnl = 0.0
+                moonshot_ret_pct = 0.0
+        # Else: breakdown stays 0.0
 
         # --- 2. If PnL is NOT saved (OPEN/SCALED without final PnL, e.g., current day trade) ---
         else:
@@ -562,17 +566,22 @@ def main():
 
         st.divider()
 
-        # --- 2. Realized PnL Breakdown (4 Columns) ---
+        # --- 2. Realized PnL Breakdown (5 Columns) ---
         st.subheader("Realized Performance (Closed Trades)")
-        col_r1, col_r2, col_r3, col_r4 = st.columns(4)
+        col_r1, col_r2, col_r3, col_r4, col_r5 = st.columns(5)
+
+        # Calculate the sum of the 100% exit PnL column
+        total_baseline_pnl = realized_df['tp_exit_pnl'].sum()
 
         col_r1.metric("Net Realized PnL", f"${total_realized_pnl:,.0f}",
-                      help="Total PnL from trades with a final status (STOP_OI, EXPIRED, SCALED).")
+                      help="Total PnL from trades with a final status (SCALED + Moonshot).")
         col_r2.metric("Total Win PnL", f"${total_realized_wins:,.0f}",
                       help="Sum of PnL from all trades with positive final PnL.")
         col_r3.metric("Total Loss PnL", f"${total_realized_losses:,.0f}",
                       help="Sum of PnL from all trades with negative/zero final PnL.")
         col_r4.metric("Profit Factor", f"{profit_factor:.2f}", help="Total Win PnL / Total Loss PnL.")
+        col_r5.metric("Baseline (100% @ 20% TP)", f"${total_baseline_pnl:,.0f}",
+                      help="Total PnL if 100% of the position had been closed at the 20% profit target.")
 
         st.divider()
 
