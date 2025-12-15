@@ -94,6 +94,7 @@ def fetch_trade_history(alert_id):
 
 
 # --- 3. SIMULATION ENGINE ---
+@st.cache_data(ttl=600) # Cache the entire simulation result for 10 minutes (or until params change)
 def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop_loss_pct):
     sim_df = df_trades.copy()
     sim_df['pos_size_dollars'] = initial_capital * (risk_pct / 100.0)
@@ -208,12 +209,18 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
             # Scaled trade: Always a Win, regardless of final realized status (which may not be set yet)
             win_loss_char = "W"
         # If status is 'OPEN' or 'SCALED' without final PnL, win_loss_char remains ""
+            # --- Max Drawdown Calculation (Robust against 99999 placeholder) ---
+        dd_pct = 0.0
+        lowest_price_float = float(row['lowest_price'])
+
+        if entry != 0 and lowest_price_float < 99999:
+            dd_pct = min(0, ((lowest_price_float - entry) / entry) * 100.0)
 
         results.append({
             "id": row['id'],
             "sim_pnl": pnl,
             "tp_exit_pnl": tp_exit_pnl,
-            "max_drawdown_pct": min(0, ((float(row['lowest_price']) - entry) / entry) * 100.0) if entry != 0 else 0.0,
+            "max_drawdown_pct": dd_pct,  # <-- Use the robustly calculated DD
             "sim_status": status,
             "sim_ret_pct": (pnl / row['pos_size_dollars']) * 100 if row['pos_size_dollars'] != 0 else 0.0,
             "left_on_table": max(0, left_on_table),
@@ -266,6 +273,10 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
     )
 
     # --- Corrected Equity Curve Calculations ---
+    # FIX: Ensure PnL columns are never NaN before cumulative sum to prevent 'nan' in metric cards
+    final_df['sim_pnl'] = final_df['sim_pnl'].fillna(0.0)
+    final_df['tp_exit_pnl'] = final_df['tp_exit_pnl'].fillna(0.0)
+
     final_df['equity_curve_scaled'] = initial_capital + final_df['sim_pnl'].cumsum()
     final_df['equity_curve_tp_exit'] = initial_capital + final_df['tp_exit_pnl'].cumsum()
 
@@ -280,17 +291,16 @@ def render_equity_chart(df):
     buffer = (max_eq - min_eq) * 0.15  # 15% buffer
 
     fig = go.Figure()
-
-    # 1. Scaled & Moonshot (Primary)
+    # 1. Max Potential (80% @ TP + 20% @ Peak High)
     fig.add_trace(go.Scatter(x=df['discord_timestamp'], y=df['equity_curve_scaled'],
                              mode='lines',
-                             name='Scaled & Moonshot',
+                             name='Max Potential PnL (Scaled & Moonshot)',
                              line=dict(color='#00CC96', width=3)))  # Green
 
-    # 2. Full TP Exit (Comparison)
+    # 2. Baseline TP (100% @ TP)
     fig.add_trace(go.Scatter(x=df['discord_timestamp'], y=df['equity_curve_tp_exit'],
                              mode='lines',
-                             name='Full TP Exit (100% @ TP)',
+                             name='Baseline PnL (100% @ TP)',
                              line=dict(color='#636EFA', width=1.5, dash='dot')))  # Blue/Grey dot
 
     fig.update_layout(
@@ -324,12 +334,18 @@ def render_calendar_view(df):
 
 
 def render_monthly_drilldown(df):
-    st.subheader("🗓️ Monthly Analysis")
+    st.subheader("🗓️ Monthly Performance (Last 12 Months)")
+    st.info("The PnL for each month is based on the **trade entry date** (Discord Timestamp).")
 
-    # 1. Prepare Monthly Data
-    # Ensure Month column exists
-    if 'Month' not in df.columns:
-        df['Month'] = df['discord_timestamp'].dt.strftime('%Y-%m')
+    # 1. Prepare 12-Month Calendar Range
+    today = pd.Timestamp.now().tz_localize('US/Eastern').to_period('M')
+    # Generate the 12 months from 11 months ago up to the current month
+    month_range = pd.period_range(end=today, periods=12, freq='M')
+    month_names = [m.strftime('%Y-%m') for m in month_range]
+
+    # 2. Group PnL by Calendar Month
+    # Ensure Month column exists and is correctly formatted for grouping
+    df['Month'] = df['discord_timestamp'].dt.strftime('%Y-%m')
 
     m_df = df.groupby('Month').agg({
         'sim_pnl': 'sum',
@@ -337,59 +353,39 @@ def render_monthly_drilldown(df):
         'sim_ret_pct': 'mean'
     }).reset_index()
 
-    if m_df.empty:
-        st.info("No monthly data available yet.")
-        return
+    # 3. Merge with 12-Month Range and Fill Missing PnL with 0
+    full_m_df = pd.DataFrame(month_names, columns=['Month'])
+    m_df = full_m_df.merge(m_df, on='Month', how='left').fillna({
+        'sim_pnl': 0,
+        'id': 0,
+        'sim_ret_pct': 0
+    })
 
-    # 2. Interactive Bar Chart
-    fig = px.bar(m_df, x='Month', y='sim_pnl', color='sim_pnl',
-                 color_continuous_scale="RdYlGn",
-                 title="Click a Month to Inspect Stats")
+    # 4. Interactive Bar Chart (Simple Green/Red for PnL)
+    m_df['PnL Sign'] = m_df['sim_pnl'].apply(lambda x: 'Profit' if x > 0 else 'Loss')
 
-    # Enable selection
-    selected_points = st.plotly_chart(fig, width='stretch', on_select="rerun")
+    # Ensure correct chronological order on the X-axis
+    fig = px.bar(m_df, x='Month', y='sim_pnl', color='PnL Sign',
+                 color_discrete_map={'Profit': '#00CC96', 'Loss': '#EF553B'},
+                 category_orders={"Month": month_names}, # Ensures chronological ordering
+                 title="Monthly Net PnL (Scaled & Moonshot)",
+                 height=350)
 
-    # 2. Interactive Bar Chart
-    # Use a unique key for the chart to allow selection to persist/be accessed
-    selected_points = st.plotly_chart(fig, width='stretch', key="monthly_pnl_chart")
+    # 5. Update Layout - Restructured for robustness
+    fig.update_layout(
+        margin=dict(t=50, b=0, l=0, r=0),
+        xaxis_title="Calendar Month (YYYY-MM)",
+        yaxis_title="Net PnL ($)",
+        bargap=0.1,  # Use bargap to control the space between bars/bar groups
+        showlegend=False
+    )
 
-    # 3. Drill Down Logic: Use session state to link selection to Trade Finder filter
-    selected_month = None
-    if st.session_state.get('monthly_pnl_chart_select_data') and st.session_state['monthly_pnl_chart_select_data'][
-        'points']:
-        selected_month = st.session_state['monthly_pnl_chart_select_data']['points'][0]['x']
+    # 6. Render Chart
+    st_chart = st.plotly_chart(fig, use_container_width=True, key="monthly_pnl_chart")
 
-    # CRITICAL: We save the selected month to session state so render_trade_finder can pick it up.
-    # If no selection, default to None (no filter)
-    if selected_month:
-        st.session_state['trade_finder_month_filter'] = [selected_month]
-        st.info(
-            f"Trades list below is filtered for **{selected_month}**. Click a different month or clear the filter to see all.")
-    else:
-        st.session_state['trade_finder_month_filter'] = []
-
-    # Show Summary Stats for the whole period (or remove this section if you want a clean funnel)
-    st.markdown("### 📊 Overall Performance Summary")
-
-    c1, c2, c3, c4 = st.columns(4)
-
-    wins = df[df['sim_pnl'] > 0]
-    losses = df[df['sim_pnl'] <= 0]
-    total_trades = len(df)
-    win_rate = (len(wins) / total_trades * 100) if total_trades > 0 else 0
-
-    c1.metric("Net PnL", f"${df['sim_pnl'].sum():,.0f}", f"{total_trades} Trades")
-    c2.metric("Win Rate", f"{win_rate:.0f}%", f"{len(wins)}W / {len(losses)}L")
-
-    # Display best/worst of the *entire* period for high-level summary
-    best_trade = df.loc[df['sim_pnl'].idxmax()] if not df.empty else None
-    worst_trade = df.loc[df['sim_pnl'].idxmin()] if not df.empty else None
-
-    if best_trade is not None:
-        c3.metric("🏆 Biggest Win", f"${best_trade['sim_pnl']:.0f}", f"{best_trade['ticker']}")
-
-    if worst_trade is not None:
-        c4.metric("💀 Biggest Loss", f"${worst_trade['sim_pnl']:.0f}", f"{worst_trade['ticker']}")
+    st.markdown("""
+        To drill down, find the desired month in the **Trade Finder** tab and use the 'Month' filter.
+    """)
 
 
 def render_trade_finder(df):
@@ -512,84 +508,95 @@ def main():
     # Sidebar Controls
     with st.sidebar:
         st.header("🎛️ Simulation")
+
+        # User only controls Capital and Risk %
         cap = st.number_input("Capital", 10000, 1000000, 100000)
-        risk = st.slider("Risk %", 0.5, 5.0, 1.0)
-        tp = st.slider("TP %", 10, 100, 20)
-        scale = st.slider("Scale %", 0, 100, 80)
-        stop = st.slider("Stop Loss %", -50, 0, 0)
+        risk = st.slider("Risk % per Trade", 0.5, 5.0, 1.0)
+
+        # Hardcoded strategy parameters (since back-end locks realized PnL)
+        # These are used for calculating PnL of OPEN/SCALED trades only.
+        tp_fixed = 20
+        scale_fixed = 80
+        stop_fixed = 0
 
         st.divider()
         st.button("🔄 Refresh DB", on_click=st.cache_data.clear)
 
-    # Run Sim
-    df = run_simulation(raw_df, cap, risk, tp, scale, stop)
+    # Run Sim (using hardcoded strategy parameters)
+    df = run_simulation(raw_df, cap, risk, tp_fixed, scale_fixed, stop_fixed)
 
     # --- DASHBOARD LAYOUT ---
+    tab1, tab2 = st.tabs(["📊 Portfolio Overview", "🔎 Trade Finder"])
 
-    # 1. Top Cards (Colored)
-    # The new metrics require 6 columns, so let's use 3 pairs of 2 columns
-    col_r1 = st.columns(2)
-    col_r2 = st.columns(2)
-    col_r3 = st.columns(2)
+    with tab1:
+        st.header("📈 Equity Curve & Performance Metrics")
 
-    # --- Calculations ---
-    total_trades = len(df)
-    total_wins_scaled = len(df[df['status'].isin(['SCALED', 'STOP_OI', 'EXPIRED']) & (df['sim_pnl'] > 0)])
-    total_expired = len(df[df['status'] == 'EXPIRED'])
+        # --- Calculations (Corrected) ---
+        realized_df = df[df['status'].isin(['STOP_OI', 'EXPIRED', 'SCALED']) & df['final_sim_pnl_pct'].notna()]
 
-    # Unrealized Metrics
-    num_unrealized_dd = len(df[df['unrealized_drawdown'] < 0])
-    total_unrealized_dd = df['unrealized_drawdown'].sum()
-    num_unrealized_profit = len(df[df['unrealized_profit'] > 0])
-    total_unrealized_profit = df['unrealized_profit'].sum()
-    total_unrealized_pnl = total_unrealized_profit + total_unrealized_dd
+        total_trades = len(df)
 
-    # Realized Metrics
-    realized_trades = df[df['status'].isin(['STOP_OI', 'EXPIRED'])]
-    total_winner_pnl = realized_trades[realized_trades['sim_pnl'] > 0]['sim_pnl'].sum()
-    total_loser_pnl_expired = df[df['status'] == 'EXPIRED']['sim_pnl'].sum()  # PnL of ONLY expired trades
-    total_realized_pnl = realized_trades['sim_pnl'].sum()
-    total_current_moonshot_pnl = df[df['status'] == 'SCALED']['sim_pnl'].sum() - df[df['status'] == 'SCALED'][
-        'tp_exit_pnl'].sum()
+        # Realized PnL
+        total_realized_pnl = realized_df['sim_pnl'].sum()
+        total_realized_wins = realized_df[realized_df['sim_pnl'] > 0]['sim_pnl'].sum()
+        total_realized_losses = realized_df[realized_df['sim_pnl'] <= 0]['sim_pnl'].sum()  # Includes zero PnL
+        realized_win_rate = (len(realized_df[realized_df['sim_pnl'] > 0]) / len(
+            realized_df) * 100) if not realized_df.empty else 0
 
-    # --- Row 1: High-Level Totals ---
-    col_r1[0].metric("Total Trades Taken", f"{total_trades:,}")
-    col_r1[1].metric("Total Wins (Realized)", f"{total_wins_scaled:,}",
-                     help="Trades that hit TP/SCALED and have a positive PnL.")
+        # Unrealized Metrics (Current Open/Scaled positions without final PnL)
+        total_unrealized_pnl = df['unrealized_pnl_dollars'].sum()
+        num_unrealized_open = len(df[df['status'].isin(['OPEN', 'SCALED']) & df['final_sim_pnl_pct'].isna()])
 
-    # --- Row 2: Unrealized Snapshot ---
-    col_r2[0].metric("Unrealized Drawdown", f"${total_unrealized_dd:,.0f}", f"{num_unrealized_dd} Trades")
-    col_r2[1].metric("Net Unrealized PnL", f"${total_unrealized_pnl:,.0f}", delta_color="normal")
+        # Risk Metric (Max DD)
+        avg_max_drawdown = df['max_drawdown_pct'].mean()
+        profit_factor = total_realized_wins / abs(total_realized_losses) if total_realized_losses < 0 else (
+            total_realized_wins / 1 if total_realized_wins > 0 else 0)
 
-    # --- Row 3: Realized / Closed PnL ---
-    col_r3[0].metric("Total Realized PnL", f"${total_realized_pnl:,.0f}",
-                     help="Total PnL from trades that are STOP_OI or EXPIRED.")
-    col_r3[1].metric("Total Moonshot Value", f"${total_current_moonshot_pnl:,.0f}",
-                     help="Remaining PnL of SCALED trades (PnL - TP Exit PnL).")
+        # --- 1. Key Metrics (3 Columns) ---
+        st.subheader("Key Metrics")
+        col_m1, col_m2, col_m3 = st.columns(3)
 
-    # The next metrics will replace the old k1-k4 metrics in the layout:
-    st.divider()
+        col_m1.metric("Net Portfolio Value", f"${df['equity_curve_scaled'].iloc[-1]:,.0f}", f"Initial: ${cap:,.0f}")
+        col_m2.metric("Total Trades", f"{total_trades:,}")
+        col_m3.metric("Realized Win Rate", f"{realized_win_rate:.1f}%", f"Avg DD: {avg_max_drawdown:.1f}%")
 
-    col_next = st.columns(4)
-    # Re-introducing a simpler metric in the second row for clean display
-    col_next[0].metric("Total Winner PnL", f"${total_winner_pnl:,.0f}", help="Total realized PnL from winning trades.")
-    col_next[1].metric("Total Loser PnL (Expired)", f"${total_loser_pnl_expired:,.0f}",
-                       help="PnL from trades that only expired worthless.")
-    col_next[2].metric("Expired Worthless Count", f"{total_expired}", delta_color="inverse")
-    col_next[3].metric("Profit Factor",
-                       f"{df[df['sim_pnl'] > 0]['sim_pnl'].sum() / abs(df[df['sim_pnl'] < 0]['sim_pnl'].sum() or 1):.2f}")
+        st.divider()
 
-    st.divider()
+        # --- 2. Realized PnL Breakdown (4 Columns) ---
+        st.subheader("Realized Performance (Closed Trades)")
+        col_r1, col_r2, col_r3, col_r4 = st.columns(4)
 
-    # 2. Main Visuals
-    c1, c2 = st.columns([2, 1])
+        col_r1.metric("Net Realized PnL", f"${total_realized_pnl:,.0f}",
+                      help="Total PnL from trades with a final status (STOP_OI, EXPIRED, SCALED).")
+        col_r2.metric("Total Win PnL", f"${total_realized_wins:,.0f}",
+                      help="Sum of PnL from all trades with positive final PnL.")
+        col_r3.metric("Total Loss PnL", f"${total_realized_losses:,.0f}",
+                      help="Sum of PnL from all trades with negative/zero final PnL.")
+        col_r4.metric("Profit Factor", f"{profit_factor:.2f}", help="Total Win PnL / Total Loss PnL.")
 
-    # 3. Monthly Drill Down
-    render_monthly_drilldown(df)
+        st.divider()
 
-    # 4. Finder & Deep Dive
-    render_trade_finder(df)
+        # --- 3. Unrealized Snapshot (3 Columns) ---
+        st.subheader("Current Market Exposure (Open Trades)")
+        col_u1, col_u2, col_u3 = st.columns(3)
 
+        col_u1.metric("Total Unrealized PnL", f"${total_unrealized_pnl:,.0f}",
+                      help="Sum of PnL for trades currently in OPEN/SCALED status.")
+        col_u2.metric("Open/Scaled Positions", f"{num_unrealized_open:,}")
+        col_u3.metric("Max Potential Return", f"${df['sim_pnl'].sum():,.0f}",
+                      help="The total PnL assuming all SCALED trades hit their peak high.")
+
+        st.divider()
+
+        # --- 4. Equity Curve ---
+        render_equity_chart(df)
+
+        # --- 5. Monthly Drill Down ---
+        render_monthly_drilldown(df)
+
+    with tab2:
+        # 4. Finder & Deep Dive
+        render_trade_finder(df)
 
 if __name__ == "__main__":
     main()
