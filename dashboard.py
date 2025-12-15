@@ -4,9 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from supabase import create_client
 import os
-from dotenv import load_dotenv
 import numpy as np
-from datetime import datetime, timedelta
 
 # --- 1. SETUP & CONFIG ---
 st.set_page_config(
@@ -15,7 +13,6 @@ st.set_page_config(
     page_icon="🐋",
     initial_sidebar_state="collapsed"
 )
-load_dotenv()
 
 # --- CUSTOM CSS FOR "PIZZAZZ" ---
 st.markdown("""
@@ -49,10 +46,10 @@ st.markdown("""
 
 @st.cache_resource
 def init_supabase():
-    url = os.getenv("SUPABASE_URL")
-    key = os.getenv("SUPABASE_KEY")
+    # Adjusted to use the nested format: [supabase] url = ...
+    url = st.secrets["supabase"]["url"]
+    key = st.secrets["supabase"]["key"]
     return create_client(url, key)
-
 
 supabase = init_supabase()
 
@@ -306,7 +303,7 @@ def render_equity_chart(df):
         legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01),
         margin=dict(t=50, b=0, l=0, r=0)
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def render_calendar_view(df):
@@ -323,7 +320,7 @@ def render_calendar_view(df):
                  title="Daily Net PnL",
                  color_continuous_scale="RdYlGn")
     fig.update_layout(height=250)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def render_monthly_drilldown(df):
@@ -350,11 +347,11 @@ def render_monthly_drilldown(df):
                  title="Click a Month to Inspect Stats")
 
     # Enable selection
-    selected_points = st.plotly_chart(fig, use_container_width=True, on_select="rerun")
+    selected_points = st.plotly_chart(fig, width='stretch', on_select="rerun")
 
     # 2. Interactive Bar Chart
     # Use a unique key for the chart to allow selection to persist/be accessed
-    selected_points = st.plotly_chart(fig, use_container_width=True, key="monthly_pnl_chart")
+    selected_points = st.plotly_chart(fig, width='stretch', key="monthly_pnl_chart")
 
     # 3. Drill Down Logic: Use session state to link selection to Trade Finder filter
     selected_month = None
@@ -433,7 +430,7 @@ def render_trade_finder(df):
                   'scale_pnl_dollars', 'scale_pnl_pct', 'moonshot_pnl_dollars', 'moonshot_pnl_pct',
                   'sim_pnl', 'sim_ret_pct', 'max_drawdown_pct',
                   'unrealized_pnl_dollars', 'unrealized_pnl_pct']],
-        use_container_width=True,
+        width='stretch',
         hide_index=True,
         on_select="rerun",
         selection_mode="single-row",
@@ -496,7 +493,7 @@ def render_deep_dive(df, trade_id):
     fig.add_hline(y=target, line_dash="dot", line_color="green", annotation_text="Target")
 
     fig.update_layout(title="Trade Lifecycle", template="plotly_dark", height=400)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
     # Stats Row
     c1, c2, c3 = st.columns(3)
