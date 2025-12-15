@@ -1,0 +1,62 @@
+Here is a comprehensive summary of your project requirements and context. Please review this carefully to ensure I have captured the logic, especially regarding the data fetching strategy and parsing rules.
+
+### **Project: Discord Options Flow Tracker & Dashboard**
+
+#### **1. Core Objective**
+Build an automated system to listen for "whale" option alerts from a specific Discord channel, track their performance using ThetaData, and visualize the "Win Rate" (defined as reaching +20% profit) on a Streamlit dashboard.
+
+#### **2. Architecture Components**
+* **Listener Bot (Python/Discord):** Listens for specific embed formats, parses trade details, and logs them to the database.
+* **Database (Supabase):** Stores trade alerts, performance metrics, and daily snapshots.
+* **Data Processor (Python/ThetaData):** Runs daily/intraday to check price action against the "Win" condition and updates trade status.
+* **Frontend (Streamlit):** Displays analytics, win rates, and active trade monitoring.
+
+---
+
+### **3. Detailed Requirements**
+
+#### **A. The Listener Bot (Parsing Logic)**
+The bot will parse Discord Embeds. Based on your description and the screenshot, the parsing logic for the title line (`EQ 1.5 C 12/19/2025 (8D) - yeet`) is:
+* **Ticker:** First block (e.g., `EQ`).
+* **Strike:** Second block (numbers with decimal, e.g., `1.5`). *Note: Will remove commas if present.*
+* **Option Type (Call/Put):** **[CLARIFICATION NEEDED]** Your description skipped this, but in the image, there is a `C` between the strike and the date. I assume the parser **must** capture this `C` or `P` to identify the contract correctly.
+* **Expiration Date:** Block with standard date format `mm/dd/yyyy`.
+* **Fields to Extract from Embed Body:**
+    * **Avg Fill:** The entry price (Critical for calculating the +20% target).
+    * **Interval Vol:** The volume of the alert.
+    * **OI (Open Interest):** Current OI at the time of the alert.
+* **Timestamp:** Use the **Discord Message Timestamp** (not the record creation time) to ensure accuracy and allow for future backfilling.
+
+#### **B. Tracking Logic & "The Win"**
+* **Win Condition:** If the option price reaches **Entry Price + 20%** at any point during its life.
+* **Exit/Stop Tracking Conditions:**
+    * Contract reaches Expiration.
+    * **Open Interest (OI) drops to 0** (See clarification below).
+* **Data Strategy (ThetaData):**
+    * **Day 0 (Same Day as Alert):** Use `option_history_trade_quote` to get tick-level data.
+        * *Logic:* Filter for trades occurring **after** the Discord message timestamp. Find the `High` of the day relative to the entry time.
+    * **Day 1+ (Subsequent Days):** Use `option_history_eod` (End of Day).
+        * *Logic:* Check the day's `High` against the profit target. Check `OI` to see if the trade is still valid.
+
+#### **C. Streamlit Dashboard Features**
+* **Overview Metrics:** Total Trades Tracked, Overall Win Rate (%), Average Profit/Loss, Average Days Held.
+* **Active Trades Table:** Live status of currently open trades (Current Price vs. Entry Price, current % Return).
+* **Win Rate Breakdowns:**
+    * By Ticker (e.g., "Does EQ flow win more than TSLA flow?").
+    * By DTE (Days to Expiration) bucket (e.g., "Do 0-7 DTE trades perform better than 30+ DTE?").
+    * By "Flow Size" (Volume/OI ratio).
+* **Drawdown Analysis:** Maximum negative excursion for "Winning" trades (i.e., "It went down 50% before it went up 20%").
+
+---
+
+### **4. Clarifications Needed**
+
+Before we proceed to code, I have **3 specific questions** to refine the logic:
+
+1.  **Parsing the "C" or "P":** In your description of the parsing blocks, you listed Ticker $\to$ Strike $\to$ Date. However, the image shows `EQ 1.5 C 12/19...`. Can I confirm the letter between the Strike and Date is **always** the Option Type (C for Call, P for Put)?
+2.  **The "OI = 0" Rule:** You mentioned tracking until "OI is reduced to 0".
+    * *Reality Check:* OI is updated once per day (pre-market). It rarely hits exactly 0 unless the contract expires.
+    * *Suggestion:* Should we stop tracking if OI drops below the **Interval Volume** (indicating the "Whale" likely exited), or strictly only if it hits 0?
+3.  **Strike Formatting:** You mentioned "it takes all numbers before and after the decimal". Does the strike *always* have a decimal? (e.g., usually strikes like `100` might appear as `100` or `100.0`). The parser should probably handle both just in case.
+
+Once you confirm these, I can outline the database schema and the Listener Bot code.

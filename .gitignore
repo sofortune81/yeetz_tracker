@@ -1,0 +1,29 @@
+/.streamlit/secrets.toml
+/.env
+/DockerFile
+/docker-compose.yml
+# -------------------------------------
+# 1. Environment and Configuration Files
+# -------------------------------------
+
+# Local environment variables
+.env
+.env.*
+
+# Python virtual environment (often named venv)
+venv/
+
+# Python compiled files
+__pycache__/
+*.pyc
+
+# -------------------------------------
+# 2. IDE/Editor Files
+# -------------------------------------
+
+# PyCharm specific files
+.idea/
+
+# Windows/macOS/Linux metadata files
+.DS_Store
+/.streamlit/secrets.toml

@@ -1,0 +1,10 @@
+discord.py
+python-dotenv
+supabase
+requests
+pytz
+streamlit
+pandas
+plotly
+numpy
+statsmodels
