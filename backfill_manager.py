@@ -197,10 +197,10 @@ class BackfillBot(discord.Client):
                         check_date += timedelta(days=1)
                         continue
 
-                # --- UPDATE LOWEST PRICE SEEN ---
+                # --- UPDATE LOWEST PRICE SEEN (Pre-Scale/Stop DD Tracking) ---
                 current_lowest = trade['lowest_price']
-                # Only update if day_low is positive and lower than the current lowest
-                if day_low > 0 and day_low < current_lowest:
+                # ONLY update lowest price if the trade is still OPEN
+                if trade['status'] == "OPEN" and day_low > 0 and day_low < current_lowest:
                     current_lowest = day_low
                     supabase.table("whale_alerts").update({"lowest_price": current_lowest}).eq("id",
                                                                                                trade_id).execute()

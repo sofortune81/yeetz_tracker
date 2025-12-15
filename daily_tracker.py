@@ -383,9 +383,17 @@ def run_daily_update():
         update_payload = {
             "last_price": close,
             "last_oi": oi,
-            # "last_iv" is no longer included in the payload
             "highest_price": max(high, float(trade.get('highest_price') or 0))
         }
+
+        # CONDITIONAL LOWEST PRICE UPDATE (Pre-Scale Drawdown Tracking)
+        current_lowest = float(trade.get('lowest_price') or 99999)
+        day_low = market_data['low']
+
+        # Only update lowest price if the trade is still OPEN
+        if trade['status'] == "OPEN" and day_low > 0 and day_low < current_lowest:
+            update_payload['lowest_price'] = day_low
+            trade['lowest_price'] = day_low  # Update local trade object
 
         if trade['status'] == "OPEN":
             profit_target = float(trade['profit_target'])
