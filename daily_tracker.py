@@ -175,10 +175,10 @@ def check_intraday_low(trade, today_int, alert_dt):
 
 # --- PERFORMANCE CHECKERS ---
 
-def get_market_data(trade, today_int, data_date_int, is_day_0):
+def get_market_data(trade, data_date_int, is_day_0, alert_dt):
     """Unified function to fetch EOD, OI, and calculate High/Low."""
 
-    # 1. Get Official EOD Close and High/Low - Uses shared client function
+    # 1. Get Official EOD Close and High/Low (Uses imported client function)
     eod_data = fetch_eod_data(
         trade['ticker'],
         trade['strike'],
@@ -190,56 +190,38 @@ def get_market_data(trade, today_int, data_date_int, is_day_0):
     # 2. Get Open Interest (OI) - Uses local function (as it's unique)
     oi = fetch_open_interest(trade, data_date_int)
 
-    # Defaults
-    eod_close, eod_day_high, eod_day_low, post_alert_high, post_alert_low = 0.0, 0.0, 0.0, 0.0, 0.0
+    if not eod_data:
+        return {"high": 0.0, "close": 0.0, "low": 0.0, "oi": oi, "iv": None}
 
-    if eod_data:
-        eod_close = eod_data['close']
-        eod_day_high = eod_data['high']
-        eod_day_low = eod_data['low']
+    eod_close = eod_data['close']
+    eod_day_high = eod_data['high']
+    eod_day_low = eod_data['low']
 
-        if is_day_0:
-            print(f"   🔎 Day 0 Analysis: {trade['ticker']}")
-            # Fetch raw trade data for Day 0 time filtering
-            alert_dt = datetime.fromisoformat(trade['discord_timestamp']).astimezone(EST)
-            params = get_option_root_params(trade)
-            params["date"] = data_date_int # Use the market date for fetching intraday ticks
-            endpoint = "/option/history/trade"
-            data_list = fetch_nested_json_data(endpoint, params)
+    if is_day_0:
+        print(f"   🔎 Day 0 Analysis: {trade['ticker']}")
+        # Fetch raw trade data for Day 0 time filtering
+        params = get_option_root_params(trade)
+        params["date"] = data_date_int
+        endpoint = "/option/history/trade"
+        data_list = fetch_nested_json_data(endpoint, params)
 
-            # Get Intraday High/Low (Post-Alert) using shared client helpers
-            post_alert_high = filter_and_get_post_alert_high(data_list, alert_dt)
-            post_alert_low = filter_and_get_post_alert_low(data_list, alert_dt)
+        # Get Intraday High/Low (Post-Alert) using shared client helpers
+        post_alert_high = filter_and_get_post_alert_high(data_list, alert_dt)
+        post_alert_low = filter_and_get_post_alert_low(data_list, alert_dt)
 
-            final_low = post_alert_low
-            final_high = post_alert_high
-        else:
-            print(f"   🔎 Day 1+ Analysis: {trade['ticker']} on {data_date_int}")
-            final_low = eod_day_low  # Use EOD Low for Day 1+
-            final_high = eod_day_high # Use EOD High for Day 1+
-
+        final_low = post_alert_low
+        final_high = post_alert_high
     else:
-        # If EOD data failed, use 0 for OI/Prices and skip further high/low calculation
-        return {
-            "high": 0.0,
-            "close": 0.0,
-            "low": 0.0,
-            "oi": oi, # Keep the OI from the separate fetch
-            "iv": None
-        }
+        print(f"   🔎 Day 1+ Analysis: {trade['ticker']} on {data_date_int}")
+        final_low = eod_day_low
+        final_high = eod_day_high
 
-    # Final logic for Day 1+ needs to ensure you are taking the maximum
-    # If not day 0, the EOD high is the final high. No need for the max() logic in the original.
-    # The original logic for Day 1+ high was flawed, using post_alert_high (which is 0 here)
-    # The current logic: final_high = eod_day_high and final_low = eod_day_low is correct for Day 1+.
-
-    # NOTE: Entry IV and Last IV are now permanently skipped.
     return {
         "high": final_high,
         "close": eod_close,
         "low": final_low,
         "oi": oi,
-        "iv": None  # Permanently set to None
+        "iv": None
     }
 
 
@@ -358,14 +340,15 @@ def run_daily_update():
 
             continue
         # --- C. Get Market Data ---
-        trade_entry_date = datetime.fromisoformat(trade['discord_timestamp']).astimezone(EST).date()
+        trade_entry_dt = datetime.fromisoformat(trade['discord_timestamp']).astimezone(EST)
+        trade_entry_date = trade_entry_dt.date()
         market_data = None
 
         is_day_0 = (trade_entry_date == data_date)
 
         if trade_entry_date <= data_date:
             # Day 0 or Day 1+
-            market_data = get_market_data(trade, today_int, data_date_int, is_day_0)
+            market_data = get_market_data(trade, data_date_int, is_day_0, trade_entry_dt)  # <-- UPDATED CALL
         else:
             print(f"   ⏩ Skipping {trade['ticker']}. Alert date {trade_entry_date} is after data date {data_date}.")
             continue
@@ -437,7 +420,7 @@ def run_daily_update():
             exit_price = close
 
             final_sim_pnl_pct, final_tp_pnl_pct = calculate_trade_pnl_percentages(
-                trade, high, profit_target
+                trade, high, exit_price  # <-- CORRECTED: Use exit_price (close) for stop
             )
 
             update_payload["final_sim_pnl_pct"] = final_sim_pnl_pct

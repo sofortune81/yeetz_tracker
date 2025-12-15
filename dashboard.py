@@ -154,6 +154,7 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
 
                 scale_pnl = scale_pnl_dollars
                 moonshot_pnl = moonshot_pnl_dollars
+                is_winner = True  # <-- ADDED: SCALED with final PnL is always a winner
 
             else:
                 # For STOP_OI or EXPIRED without TP hit: Display the total realized PnL as the 'scale_pnl'.
@@ -204,13 +205,17 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
                 status = "INVALID_ENTRY"
 
         # --- Collect Results ---
-        win_loss_char = ""  # Default to blank (for OPEN, SCALED without final PnL)
+        win_loss_char = ""  # Default to blank (for OPEN trades)
 
+        # Determine W/L for Realized Trades
         if status in ['STOP_OI', 'EXPIRED']:
-            # Closed trade: Determine W/L based on PnL
+            # Closed trade: Determine W/L based on final sim_pnl
             win_loss_char = "W" if pnl > 0.0 else "L"
-        elif status == 'SCALED':
-            # Scaled trade: Always a Win, regardless of final realized status (which may not be set yet)
+        elif status == 'SCALED' and row['final_sim_pnl_pct'] is not None:
+            # SCALED with final PnL from DB (Always W, as PnL >= Scale-out PnL)
+            win_loss_char = "W"
+        elif status == 'SCALED' and row['final_sim_pnl_pct'] is None:
+            # SCALED without final PnL yet (current day): Assume W for the dashboard's W/L count
             win_loss_char = "W"
         # If status is 'OPEN' or 'SCALED' without final PnL, win_loss_char remains ""
             # --- Max Drawdown Calculation (Robust against 99999 placeholder) ---
@@ -390,7 +395,7 @@ def render_monthly_drilldown(df):
     )
 
     # 6. Render Chart
-    st_chart = st.plotly_chart(fig, use_container_width=True, key="monthly_pnl_chart")
+    st_chart = st.plotly_chart(fig, width='stretch', key="monthly_pnl_chart")
 
     st.markdown("""
         To drill down, find the desired month in the **Trade Finder** tab and use the 'Month' filter.
