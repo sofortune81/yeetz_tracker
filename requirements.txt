@@ -1,10 +1,9 @@
 discord.py
 python-dotenv
 supabase
-requests
+httpx
 pytz
 streamlit
 pandas
 plotly
 numpy
-statsmodels
