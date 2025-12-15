@@ -293,6 +293,50 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
 
 # --- 4. VISUALIZATION COMPONENTS ---
 
+def render_todays_activity(df):
+    """
+    Renders a dedicated section for trades alerted 'Today' (EST).
+    Handles the HKT vs EST timezone difference correctly.
+    """
+    # 1. Get Today's Date in EST (regardless of User's System Time)
+    est = pytz.timezone('US/Eastern')
+    today_est = datetime.now(est).date()
+
+    # 2. Filter DF for Today's Trades (using the EST 'Day' column we made earlier)
+    todays_trades = df[df['Day'] == today_est].copy()
+
+    st.subheader(f"🔔 Today's Live Alerts ({today_est})")
+
+    if todays_trades.empty:
+        st.info("No alerts found for the current EST trading session yet.")
+        return
+
+    # 3. Calculate Quick Stats for Today
+    count = len(todays_trades)
+    winners = len(todays_trades[todays_trades['sim_pnl'] > 0])
+    # Assume unrealized PnL + realized PnL for today's net
+    net_pnl_today = todays_trades['sim_pnl'].sum() + todays_trades['unrealized_pnl_dollars'].sum()
+
+    # 4. Metrics
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Alerts Today", count)
+    c2.metric("Today's PnL (Sim)", f"${net_pnl_today:,.2f}", help="Realized + Unrealized PnL for trades alerted today.")
+    c3.metric("Strike Rate", f"{winners}/{count}")
+
+    # 5. Simple Dataframe
+    st.dataframe(
+        todays_trades[['discord_timestamp', 'ticker', 'strike', 'option_type', 'entry_price', 'last_price', 'sim_status', 'unrealized_pnl_pct']],
+        hide_index=True,
+        use_container_width=True,
+        column_config={
+            "discord_timestamp": st.column_config.DatetimeColumn("Time (EST)", format="HH:mm"),
+            "entry_price": st.column_config.NumberColumn("Entry", format="$%.2f"),
+            "last_price": st.column_config.NumberColumn("Current", format="$%.2f"),
+            "unrealized_pnl_pct": st.column_config.NumberColumn("Unrealized %", format="%.2f%%"),
+        }
+    )
+    st.divider()
+
 def render_equity_chart(df):
     # Combine the min/max of both curves for padding calculation
     min_eq = min(df['equity_curve_scaled'].min(), df['equity_curve_tp_exit'].min())
@@ -555,6 +599,7 @@ def main():
     # Run Sim (using hardcoded strategy parameters)
     df = run_simulation(raw_df, cap, risk, tp_fixed, scale_fixed, stop_fixed)
 
+    render_todays_activity(df)
     # --- DASHBOARD LAYOUT ---
     tab1, tab2 = st.tabs(["📊 Portfolio Overview", "🔎 Trade Finder"])
 
