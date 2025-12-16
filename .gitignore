@@ -1,6 +1,6 @@
 /.streamlit/secrets.toml
 /.env
-/DockerFile
+/Dockerfile
 /docker-compose.yml
 # -------------------------------------
 # 1. Environment and Configuration Files

@@ -111,5 +111,8 @@ if __name__ == "__main__":
     if not DISCORD_TOKEN:
         print("❌ Error: DISCORD_TOKEN not found in .env")
     else:
-        client = YeetzListener(intents=discord.Intents.default())
+        # ADD THESE TWO LINES
+        intents = discord.Intents.default()
+        intents.message_content = True
+        client = YeetzListener(intents=intents)
         client.run(DISCORD_TOKEN)

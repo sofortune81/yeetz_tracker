@@ -159,6 +159,29 @@ def fetch_trade_quote_data(ticker, strike, opt_type_char, exp_date, date_int):
     return fetch_data_and_handle_error(endpoint, params)
 
 
+# Add this to theta_api_client.py
+
+def get_intraday_performance(ticker, strike, opt_type_char, exp_date, date_int, alert_dt):
+    """
+    Fetches all trade ticks for the day and filters for the high/low
+    that occurred strictly AFTER the alert timestamp.
+    """
+    params = get_option_root_params(ticker, strike, opt_type_char, exp_date)
+    params["date"] = date_int
+    # We use /trade instead of /trade_quote for higher performance/simpler parsing
+    endpoint = "/option/history/trade"
+
+    data_list = fetch_data_and_handle_error(endpoint, params)
+
+    if not data_list:
+        return {"high": 0.0, "low": 0.0}
+
+    high = filter_and_get_post_alert_high(data_list, alert_dt)
+    low = filter_and_get_post_alert_low(data_list, alert_dt)
+
+    return {"high": high, "low": low}
+
+
 def fetch_eod_data(ticker, strike, opt_type_char, exp_date, date_int):
     """Fetches the End-Of-Day (EOD) data (High/Close/OI)."""
     params = get_option_root_params(ticker, strike, opt_type_char, exp_date)

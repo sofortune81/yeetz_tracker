@@ -1,13 +1,23 @@
+# --- IMPORTS ---
 import os
+import sys
 import discord
 import asyncio
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from supabase import create_client
 import pytz
+
+from logger import setup_logger
 from parser import parse_yeetz_alert
-from theta_api_client import get_theta_date_int, get_option_root_params, fetch_trade_quote_data, fetch_eod_data, filter_and_get_post_alert_high, filter_and_get_post_alert_low # <-- ADDED filter_and_get_post_alert_low
-from daily_tracker import calculate_trade_pnl_percentages # <-- NEW IMPORT
+from daily_tracker import calculate_trade_pnl_percentages  #
+
+from theta_api_client import (
+    get_theta_date_int,
+    get_intraday_performance,
+    fetch_eod_data,
+    EST
+)
 
 # --- CONFIGURATION ---
 load_dotenv()
@@ -15,405 +25,180 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 TARGET_CHANNEL_ID = int(os.getenv("TARGET_CHANNEL_ID"))
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-# THETA_HTTP_URL is now defined in theta_api_client.py
-EST = pytz.timezone('US/Eastern')
 
+logger = setup_logger(name="backfill", log_filename="backfill.log")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-def prompt_for_repopulate():
-    """Asks user if they want to repopulate the database."""
-    print("\n-----------------------------------------------------------------------------------")
-    print("🚨 WARNING: Full Repopulation will DELETE ALL data in 'whale_alerts' and 'whale_performance'.")
-    prompt = input("Do you want to run a FULL REPOPULATION (Delete all data first)? (yes/no, default=no): ").strip().lower()
-    print("-----------------------------------------------------------------------------------\n")
-    return prompt == 'yes'
-
-def prompt_for_lookback(default_days=30):
-    """Asks user how many days back to look."""
-    prompt = input(f"How many days back should we scan? (Enter number, default={default_days}): ").strip()
-    try:
-        days = int(prompt)
-        return days if days > 0 else default_days
-    except ValueError:
-        return default_days
-
-async def clear_database():
-    """Deletes all records from trade tables."""
-    print("🗑️ Clearing 'whale_performance'...")
-    supabase.table("whale_performance").delete().neq("id", 0).execute()
-    print("🗑️ Clearing 'whale_alerts'...")
-    supabase.table("whale_alerts").delete().neq("id", 0).execute()
-    print("✅ Database cleared.")
 
 class BackfillBot(discord.Client):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Initialize the attribute to prevent AttributeError
+        self.start_scan = datetime.now(pytz.utc) - timedelta(days=30)
+
     async def on_ready(self):
-        print(f"✅ Backfill Bot Logged in as {self.user}")
+        logger.info(f"✅ Backfill Bot Logged in as {self.user}")
         await self.run_backfill()
         await self.close()
 
     async def run_backfill(self):
-        print("⏳ Starting Intelligent Backfill...")
+        logger.info("⏳ Starting Intelligent Backfill...")
         channel = self.get_channel(TARGET_CHANNEL_ID)
 
-        # --- 1. HANDLE REPOPULATION & LOOKBACK ---
-        repopulate = prompt_for_repopulate()
-        if repopulate:
-            await clear_database()
-            days_lookback = prompt_for_lookback(default_days=30)
-            start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
-            print(f"🔎 FULL REPOPULATION: Scanning last {days_lookback} days from {start_scan.date()}.")
+        try:
+            days_lookback = int(sys.argv[1]) if len(sys.argv) > 1 else 30
+            prompt_full_repop = sys.argv[2].lower() if len(sys.argv) > 2 else 'no'
+        except ValueError:
+            days_lookback = 30
+            prompt_full_repop = 'no'
 
+        # --- 2. Handle Full Repopulation ---
+        if prompt_full_repop == 'yes':
+            logger.warning("🛑 FULL BACKFILL SELECTED: Clearing existing data...")
+
+            def delete_db_data():
+                supabase.table("whale_performance").delete().neq("alert_id", "0").execute()
+                supabase.table("whale_alerts").delete().neq("id", "0").execute()
+
+            await asyncio.to_thread(delete_db_data)
+
+            # Use self. to ensure the attribute is set correctly
+            self.start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
+            logger.info(f"✅ DB Cleared. Scanning last {days_lookback} days.")
         else:
-            # --- 2. DETERMINE INCREMENTAL GAP ---
-            # Find the most recent trade in DB to know where to start
-            last_db_entry = supabase.table("whale_alerts").select("discord_timestamp").order("discord_timestamp",
-                                                                                             desc=True).limit(
-                1).execute()
+            # --- 3. Incremental Backfill ---
+            is_incremental = await self.check_and_set_incremental_start()
+            if not is_incremental:
+                self.start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
+                logger.info(f"🔎 Empty DB. Scanning last {days_lookback} days.")
 
-            if last_db_entry.data:
-                last_dt = datetime.fromisoformat(last_db_entry.data[0]['discord_timestamp'])
-                start_scan = last_dt.astimezone(pytz.utc)
-                print(f"📅 Database has data up to {last_dt.date()}. Scanning after this...")
-            else:
-                # If database is empty, ask for a lookback period
-                days_lookback = prompt_for_lookback(default_days=30)
-                start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
-                print(f"⚠️ Database empty. Scanning last {days_lookback} days from {start_scan.date()}...")
-
-        # 3. Fetch Messages
+        # --- 4. Fetch and Process ---
         messages_to_process = []
-        async for message in channel.history(after=start_scan, limit=None, oldest_first=True):
+        async for message in channel.history(after=self.start_scan, limit=None, oldest_first=True):
             if message.author == self.user: continue
             if message.embeds:
                 messages_to_process.append(message)
 
-        print(f"📥 Found {len(messages_to_process)} alerts to process.")
+        logger.info(f"📥 Found {len(messages_to_process)} alerts to process.")
 
-        # 3. Process Each Alert (The Time Machine)
         for msg in messages_to_process:
-            for embed in msg.embeds:
-                await self.process_and_simulate(embed, msg)
+            await self.process_and_simulate(msg)
+            await asyncio.sleep(1.0)
 
-            await asyncio.sleep(2.0)
+    async def process_and_simulate(self, message):
+        """Re-implementing the Simulation Time Machine"""
+        parsed_data = parse_yeetz_alert(message.embeds[0])
+        if not parsed_data: return
 
-    async def process_and_simulate(self, embed, message):
-        # --- DEBUG: Immediately confirm entry into the function ---
-        print(f"-> START Processing Message ID: {message.id}")
+        alert_dt = message.created_at.astimezone(EST)
+        ticker = parsed_data['ticker']
 
-        try:
-            # --- PARSE (Use Shared Logic) ---
-            parsed_data = parse_yeetz_alert(embed)
+        # Initial Trade Setup
+        trade = {
+            "discord_message_id": str(message.id),
+            "ticker": ticker,
+            "strike": parsed_data['strike'],
+            "option_type": parsed_data['option_type'],
+            "expiration_date": parsed_data['expiration_date'].isoformat(),
+            "entry_price": parsed_data['entry_price'],
+            "entry_size": parsed_data['entry_size'],
+            "entry_oi": parsed_data['entry_oi'],
+            "profit_target": parsed_data['entry_price'] * 1.20,
+            "stop_oi_level": int(parsed_data['entry_size'] * 0.20),
+            "discord_timestamp": alert_dt.isoformat(),
+            "status": "OPEN",
+            "highest_price": 0.0,
+            "lowest_price": 9999.0
+        }
 
-            # 1. Check if parsing was successful
-            if not parsed_data:
-                print(f"   - SKIPPING {message.id}: Failed to parse alert details.")
-                return
+        # Save record to get Trade ID
+        db_res = supabase.table("whale_alerts").upsert(trade, on_conflict="discord_message_id").execute()
+        if not db_res.data: return
+        trade_id = db_res.data[0]['id']
 
-            ticker = parsed_data['ticker']
-            strike = parsed_data['strike']
-            opt_type = parsed_data['option_type']
-            exp_date = parsed_data['expiration_date']
-            entry_price = parsed_data['entry_price']
-            entry_size = parsed_data['entry_size']
-            entry_oi = parsed_data['entry_oi']
-            raw_title = parsed_data['raw_title']
+        # Simulation Loop (Alert Day -> Today)
+        check_date = alert_dt.date()
+        today = datetime.now(EST).date()
+        is_closed = False
 
-            # NEW: Calculate derived fields
-            # Vol/OI Ratio: Use 0 if OI is 0 to prevent division by zero
-            vol_oi_ratio = round((entry_size / entry_oi) if entry_oi > 0 else 0.0, 2)
-
-            # Premium: Price * Quantity * Contract Multiplier (100)
-            premium_usd = entry_price * entry_size * 100
-
-            # Print the found alert title for debugging
-            print(f"\n⚡ Processing ALERT: {raw_title} (Discord ID: {message.id})")
-
-            # Metadata
-            utc_time = message.created_at
-            alert_dt = utc_time.astimezone(EST)
-            alert_date_int = int(alert_dt.strftime('%Y%m%d'))
-
-            print(f"\n⚡ Processing: {ticker} {strike}{opt_type} (Alert: {alert_dt.date()})")
-
-            # --- ENDPOINT 1: FETCH ENTRY IV (Greeks Snapshot) ---
-            entry_iv = 0.0  # IV is permanently skipped
-
-            # --- SIMULATION ENGINE ---
-            # Setup Trade Object
-            trade = {
-                "discord_message_id": str(message.id),
-                "ticker": ticker,
-                "strike": strike,
-                "option_type": opt_type,
-                "expiration_date": exp_date.isoformat(),
-                "entry_price": entry_price,
-                "entry_size": entry_size,
-                "entry_interval_vol": entry_size,
-                "entry_oi": entry_oi,
-                "entry_vol_oi_ratio": vol_oi_ratio,  # NEW: Calculated
-                "entry_premium": premium_usd,  # NEW: Calculated
-                "entry_iv": entry_iv,
-                "profit_target": entry_price * 1.20,
-                "stop_oi_level": int(entry_size * 0.20),
-                "discord_timestamp": alert_dt.isoformat(),
-                "status": "OPEN",
-                "highest_price": 0,
-                "lowest_price": 99999,
-                "risk_pct_used": 1.0
-            }
-
-            # Insert Initial "OPEN" Record so we have an ID to link history to
-            # We use upsert to avoid duplicates
-            db_res = supabase.table("whale_alerts").upsert(trade, on_conflict="discord_message_id").execute()
-
-            if db_res.data:
-                trade_id = db_res.data[0]['id']
-                print(f"   ✅ Saved alert. Trade ID: {trade_id}")
-            else:
-                print(f"   ❌ ERROR: Supabase upsert failed. Response: {db_res}")
-                return  # Stop processing this trade if the main record failed to save
-
-            # Generate list of dates to check (Alert Date -> Today)
-            today = datetime.now(EST).date()
-            check_date = alert_dt.date()
-
-            is_closed = False
-
-            while check_date <= today and not is_closed:
-                # Loop control
-                check_date_int = int(check_date.strftime('%Y%m%d'))
-
-                def check_history_exists(trade_id, date_iso):
-                    # Use a to_thread execution since Supabase client is not inherently async
-                    res = supabase.table("whale_performance").select("alert_id").eq("alert_id", trade_id).eq("date",
-                                                                                                             date_iso).limit(
-                        1).execute()
-                    return len(res.data) > 0
-
-                # Check if it's a weekend/holiday first to save an API/DB call
-                if check_date.weekday() >= 5:  # 5 is Saturday, 6 is Sunday
-                    print(f"   ⏩ Skipping {check_date.isoformat()}. It's a weekend.")
-                    check_date += timedelta(days=1)
-                    continue
-
-                history_exists = await asyncio.to_thread(check_history_exists, trade_id, check_date.isoformat())
-
-                if history_exists:
-                    print(
-                        f"   ⏭️ History already exists for {check_date.isoformat()}. Skipping simulation for this day.")
-                    check_date += timedelta(days=1)
-                    continue
-
-                # Check Expiration
-                if check_date > exp_date:
-                    print(f"   💀 Expired on {check_date}")
-                    high_price = trade['highest_price']
-                    exit_price = 0.0  # Assumed worthless at expiration
-
-                    final_sim_pnl_pct, final_tp_pnl_pct = calculate_trade_pnl_percentages(
-                        trade, high_price, exit_price
-                    )
-
-                    supabase.table("whale_alerts").update({
-                        "status": "EXPIRED",
-                        "close_date": check_date.isoformat(),
-                        "close_price": 0,
-                        "close_reason": "expiration",
-                        "final_sim_pnl_pct": final_sim_pnl_pct,  # <-- SAVE PNL
-                        "final_tp_pnl_pct": final_tp_pnl_pct  # <-- SAVE PNL
-                    }).eq("id", trade_id).execute()
-                    is_closed = True
-                    break
-
-                # DATA FETCHING
-                day_high = 0
-                day_close = 0
-                day_low = 0  # <-- NEW
-                day_oi = 0
-                day_iv = 0
-
-                # --- ENDPOINT 1 (Day 0): Trade Quote (Intraday) ---
-                if check_date == alert_dt.date():
-                    # Special logic for Day 0: Only look at price AFTER alert time
-                    alert_ms = (alert_dt.hour * 3600 + alert_dt.minute * 60 + alert_dt.second) * 1000
-                    day_high, day_close, day_low, day_oi, day_iv = self.get_day_0_stats(  # <-- ADD day_low
-                        ticker, strike, opt_type, exp_date, check_date_int, alert_dt, entry_oi
-                    )
-
-                # --- ENDPOINT 2 & 3 (Day 1+): EOD & Greeks ---
-                else:
-                    day_high, day_close, day_low, day_oi, day_iv = self.get_eod_stats(  # <-- ADD day_low
-                        ticker, strike, opt_type, exp_date, check_date_int
-                    )
-
-                    # The lines before the block to replace (line 153):
-                    if day_close == 0 and day_high == 0:
-                        # The block to replace:
-                        # No data for this day (weekend/holiday), skip
-                        check_date += timedelta(days=1)
-                        continue
-
-                # --- UPDATE LOWEST PRICE SEEN (Pre-Scale/Stop DD Tracking) ---
-                current_lowest = trade['lowest_price']
-                # ONLY update lowest price if the trade is still OPEN
-                if trade['status'] == "OPEN" and day_low > 0 and day_low < current_lowest:
-                    current_lowest = day_low
-                    supabase.table("whale_alerts").update({"lowest_price": current_lowest}).eq("id",
-                                                                                               trade_id).execute()
-                    trade['lowest_price'] = current_lowest
-
-                if day_close > 0:
-                    supabase.table("whale_alerts").update({"last_price": day_close}).eq("id", trade_id).execute()
-                # --- CHECK WIN/LOSS LOGIC ---
-
-                # Update Highest Price Seen
-                current_highest = trade['highest_price']
-                if day_high > current_highest:
-                    current_highest = day_high
-                    supabase.table("whale_alerts").update({"highest_price": current_highest}).eq("id",
-                                                                                                 trade_id).execute()
-                    trade['highest_price'] = current_highest
-
-                    # --- Replacement Block ---
-                    # 1. Check Win (TP) - Transition from OPEN to SCALED
-                    # The lines after the block to replace:
-                    if day_high >= trade['profit_target'] and trade['status'] == "OPEN":
-                        print(f"   🎉 Backfill SCALE OUT HIT: Hit {trade['profit_target']:.2f} on {check_date}")
-                        supabase.table("whale_alerts").update({
-                            "status": "SCALED",
-                            "tp_hit_date": check_date.isoformat(),
-                            "tp_hit_price": trade['profit_target'],
-                        }).eq("id", trade_id).execute()
-
-                        trade['status'] = "SCALED"
-                        trade['tp_hit_date'] = check_date.isoformat()
-
-                        # --- START INSERTION BLOCK (Save PnL on Scale) ---
-                        # Calculate and save the PnL at the point of scaling
-                        high_price = trade['highest_price']
-                        exit_price = trade['profit_target']
-
-                        # We use profit_target as the exit price signal since TP was hit
-                        final_sim_pnl_pct, final_tp_pnl_pct = calculate_trade_pnl_percentages(
-                            trade, high_price, exit_price
-                        )
-
-                        supabase.table("whale_alerts").update({
-                            "final_sim_pnl_pct": final_sim_pnl_pct,
-                            "final_tp_pnl_pct": final_tp_pnl_pct
-                        }).eq("id", trade_id).execute()
-
-                        # --- Run Daily OI Stop Check (Always on Day 1+) ---
-                    if check_date > alert_dt.date() and trade['status'] not in ["STOP_OI", "EXPIRED"]:
-                        stop_oi = int(trade['entry_size'] * 0.20)  # Use the corrected 20% stop
-
-                        # Assuming Stop OI kills the moonshot if status is SCALED, or the whole trade if OPEN
-                        if day_oi < stop_oi and day_oi > 0:
-                            print(f"   🛑 Backfill Stop: OI {day_oi} < {stop_oi} on {check_date}")
-                            high_price = trade['highest_price']
-                            exit_price = day_close  # Exit price is the day's closing price
-
-                            final_sim_pnl_pct, final_tp_pnl_pct = calculate_trade_pnl_percentages(
-                                trade, high_price, exit_price
-                            )
-
-                            supabase.table("whale_alerts").update({
-                                "status": "STOP_OI",
-                                "close_date": check_date.isoformat(),
-                                "close_price": day_close,
-                                "close_reason": "stop_oi",
-                                "final_sim_pnl_pct": final_sim_pnl_pct,  # <-- SAVE PNL
-                                "final_tp_pnl_pct": final_tp_pnl_pct  # <-- SAVE PNL
-                            }).eq("id", trade_id).execute()
-                            is_closed = True  # Stop tracking
-
-                # Save History Snapshot
-                supabase.table("whale_performance").insert({
-                    "alert_id": trade_id,
-                    "date": check_date.isoformat(),
-                    "price_high": day_high,
-                    "price_close": day_close,
-                    "price_low": day_low,  # <-- NEW: Save Daily Low
-                    "current_oi": day_oi,
-                    "implied_volatility": day_iv
-                }).execute()
-                print(f"   ☑️ Saved history snapshot for {check_date} (High: {day_high:.2f})")
-                # Move to next day
+        while check_date <= today and not is_closed:
+            date_int = get_theta_date_int(check_date)
+            if check_date.weekday() >= 5:  # Weekend skip
                 check_date += timedelta(days=1)
+                continue
 
-        except Exception as e:
-            print(f"❌ Error processing {message.id}: {e}")
-
-    def get_day_0_stats(self, ticker, strike, opt_type_char, exp_date, date_int, alert_dt, entry_oi):
-        """Endpoint 1: Trade Quote (Intraday) - Fetches high/close post-alert using the API client."""
-
-        # NOTE: alert_dt is the full EST datetime object passed from the caller.
-
-        # Fetch trade/quote data using the refactored client
-        data_list = fetch_trade_quote_data(ticker, strike, opt_type_char, exp_date, date_int)
-
-        # 1. Get the high price achieved AFTER the alert time using the helper
-        high = filter_and_get_post_alert_high(data_list, alert_dt)
-
-        # 2. Get the low price achieved AFTER the alert time using the new helper
-        low = filter_and_get_post_alert_low(data_list, alert_dt)  # <-- NEW: Fetch true low
-
-        # 3. Estimate Close Price (Last trade after alert)
-        # The block to replace:
-        # last element is the last trade of the day, but it's the best data available.
-        close = 0.0
-        if data_list:
-            # Re-run the list to find the absolute last price *after* the alert
-            last_valid_trade = 0.0
-            alert_time_str = alert_dt.strftime('%H:%M:%S.%f')[:-3]
-
-            for tick in reversed(data_list):
-                try:
-                    trade_timestamp = tick.get('trade_timestamp')
-                    price = float(tick.get('price', 0.0))
-
-                    if not trade_timestamp: continue
-
-                    # Convert UTC tick time to EST for comparison
-                    dt_utc = datetime.fromisoformat(trade_timestamp.replace('Z', '+00:00'))
-                    dt_est = dt_utc.astimezone(EST)
-                    trade_time_str = dt_est.strftime('%H:%M:%S.%f')[:-3]
-
-                    if trade_time_str >= alert_time_str and price > 0:
-                        last_valid_trade = price
-                        break  # Found the last trade after alert
-
-                except (KeyError, ValueError, IndexError, AttributeError):
+            # FETCH CORRECT DATA (Day 0 Ticks vs EOD)
+            if check_date == alert_dt.date():
+                perf = get_intraday_performance(
+                    ticker, trade['strike'], trade['option_type'][0],
+                    parsed_data['expiration_date'], date_int, alert_dt
+                )
+                day_high, day_low, day_close = perf['high'], perf['low'], trade['entry_price']
+                day_oi = trade['entry_oi']
+            else:
+                eod = fetch_eod_data(
+                    ticker, trade['strike'], trade['option_type'][0],
+                    parsed_data['expiration_date'], date_int
+                )
+                if not eod:
+                    check_date += timedelta(days=1)
                     continue
+                day_high, day_low, day_close, day_oi = eod['high'], eod['low'], eod['close'], eod['oi']
 
-            close = last_valid_trade
+            # Update Simulation State
+            trade['highest_price'] = max(trade['highest_price'], day_high)
+            if trade['status'] == "OPEN" and day_low > 0:
+                trade['lowest_price'] = min(trade['lowest_price'], day_low)
 
-        if high == 0.0:
-            print(f"   ❌ Trade Quote error for {ticker}: No post-alert data returned.")
+            # Strategy Triggers
+            update_payload = {"highest_price": trade['highest_price'], "lowest_price": trade['lowest_price'],
+                              "last_price": day_close, "last_oi": day_oi}
 
-        # OI is assumed to be entry_oi for Day 0 logic. IV is skipped.
-        return high, close, low, entry_oi, 0.0  # <-- RETURN the correct 'low'
+            # Check Scale Out (TP)
+            if trade['status'] == "OPEN" and day_high >= trade['profit_target']:
+                trade['status'] = "SCALED"
+                sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, trade['highest_price'], trade['profit_target'])
+                update_payload.update({"status": "SCALED", "final_sim_pnl_pct": sim_pnl, "final_tp_pnl_pct": tp_pnl})
 
-    def get_eod_stats(self, ticker, strike, opt_type_char, exp_date, date_int):
-        """Endpoint 2: Standard EOD - Fetches high, close, and OI using the API client."""
+            # Check Stop OI (Day 1+)
+            if check_date > alert_dt.date() and day_oi < trade['stop_oi_level'] and day_oi > 0:
+                is_closed = True
+                sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, trade['highest_price'], day_close)
+                update_payload.update({
+                    "status": "STOP_OI", "close_date": check_date.isoformat(), "close_price": day_close,
+                    "close_reason": "stop_oi", "final_sim_pnl_pct": sim_pnl, "final_tp_pnl_pct": tp_pnl
+                })
 
-        eod_data = fetch_eod_data(ticker, strike, opt_type_char, exp_date, date_int)
+            # Update Main Record
+            supabase.table("whale_alerts").update(update_payload).eq("id", trade_id).execute()
 
-        if eod_data:
-            high = eod_data['high']
-            close = eod_data['close']
-            low = eod_data['low']  # <-- NEW: Extract Low
-            oi = eod_data['oi']
-            return high, close, low, oi, 0.0  # IV is permanently 0.0
+            # Save Snapshot
+            supabase.table("whale_performance").upsert({
+                "alert_id": trade_id, "date": check_date.isoformat(),
+                "price_high": day_high, "price_low": day_low, "price_close": day_close, "current_oi": day_oi
+            }, on_conflict="alert_id, date").execute()
 
-        print(f"      EOD {date_int}: Failed to fetch or parse EOD data. Returning 0s.")
-        # FIX CONFIRMED: Ensures 5 values are returned on failure: (high, close, low, oi, iv)
-        return 0.0, 0.0, 0.0, 0, 0.0
+            check_date += timedelta(days=1)
+
+    async def check_and_set_incremental_start(self):
+        """Checks DB for last entry and sets self.start_scan."""
+
+        def fetch_last():
+            return supabase.table("whale_alerts").select("discord_timestamp").order("discord_timestamp",
+                                                                                    desc=True).limit(1).execute()
+
+        last_db_entry = await asyncio.to_thread(fetch_last)
+        if last_db_entry.data:
+            last_dt = datetime.fromisoformat(last_db_entry.data[0]['discord_timestamp'])
+            self.start_scan = last_dt.astimezone(pytz.utc)
+            logger.info(f"📅 Resuming from DB timestamp: {last_dt}")
+            return True
+        return False
 
 
 if __name__ == "__main__":
     if not DISCORD_TOKEN:
-        print("❌ Error: DISCORD_TOKEN not found.")
+        logger.error("❌ DISCORD_TOKEN not found.")
     else:
         intents = discord.Intents.default()
         intents.message_content = True
