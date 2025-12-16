@@ -35,12 +35,6 @@ if SUPABASE_URL and SUPABASE_KEY:
 else:
     supabase = None
 
-# --- GENERAL HELPERS ---
-
-def get_theta_date_int(dt_obj):
-    """Converts a date object/datetime to a ThetaData-compatible YYYYMMDD integer."""
-    return int(dt_obj.strftime('%Y%m%d'))
-
 
 def get_option_root_params(trade):
     """Helper to build standard params for ThetaData (Symbol, Exp, Strike, Right) using JSON format."""
@@ -96,40 +90,6 @@ def fetch_nested_json_data(endpoint, params):
 
 # --- THETADATA FETCHERS ---
 
-def fetch_eod_data(trade, date_int):
-    """Fetches the End-Of-Day (EOD) data (High/Close)."""
-    params = get_option_root_params(trade)
-    params["start_date"] = date_int
-    params["end_date"] = date_int
-    endpoint = "/option/history/eod"
-
-    data_list = fetch_nested_json_data(endpoint, params)
-
-    if not data_list:
-        return None
-
-    try:
-        data_obj = data_list[0]
-
-        # Extract high and close, default to 0.0 if key is missing/null
-        high = float(data_obj.get('high', 0.0))
-        close = float(data_obj.get('close', 0.0))
-        low = float(data_obj.get('low', 0.0))  # <-- NEW: Extract Low
-
-        if high == 0.0 and close == 0.0:
-            # The block to replace:
-            print(f"      EOD Data for {trade['ticker']} appears inactive or zero-filled.")
-            return None
-
-        return {
-            "high": high,
-            "close": close,
-            "low": low  # <-- NEW: Return Low
-        }
-    except (ValueError, TypeError) as e:
-        # The lines after the block to replace:
-        print(f"      EOD Data Parsing Error: {e}")
-        return None
 
 
 def fetch_open_interest(trade, date_int):
@@ -188,43 +148,58 @@ def check_intraday_low(trade, today_int, alert_dt):
 def get_market_data(trade, data_date_int, is_day_0, alert_dt):
     """Unified function to fetch EOD, OI, and calculate High/Low."""
 
-    # 1. Get Official EOD Close and High/Low (Uses imported client function)
+    # 1. Get Official EOD Close and High/Low
+    # Note: We pass expiration as a datetime object for the helper
+    exp_dt = datetime.strptime(trade['expiration_date'], "%Y-%m-%d")
+
     eod_data = fetch_eod_data(
         trade['ticker'],
         trade['strike'],
         trade['option_type'][0],
-        datetime.strptime(trade['expiration_date'], "%Y-%m-%d"),
+        exp_dt,
         data_date_int
     )
 
-    # 2. Get Open Interest (OI) - Uses local function (as it's unique)
+
+
+    # 2. Get Open Interest (OI)
     oi = fetch_open_interest(trade, data_date_int)
 
     if not eod_data:
-        return {"high": 0.0, "close": 0.0, "low": 0.0, "oi": oi, "iv": None}
+        # Fallback if EOD fails: treat entry as the high/low/close
+        return {"high": float(trade['entry_price']), "close": float(trade['entry_price']),
+                "low": float(trade['entry_price']), "oi": oi, "iv": None}
 
     eod_close = eod_data['close']
     eod_day_high = eod_data['high']
     eod_day_low = eod_data['low']
+    entry_price = float(trade['entry_price'])
 
     if is_day_0:
-        print(f"   🔎 Day 0 Analysis: {trade['ticker']}")
-        # Fetch raw trade data for Day 0 time filtering
-        params = get_option_root_params(trade)
-        params["date"] = data_date_int
-        endpoint = "/option/history/trade"
-        data_list = fetch_nested_json_data(endpoint, params)
+        # FIX: Fetch the intraday ticks to define data_list
+        data_list = fetch_trade_quote_data(
+            trade['ticker'],
+            trade['strike'],
+            trade['option_type'][0],
+            exp_dt,
+            data_date_int
+        )
 
-        # Get Intraday High/Low (Post-Alert) using shared client helpers
+        # Get Intraday High/Low (Post-Alert) from the fetched data_list
         post_alert_high = filter_and_get_post_alert_high(data_list, alert_dt)
         post_alert_low = filter_and_get_post_alert_low(data_list, alert_dt)
 
-        final_low = post_alert_low
-        final_high = post_alert_high
+        # LOGIC: High is the max of (Entry, Ticks, EOD High)
+        final_high = max(entry_price, post_alert_high, eod_day_high)
+
+        # LOGIC: Low is the min of (Entry, Ticks, EOD Low) - ignoring 0.0
+        valid_ticks_low = post_alert_low if post_alert_low > 0 else entry_price
+        valid_eod_low = eod_day_low if eod_day_low > 0 else entry_price
+        final_low = min(entry_price, valid_ticks_low, valid_eod_low)
     else:
-        print(f"   🔎 Day 1+ Analysis: {trade['ticker']} on {data_date_int}")
-        final_low = eod_day_low
-        final_high = eod_day_high
+        # Day 1+ logic: Compare EOD against entry (High cannot be < entry)
+        final_high = max(eod_day_high, entry_price)
+        final_low = eod_day_low if eod_day_low > 0 else entry_price
 
     return {
         "high": final_high,
@@ -234,49 +209,31 @@ def get_market_data(trade, data_date_int, is_day_0, alert_dt):
         "iv": None
     }
 
-
 def calculate_trade_pnl_percentages(trade, high, exit_price):
     """
-    Calculates the final PnL percentages for both Scaled/Moonshot and Full TP Exit
-    based on the trade's entry and maximum performance, assuming default scaling rules.
-
-    Returns: (final_sim_pnl_pct, final_tp_pnl_pct) as a percentage (e.g., 20.0 for 20%)
+    Deterministically calculates PnL.
+    Curve 1 (Baseline): Always +20% if 20% hit, else exit_price return.
+    Curve 2 (Scaled): 80% at 20% profit + 20% at High (Moonshot).
     """
-
     entry = float(trade['entry_price'])
-    # Avoid division by zero
-    if entry == 0:
-        return 0.0, 0.0
+    if entry == 0: return 0.0, 0.0
 
     target_price = entry * (1 + TP_PCT / 100.0)
     hit_tp = high >= target_price
 
-    # --- 1. Scaled & Moonshot PnL Calculation ---
+    # 1. Curve 1: Baseline (100% Exit at 20%)
+    final_tp_pnl_pct = TP_PCT if hit_tp else ((exit_price - entry) / entry) * 100.0
+
+    # 2. Curve 2: Baseline Scale (80/20 Strategy)
     if hit_tp:
-        # The moonshot portion (20%) is calculated based on the HIGHEST price ever achieved.
-        moonshot_exit_price = high
-
-        # Scale out profit is realized
-        scale_pct_amount = SCALE_PCT / 100.0
-        scale_pnl_pct = scale_pct_amount * TP_PCT
-
-        # Moonshot PnL (on remaining position)
-        moon_pct_amount = (1 - scale_pct_amount)
-        moon_ret_pct = ((moonshot_exit_price - entry) / entry) * 100.0
-        moon_pnl_pct = moon_pct_amount * moon_ret_pct
-
-        final_sim_pnl_pct = scale_pnl_pct + moon_pnl_pct
+        # Scale portion: 80% of position realized at 20% gain
+        scale_gain = (SCALE_PCT / 100.0) * TP_PCT
+        # Moonshot portion: 20% of position at peak high
+        moon_gain = (MOON_PCT / 100.0) * (((high - entry) / entry) * 100.0)
+        final_sim_pnl_pct = scale_gain + moon_gain
     else:
-        # No TP hit, 100% position exited at exit_price (current price/close price)
+        # No TP hit: 100% position exits at current/exit price
         final_sim_pnl_pct = ((exit_price - entry) / entry) * 100.0
-
-    # --- 2. Full TP Exit PnL Calculation ---
-    if hit_tp:
-        # If TP was hit, the full exit model assumes 100% profit at TP
-        final_tp_pnl_pct = TP_PCT
-    else:
-        # If no TP was hit, the full exit model exits at exit_price
-        final_tp_pnl_pct = ((exit_price - entry) / entry) * 100.0
 
     return final_sim_pnl_pct, final_tp_pnl_pct
 
@@ -326,8 +283,8 @@ def run_daily_update():
             }).eq("id", trade['id']).execute()
 
             # For EXPIRED, we assume an exit price of $0.00 unless a price was recorded.
-            high_price = float(trade.get('highest_price') or 0.0)
-            exit_price = 0.0  # Option is assumed worthless at expiration
+            high_price = max(float(trade.get('highest_price') or 0.0), market_data['high'] if market_data else 0.0)
+            exit_price = 0.0
 
             final_sim_pnl_pct, final_tp_pnl_pct = calculate_trade_pnl_percentages(
                 trade, high_price, exit_price
@@ -401,32 +358,33 @@ def run_daily_update():
                 update_payload["final_tp_pnl_pct"] = final_tp_pnl_pct
 
         elif trade['status'] == "SCALED":
-            # --- START INSERTION BLOCK (10 lines) ---
-            print(f"   📈 Recalculating Moonshot PnL for SCALED trade {trade['ticker']}")
+            # Update the peak high first
+            # 1. Get the current peak high
+            current_high = update_payload["highest_price"]
 
-            # Use the new highest_price (which includes today's high) for PnL calculation
-            current_high_price = update_payload["highest_price"]
-
-            # For SCALED, we use the highest price seen as the PnL driver.
-            final_sim_pnl_pct, final_tp_pnl_pct = calculate_trade_pnl_percentages(
-                trade, current_high_price, current_high_price
+            # 2. Strategy: 80% at 20% TP + 20% at the NEW Peak High
+            # We pass current_high for BOTH high and exit_price because for a
+            # SCALED trade, the moonshot is valued at its peak, not the current close.
+            final_sim_pnl_pct, _ = calculate_trade_pnl_percentages(
+                trade, current_high, current_high
             )
 
-            # Continuously update the PnL fields for SCALED trades
-            update_payload["final_sim_pnl_pct"] = final_sim_pnl_pct
-            update_payload["final_tp_pnl_pct"] = final_tp_pnl_pct
+            update_payload.update({
+                "final_sim_pnl_pct": final_sim_pnl_pct,
+                "final_tp_pnl_pct": 20.0  # HARD LOCK: Baseline is always 20% for scaled trades
+            })
 
         stop_oi = int(trade['stop_oi_level'])
         if oi < stop_oi and trade['status'] != "STOP_OI":
             print(f"   🛑 STOP OI HIT: {trade['ticker']} (OI {oi} < {stop_oi})")
 
-            # Use the new utility function for accurate PnL calculation
+            # FIX: Use the 'highest_price' from update_payload (Lifetime High)
             high_price = update_payload["highest_price"]
-            # Close price is the exit price for STOP_OI
             exit_price = close
 
+            # This ensures Moonshot PnL uses the peak from Day 1, even if Stopped on Day 3
             final_sim_pnl_pct, final_tp_pnl_pct = calculate_trade_pnl_percentages(
-                trade, high, exit_price  # <-- CORRECTED: Use exit_price (close) for stop
+                trade, high_price, exit_price
             )
 
             update_payload["final_sim_pnl_pct"] = final_sim_pnl_pct

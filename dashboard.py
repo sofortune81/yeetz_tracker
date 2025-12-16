@@ -105,7 +105,17 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
 
     for _, row in sim_df.iterrows():
         entry = float(row['entry_price'])
-        high = float(row['highest_price'])
+
+        # FIX: Force high to be at least the entry price for PnL calculations
+        high = max(float(row['highest_price'] or 0), entry)
+
+        # FIX: Resolve the 9999/0 low price issue
+        raw_low = float(row['lowest_price'] or entry)
+        lowest_price_float = raw_low if (0 < raw_low < 9999) else entry
+
+        # Use these cleaned variables for PnL and Drawdown
+        #entry = float(row['entry_price'])
+        #high = float(row['highest_price'])
         curr_price = float(row['last_price'] or entry)
         target_price = entry * (1 + tp_pct / 100.0)
 
@@ -122,121 +132,44 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
         moonshot_ret_pct = 0.0
         is_winner = False
 
-        # --- 1. If Trade has Final PnL saved (Realized PnL from DB: STOP_OI, EXPIRED, SCALED) ---
-        if row['final_sim_pnl_pct'] is not None:
-            final_ret_pct = row['final_sim_pnl_pct']
-            final_tp_ret_pct = row['final_tp_pnl_pct']
-
-            pnl = row['pos_size_dollars'] * (final_ret_pct / 100.0)
-            tp_exit_pnl = row['pos_size_dollars'] * (final_tp_ret_pct / 100.0)
+        # --- MEMORIALIZED SIMULATION ENGINE ---
+        if row['final_tp_pnl_pct'] is not None:
+            # Use fixed history from DB for Curves 1 & 2
+            tp_exit_ret_pct = row['final_tp_pnl_pct']
+            sim_ret_pct = row['final_sim_pnl_pct']
             status = row['status']
-            left_on_table = 0.0  # Already finalized/realized
-            is_winner = pnl > 0  # A win is defined by a positive PnL
-
-            # --- CORRECTED PNL BREAKDOWN (Calculate Components & Set Total PnL to Sum) ---
-            if row['status'] == 'SCALED' or row['final_tp_pnl_pct'] == TP_PCT:
-                # 1. Calculate Scale Component PnL
-                scale_pct_amount = SCALE_PCT / 100.0
-                scale_pnl_dollars = row['pos_size_dollars'] * scale_pct_amount * (TP_PCT / 100.0)
-                scale_ret_pct = TP_PCT
-
-                # 2. Calculate Moonshot Component PnL
-                moon_pct_amount = (100 - SCALE_PCT) / 100.0
-                moonshot_ret_pct = ((high - entry) / entry) * 100.0
-                moonshot_pnl_dollars = row['pos_size_dollars'] * moon_pct_amount * (moonshot_ret_pct / 100.0)
-
-                # 3. SET FINAL VALUES
-                # The Total PnL MUST be the sum of the components, overriding the database's 'pnl'
-                pnl = scale_pnl_dollars + moonshot_pnl_dollars
-
-                scale_pnl = scale_pnl_dollars
-                moonshot_pnl = moonshot_pnl_dollars
-                is_winner = True  # <-- ADDED: SCALED with final PnL is always a winner
-
-            else:
-                # For STOP_OI or EXPIRED without TP hit: Display the total realized PnL as the 'scale_pnl'.
-                # pnl is already set based on final_ret_pct from the DB.
-                scale_pnl = pnl
-                scale_ret_pct = final_ret_pct
-                moonshot_pnl = 0.0
-                moonshot_ret_pct = 0.0
-        # Else: breakdown stays 0.0
-
-        # --- 2. If PnL is NOT saved (OPEN/SCALED without final PnL, e.g., current day trade) ---
+            is_winner = tp_exit_ret_pct > 0
+            unrealized_pnl_pct = 0.0
         else:
-            exit_price = float(row['close_price'] or curr_price)
+            # Use live market data for OPEN (Curve 3)
+            curr_price = float(row['last_price'] or entry)
+            live_ret = ((curr_price - entry) / entry) * 100.0 if entry != 0 else 0
+            tp_exit_ret_pct = live_ret
+            sim_ret_pct = live_ret
+            status = row['status']
+            is_winner = live_ret > 0
+            unrealized_pnl_pct = live_ret
 
-            if entry != 0:
-                if hit_tp or row['status'] == 'SCALED':
-                    # Case: TP hit (SCALED) - Calculate full potential PnL (as if closed today at high/TP)
-                    is_winner = True
+        # Convert to dollars
+        pnl_strategy = row['pos_size_dollars'] * (sim_ret_pct / 100.0)
+        pnl_baseline = row['pos_size_dollars'] * (tp_exit_ret_pct / 100.0)
 
-                    # 1. Scale Out PnL (80% at 20% gain)
-                    scale_pos_size = row['pos_size_dollars'] * (SCALE_PCT / 100.0)
-                    scale_pnl = scale_pos_size * (TP_PCT / 100.0)
-                    scale_ret_pct = TP_PCT
-
-                    # 2. Moonshot PnL (20% at Peak High)
-                    moon_pos_size = row['pos_size_dollars'] * ((100 - SCALE_PCT) / 100.0)
-                    moonshot_ret_pct = ((high - entry) / entry) * 100.0
-                    moonshot_pnl = moon_pos_size * (moonshot_ret_pct / 100.0)
-
-                    pnl = scale_pnl + moonshot_pnl  # <-- Total PnL is scale + moonshot peak
-                    tp_exit_pnl = row['pos_size_dollars'] * (TP_PCT / 100.0)
-
-                    # Left on Table
-                    max_ret_pct = ((high - entry) / entry) * 100.0
-                    potential_max_pnl = row['pos_size_dollars'] * (max_ret_pct / 100.0)
-                    left_on_table = potential_max_pnl - pnl
-                    status = row['status']  # Keep OPEN or SCALED
-                else:
-                    # Case: No TP hit (OPEN/DRAWDOWN) - PnL at current price
-                    is_winner = False
-                    ret = (exit_price - entry) / entry
-                    pnl = row['pos_size_dollars'] * ret
-                    tp_exit_pnl = pnl
-                    left_on_table = 0.0
-                    status = row['status']
-                    # PnL Breakdown stays 0.0
-            else:
-                status = "INVALID_ENTRY"
-
-        # --- Collect Results ---
-        win_loss_char = ""  # Default to blank (for OPEN trades)
-
-        # Determine W/L for Realized Trades
-        if status in ['STOP_OI', 'EXPIRED']:
-            # Closed trade: Determine W/L based on final sim_pnl
-            win_loss_char = "W" if pnl > 0.0 else "L"
-        elif status == 'SCALED' and row['final_sim_pnl_pct'] is not None:
-            # SCALED with final PnL from DB (Always W, as PnL >= Scale-out PnL)
-            win_loss_char = "W"
-        elif status == 'SCALED' and row['final_sim_pnl_pct'] is None:
-            # SCALED without final PnL yet (current day): Assume W for the dashboard's W/L count
-            win_loss_char = "W"
-        # If status is 'OPEN' or 'SCALED' without final PnL, win_loss_char remains ""
-            # --- Max Drawdown Calculation (Robust against 99999 placeholder) ---
-        dd_pct = 0.0
-        lowest_price_float = float(row['lowest_price'])
-
-        if entry != 0 and lowest_price_float < 99999:
-            dd_pct = min(0, ((lowest_price_float - entry) / entry) * 100.0)
+        # Max Drawdown Logic
+        dd_pct = min(0, ((lowest_price_float - entry) / entry) * 100.0) if entry != 0 else 0
 
         results.append({
             "id": row['id'],
-            "sim_pnl": pnl,
-            "tp_exit_pnl": tp_exit_pnl,
-            "max_drawdown_pct": dd_pct,  # <-- Use the robustly calculated DD
+            "sim_pnl": pnl_strategy,  # Strategy Curve
+            "tp_exit_pnl": pnl_baseline,  # Baseline Curve
             "sim_status": status,
-            "sim_ret_pct": (pnl / row['pos_size_dollars']) * 100 if row['pos_size_dollars'] != 0 else 0.0,
-            "left_on_table": max(0, left_on_table),
-            "scale_pnl_dollars": scale_pnl,
-            "scale_pnl_pct": scale_ret_pct,
-            "moonshot_pnl_dollars": moonshot_pnl,
-            "moonshot_pnl_pct": moonshot_ret_pct,
+            "sim_ret_pct": sim_ret_pct,
             "is_winner": is_winner,
-            "win_loss": win_loss_char  # This is the desired W/L/"" column
+            "max_drawdown_pct": dd_pct,
+            "unrealized_pnl_pct": unrealized_pnl_pct,
+            "unrealized_pnl_dollars": row['pos_size_dollars'] * (unrealized_pnl_pct / 100.0),
+            "win_loss": "W" if (is_winner and status != "OPEN") else ("L" if status in ["STOP_OI", "EXPIRED"] else "")
         })
+
 
     res_df = pd.DataFrame(results)
     # Drop any stale 'sim_pnl' or 'tp_exit_pnl' columns from the original trade data
@@ -288,9 +221,12 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
     final_df['sim_pnl'] = final_df['sim_pnl'].fillna(0.0)
     final_df['tp_exit_pnl'] = final_df['tp_exit_pnl'].fillna(0.0)
 
+    # Existing lines
     final_df['equity_curve_scaled'] = initial_capital + final_df['sim_pnl'].cumsum()
     final_df['equity_curve_tp_exit'] = initial_capital + final_df['tp_exit_pnl'].cumsum()
 
+    # NEW: Curve 3 - Total Portfolio Value (Strategy + Open Trade Fluctuations)
+    final_df['equity_curve_live'] = final_df['equity_curve_scaled'] + final_df['unrealized_pnl_dollars'].cumsum()
     return final_df
 
 # --- 4. VISUALIZATION COMPONENTS ---
@@ -357,6 +293,12 @@ def render_equity_chart(df):
                              mode='lines',
                              name='Baseline PnL (100% @ TP)',
                              line=dict(color='#636EFA', width=1.5, dash='dot')))  # Blue/Grey dot
+
+    # Add this trace to your chart function
+    fig.add_trace(go.Scatter(x=df['discord_timestamp'], y=df['equity_curve_live'],
+                             mode='lines',
+                             name='Live Portfolio (Strategy + Open Risk)',
+                             line=dict(color='#FFA500', width=2)))  # Orange line
 
     fig.update_layout(
         title="<b>📈 Portfolio Velocity (Scaled vs. Full TP Exit)</b>",

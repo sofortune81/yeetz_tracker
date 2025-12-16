@@ -1,4 +1,3 @@
-# --- IMPORTS ---
 import os
 import sys
 import discord
@@ -8,10 +7,9 @@ from dotenv import load_dotenv
 from supabase import create_client
 import pytz
 
-from logger import setup_logger
+# Shared Project Imports
 from parser import parse_yeetz_alert
-from daily_tracker import calculate_trade_pnl_percentages  #
-
+from daily_tracker import calculate_trade_pnl_percentages, get_market_data, fetch_open_interest
 from theta_api_client import (
     get_theta_date_int,
     get_intraday_performance,
@@ -25,26 +23,24 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 TARGET_CHANNEL_ID = int(os.getenv("TARGET_CHANNEL_ID"))
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-
-logger = setup_logger(name="backfill", log_filename="backfill.log")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 class BackfillBot(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Initialize the attribute to prevent AttributeError
-        self.start_scan = datetime.now(pytz.utc) - timedelta(days=30)
+        self.start_scan = None
 
     async def on_ready(self):
-        logger.info(f"✅ Backfill Bot Logged in as {self.user}")
+        print(f"✅ Backfill Bot Logged in as {self.user}")
         await self.run_backfill()
         await self.close()
 
     async def run_backfill(self):
-        logger.info("⏳ Starting Intelligent Backfill...")
+        print("⏳ Starting Intelligent Backfill...")
         channel = self.get_channel(TARGET_CHANNEL_ID)
 
+        # 1. Determine Scan Start (CLI Arguments or DB Lookup)
         try:
             days_lookback = int(sys.argv[1]) if len(sys.argv) > 1 else 30
             prompt_full_repop = sys.argv[2].lower() if len(sys.argv) > 2 else 'no'
@@ -52,69 +48,71 @@ class BackfillBot(discord.Client):
             days_lookback = 30
             prompt_full_repop = 'no'
 
-        # --- 2. Handle Full Repopulation ---
         if prompt_full_repop == 'yes':
-            logger.warning("🛑 FULL BACKFILL SELECTED: Clearing existing data...")
+            print("\n🛑 FULL BACKFILL SELECTED: Deleting all existing trade data...")
 
             def delete_db_data():
                 supabase.table("whale_performance").delete().neq("alert_id", "0").execute()
                 supabase.table("whale_alerts").delete().neq("id", "0").execute()
 
             await asyncio.to_thread(delete_db_data)
-
-            # Use self. to ensure the attribute is set correctly
             self.start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
-            logger.info(f"✅ DB Cleared. Scanning last {days_lookback} days.")
+            print(f"✅ Database cleared. Scanning the last {days_lookback} days.")
         else:
-            # --- 3. Incremental Backfill ---
             is_incremental = await self.check_and_set_incremental_start()
             if not is_incremental:
                 self.start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
-                logger.info(f"🔎 Empty DB. Scanning last {days_lookback} days.")
+                print(f"🔎 Empty DB. Scanning the last {days_lookback} days.")
 
-        # --- 4. Fetch and Process ---
-        messages_to_process = []
+        # 2. Fetch Discord History
+        messages = []
         async for message in channel.history(after=self.start_scan, limit=None, oldest_first=True):
-            if message.author == self.user: continue
             if message.embeds:
-                messages_to_process.append(message)
+                messages.append(message)
 
-        logger.info(f"📥 Found {len(messages_to_process)} alerts to process.")
+        print(f"📥 Found {len(messages)} alerts to process.")
 
-        for msg in messages_to_process:
+        # 3. Process Each Alert (The Time Machine)
+        for msg in messages:
             await self.process_and_simulate(msg)
-            await asyncio.sleep(1.0)
+            await asyncio.sleep(1.5)
 
     async def process_and_simulate(self, message):
-        """Re-implementing the Simulation Time Machine"""
-        parsed_data = parse_yeetz_alert(message.embeds[0])
-        if not parsed_data: return
+        print(f"\n-> START Processing Message ID: {message.id}")
+        parsed = parse_yeetz_alert(message.embeds[0])
+        if not parsed:
+            print(f"   - SKIPPING {message.id}: Failed to parse alert details.")
+            return
 
         alert_dt = message.created_at.astimezone(EST)
-        ticker = parsed_data['ticker']
+        exp_date = parsed['expiration_date']
+        ticker = parsed['ticker']
 
-        # Initial Trade Setup
+        print(f"⚡ Processing: {ticker} {parsed['strike']}{parsed['option_type']} (Alert: {alert_dt.date()})")
+
+        # Initial Trade Record
         trade = {
             "discord_message_id": str(message.id),
             "ticker": ticker,
-            "strike": parsed_data['strike'],
-            "option_type": parsed_data['option_type'],
-            "expiration_date": parsed_data['expiration_date'].isoformat(),
-            "entry_price": parsed_data['entry_price'],
-            "entry_size": parsed_data['entry_size'],
-            "entry_oi": parsed_data['entry_oi'],
-            "profit_target": parsed_data['entry_price'] * 1.20,
-            "stop_oi_level": int(parsed_data['entry_size'] * 0.20),
+            "strike": parsed['strike'],
+            "option_type": parsed['option_type'],
+            "expiration_date": exp_date.isoformat(),
+            "entry_price": parsed['entry_price'],
+            "entry_size": parsed['entry_size'],
+            "entry_oi": parsed['entry_oi'],
+            "profit_target": parsed['entry_price'] * 1.20,
+            "stop_oi_level": int(parsed['entry_size'] * 0.20),
             "discord_timestamp": alert_dt.isoformat(),
             "status": "OPEN",
-            "highest_price": 0.0,
-            "lowest_price": 9999.0
+            "status": "OPEN",
+            "highest_price": parsed['entry_price'],  # Initialize with entry, not 0.0
+            "lowest_price": parsed['entry_price']  # Initialize with entry, not 9999
         }
 
-        # Save record to get Trade ID
         db_res = supabase.table("whale_alerts").upsert(trade, on_conflict="discord_message_id").execute()
         if not db_res.data: return
         trade_id = db_res.data[0]['id']
+        print(f"   ✅ Saved alert. Trade ID: {trade_id}")
 
         # Simulation Loop (Alert Day -> Today)
         check_date = alert_dt.date()
@@ -122,85 +120,120 @@ class BackfillBot(discord.Client):
         is_closed = False
 
         while check_date <= today and not is_closed:
+            # 1. Define date_int and skip weekends
             date_int = get_theta_date_int(check_date)
-            if check_date.weekday() >= 5:  # Weekend skip
+
+            if check_date.weekday() >= 5:
+                day_name = "Saturday" if check_date.weekday() == 5 else "Sunday"
+                print(f"      ☕ {check_date} is {day_name}. Skipping.")
                 check_date += timedelta(days=1)
                 continue
 
-            # FETCH CORRECT DATA (Day 0 Ticks vs EOD)
-            if check_date == alert_dt.date():
-                perf = get_intraday_performance(
-                    ticker, trade['strike'], trade['option_type'][0],
-                    parsed_data['expiration_date'], date_int, alert_dt
-                )
-                day_high, day_low, day_close = perf['high'], perf['low'], trade['entry_price']
-                day_oi = trade['entry_oi']
-            else:
-                eod = fetch_eod_data(
-                    ticker, trade['strike'], trade['option_type'][0],
-                    parsed_data['expiration_date'], date_int
-                )
-                if not eod:
+            if check_date.weekday() >= 5:
+                check_date += timedelta(days=1)
+                continue
+
+            # 2. Skip today's EOD if market is still open
+            now_est = datetime.now(EST)
+            if check_date == today and now_est.hour < 17:
+                if check_date != alert_dt.date():
                     check_date += timedelta(days=1)
                     continue
-                day_high, day_low, day_close, day_oi = eod['high'], eod['low'], eod['close'], eod['oi']
 
-            # Update Simulation State
+            # 3. Use the unified get_market_data (Handles Day 0 and EOD)
+            market_data = get_market_data(trade, date_int, (check_date == alert_dt.date()), alert_dt)
+
+            if not market_data or market_data['close'] == 0:
+                print(f"      EOD {date_int}: No data. Skipping.")
+                check_date += timedelta(days=1)
+                continue
+
+            # 4. Extract standard variables
+            day_high = market_data['high']
+            day_low = market_data['low']
+            day_close = market_data['close']
+            day_oi = market_data['oi']
+
+            # Update Simulation Local State
             trade['highest_price'] = max(trade['highest_price'], day_high)
             if trade['status'] == "OPEN" and day_low > 0:
                 trade['lowest_price'] = min(trade['lowest_price'], day_low)
 
-            # Strategy Triggers
-            update_payload = {"highest_price": trade['highest_price'], "lowest_price": trade['lowest_price'],
-                              "last_price": day_close, "last_oi": day_oi}
 
-            # Check Scale Out (TP)
-            if trade['status'] == "OPEN" and day_high >= trade['profit_target']:
+            update_payload = {
+                "highest_price": trade['highest_price'],
+                "lowest_price": trade['lowest_price'],
+                "last_price": day_close,
+                "last_oi": day_oi
+            }
+
+            # 1. Memorialize the Win (Baseline Curve)
+            if trade['status'] == "OPEN" and trade['highest_price'] >= trade['profit_target']:
+                print(f"🎉 WIN LOCKED: Memorializing 20% Baseline for {ticker}")
                 trade['status'] = "SCALED"
-                sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, trade['highest_price'], trade['profit_target'])
-                update_payload.update({"status": "SCALED", "final_sim_pnl_pct": sim_pnl, "final_tp_pnl_pct": tp_pnl})
 
-            # Check Stop OI (Day 1+)
-            if check_date > alert_dt.date() and day_oi < trade['stop_oi_level'] and day_oi > 0:
-                is_closed = True
-                sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, trade['highest_price'], day_close)
+                # Calculate initial values. Baseline PnL (tp_pnl) is now 20.0 and LOCKED.
+                sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, trade['highest_price'], trade['profit_target'])
+
                 update_payload.update({
-                    "status": "STOP_OI", "close_date": check_date.isoformat(), "close_price": day_close,
-                    "close_reason": "stop_oi", "final_sim_pnl_pct": sim_pnl, "final_tp_pnl_pct": tp_pnl
+                    "status": "SCALED",
+                    "tp_hit_date": check_date.isoformat(),
+                    "tp_hit_price": trade['profit_target'],
+                    "final_tp_pnl_pct": 20.0,  # LOCKED Curve 1
+                    "final_sim_pnl_pct": sim_pnl  # Initial Curve 2
                 })
 
-            # Update Main Record
+            # 2. Update Peak for SCALED trades (Moonshot growth)
+            elif trade['status'] == "SCALED":
+                sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, trade['highest_price'], day_close)
+                update_payload.update({
+                    "final_sim_pnl_pct": sim_pnl  # Curve 2 grows as Peak High grows
+                })
+
+            # 3. Finalize on Stop OI or Expiration
+            if (check_date > alert_dt.date() and day_oi < trade['stop_oi_level'] and day_oi > 0) or (
+                    check_date >= exp_date):
+                reason = "stop_oi" if check_date < exp_date else "expiration"
+                print(f"   🛑 Finalizing Trade: {reason}")
+                is_closed = True
+
+                # Final check of PnL at close
+                sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, trade['highest_price'], day_close)
+                update_payload.update({
+                    "status": "STOP_OI" if reason == "stop_oi" else "EXPIRED",
+                    "close_date": check_date.isoformat(),
+                    "close_price": day_close,
+                    "close_reason": reason,
+                    "final_sim_pnl_pct": sim_pnl,
+                    "final_tp_pnl_pct": tp_pnl
+                })
+
+            # Update Database
             supabase.table("whale_alerts").update(update_payload).eq("id", trade_id).execute()
 
-            # Save Snapshot
+            # Save History Snapshot
             supabase.table("whale_performance").upsert({
                 "alert_id": trade_id, "date": check_date.isoformat(),
                 "price_high": day_high, "price_low": day_low, "price_close": day_close, "current_oi": day_oi
             }, on_conflict="alert_id, date").execute()
+            print(f"   ☑️ Saved history snapshot for {check_date} (High: {day_high:.2f})")
 
             check_date += timedelta(days=1)
 
     async def check_and_set_incremental_start(self):
-        """Checks DB for last entry and sets self.start_scan."""
-
         def fetch_last():
             return supabase.table("whale_alerts").select("discord_timestamp").order("discord_timestamp",
                                                                                     desc=True).limit(1).execute()
 
-        last_db_entry = await asyncio.to_thread(fetch_last)
-        if last_db_entry.data:
-            last_dt = datetime.fromisoformat(last_db_entry.data[0]['discord_timestamp'])
-            self.start_scan = last_dt.astimezone(pytz.utc)
-            logger.info(f"📅 Resuming from DB timestamp: {last_dt}")
+        res = await asyncio.to_thread(fetch_last)
+        if res.data:
+            self.start_scan = datetime.fromisoformat(res.data[0]['discord_timestamp']).astimezone(pytz.utc)
+            print(f"📅 Resuming from DB timestamp: {self.start_scan}")
             return True
         return False
 
 
 if __name__ == "__main__":
-    if not DISCORD_TOKEN:
-        logger.error("❌ DISCORD_TOKEN not found.")
-    else:
-        intents = discord.Intents.default()
-        intents.message_content = True
-        client = BackfillBot(intents=intents)
-        client.run(DISCORD_TOKEN)
+    intents = discord.Intents.default()
+    intents.message_content = True
+    BackfillBot(intents=intents).run(DISCORD_TOKEN)
