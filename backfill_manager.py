@@ -9,7 +9,7 @@ import pytz
 
 # Shared Project Imports
 from parser import parse_yeetz_alert
-from daily_tracker import calculate_trade_pnl_percentages, get_market_data, fetch_open_interest
+from daily_tracker import calculate_trade_pnl_percentages, get_market_data, fetch_open_interest, process_trade_state
 from theta_api_client import (
     get_theta_date_int,
     get_intraday_performance,
@@ -148,76 +148,37 @@ class BackfillBot(discord.Client):
                 check_date += timedelta(days=1)
                 continue
 
-            # 4. Extract standard variables
-            day_high = market_data['high']
-            day_low = market_data['low']
-            day_close = market_data['close']
-            day_oi = market_data['oi']
+            # 4. Use the Shared State Machine (Source of Truth)
+            new_status, update_payload = process_trade_state(
+                trade,
+                market_data['high'],
+                market_data['low'],
+                market_data['close'],
+                market_data['oi'],
+                trade['status'],
+                trade['expiration_date']
+            )
 
-            # Update Simulation Local State
-            trade['highest_price'] = max(trade['highest_price'], day_high)
-            if trade['status'] == "OPEN" and day_low > 0:
-                trade['lowest_price'] = min(trade['lowest_price'], day_low)
+            # Update local trade object for the next loop iteration
+            trade.update(update_payload)
 
-
-            update_payload = {
-                "highest_price": trade['highest_price'],
-                "lowest_price": trade['lowest_price'],
-                "last_price": day_close,
-                "last_oi": day_oi
-            }
-
-            # 1. Memorialize the Win (Baseline Curve)
-            if trade['status'] == "OPEN" and trade['highest_price'] >= trade['profit_target']:
-                print(f"🎉 WIN LOCKED: Memorializing 20% Baseline for {ticker}")
-                trade['status'] = "SCALED"
-
-                # Calculate initial values. Baseline PnL (tp_pnl) is now 20.0 and LOCKED.
-                sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, trade['highest_price'], trade['profit_target'])
-
-                update_payload.update({
-                    "status": "SCALED",
-                    "tp_hit_date": check_date.isoformat(),
-                    "tp_hit_price": trade['profit_target'],
-                    "final_tp_pnl_pct": 20.0,  # LOCKED Curve 1
-                    "final_sim_pnl_pct": sim_pnl  # Initial Curve 2
-                })
-
-            # 2. Update Peak for SCALED trades (Moonshot growth)
-            elif trade['status'] == "SCALED":
-                sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, trade['highest_price'], day_close)
-                update_payload.update({
-                    "final_sim_pnl_pct": sim_pnl  # Curve 2 grows as Peak High grows
-                })
-
-            # 3. Finalize on Stop OI or Expiration
-            if (check_date > alert_dt.date() and day_oi < trade['stop_oi_level'] and day_oi > 0) or (
-                    check_date >= exp_date):
-                reason = "stop_oi" if check_date < exp_date else "expiration"
-                print(f"   🛑 Finalizing Trade: {reason}")
+            if new_status in ["STOP_OI", "EXPIRED"]:
                 is_closed = True
 
-                # Final check of PnL at close
-                sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, trade['highest_price'], day_close)
-                update_payload.update({
-                    "status": "STOP_OI" if reason == "stop_oi" else "EXPIRED",
-                    "close_date": check_date.isoformat(),
-                    "close_price": day_close,
-                    "close_reason": reason,
-                    "final_sim_pnl_pct": sim_pnl,
-                    "final_tp_pnl_pct": tp_pnl
-                })
-
-            # Update Database
+            # Update Database - Single Point of Entry
             supabase.table("whale_alerts").update(update_payload).eq("id", trade_id).execute()
 
             # Save History Snapshot
             supabase.table("whale_performance").upsert({
-                "alert_id": trade_id, "date": check_date.isoformat(),
-                "price_high": day_high, "price_low": day_low, "price_close": day_close, "current_oi": day_oi
+                "alert_id": trade_id,
+                "date": check_date.isoformat(),
+                "price_high": market_data['high'],
+                "price_low": market_data['low'],
+                "price_close": market_data['close'],
+                "current_oi": market_data['oi']
             }, on_conflict="alert_id, date").execute()
-            print(f"   ☑️ Saved history snapshot for {check_date} (High: {day_high:.2f})")
 
+            print(f"   ☑️ Saved snapshot for {check_date} (Status: {new_status})")
             check_date += timedelta(days=1)
 
     async def check_and_set_incremental_start(self):

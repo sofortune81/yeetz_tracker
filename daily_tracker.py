@@ -209,30 +209,31 @@ def get_market_data(trade, data_date_int, is_day_0, alert_dt):
         "iv": None
     }
 
+# Replace the existing calculate_trade_pnl_percentages function:
+
 def calculate_trade_pnl_percentages(trade, high, exit_price):
-    """
-    Deterministically calculates PnL.
-    Curve 1 (Baseline): Always +20% if 20% hit, else exit_price return.
-    Curve 2 (Scaled): 80% at 20% profit + 20% at High (Moonshot).
-    """
     entry = float(trade['entry_price'])
     if entry == 0: return 0.0, 0.0
 
     target_price = entry * (1 + TP_PCT / 100.0)
     hit_tp = high >= target_price
 
-    # 1. Curve 1: Baseline (100% Exit at 20%)
-    final_tp_pnl_pct = TP_PCT if hit_tp else ((exit_price - entry) / entry) * 100.0
-
-    # 2. Curve 2: Baseline Scale (80/20 Strategy)
+    # 1. Curve 1: Baseline (100% Exit at 20% TP)
     if hit_tp:
-        # Scale portion: 80% of position realized at 20% gain
+        final_tp_pnl_pct = TP_PCT # Locked
+    else:
+        # 100% position is valued at exit (e.g. 0.0 if expired)
+        final_tp_pnl_pct = ((exit_price - entry) / entry) * 100.0
+
+    # 2. Curve 2: Scaled (80/20 Strategy)
+    if hit_tp:
+        # 80% locked at 20% gain
         scale_gain = (SCALE_PCT / 100.0) * TP_PCT
-        # Moonshot portion: 20% of position at peak high
+        # 20% moonshot locked at Peak High
         moon_gain = (MOON_PCT / 100.0) * (((high - entry) / entry) * 100.0)
         final_sim_pnl_pct = scale_gain + moon_gain
     else:
-        # No TP hit: 100% position exits at current/exit price
+        # Strategy behaves as 100% block for losers/untriggered trades
         final_sim_pnl_pct = ((exit_price - entry) / entry) * 100.0
 
     return final_sim_pnl_pct, final_tp_pnl_pct
@@ -272,36 +273,7 @@ def run_daily_update():
 
         # --- B. Expiration Check ---
         exp_date = datetime.strptime(trade['expiration_date'], "%Y-%m-%d").date()
-        if data_date >= exp_date:
-            print(f"   💀 Trade Expired: {trade['ticker']}")
 
-            supabase.table("whale_alerts").update({
-                "status": "EXPIRED",
-                "close_date": today.isoformat(),
-                "close_price": 0,
-                "close_reason": "expiration"
-            }).eq("id", trade['id']).execute()
-
-            # For EXPIRED, we assume an exit price of $0.00 unless a price was recorded.
-            high_price = max(float(trade.get('highest_price') or 0.0), market_data['high'] if market_data else 0.0)
-            exit_price = 0.0
-
-            final_sim_pnl_pct, final_tp_pnl_pct = calculate_trade_pnl_percentages(
-                trade, high_price, exit_price
-            )
-
-            update_payload = {  # We define update_payload inside this block for EXPIRED
-                "status": "EXPIRED",
-                "close_date": today.isoformat(),
-                "close_price": exit_price,
-                "close_reason": "expiration",
-                "final_sim_pnl_pct": final_sim_pnl_pct,
-                "final_tp_pnl_pct": final_tp_pnl_pct
-            }
-
-            supabase.table("whale_alerts").update(update_payload).eq("id", trade['id']).execute()
-
-            continue
         # --- C. Get Market Data ---
         trade_entry_dt = datetime.fromisoformat(trade['discord_timestamp']).astimezone(EST)
         trade_entry_date = trade_entry_dt.date()
@@ -323,77 +295,32 @@ def run_daily_update():
         high = float(market_data['high'])
         close = float(market_data['close'])
         oi = int(market_data['oi'])
-        # iv is always None now
+        if data_date >= exp_date:
+            actual_last_price = 0.0
+        elif close > 0:
+            actual_last_price = close
+        else:
+            # Only fallback to previous last_price if it's not expired and market data is missing
+            actual_last_price = float(trade.get('last_price', 0))
 
-        # --- D. Strategy Logic ---
-        update_payload = {
-            "last_price": close,
-            "last_oi": oi,
-            "highest_price": max(high, float(trade.get('highest_price') or 0))
-        }
+        new_status, update_payload = process_trade_state(
+            trade,
+            market_data['high'],
+            market_data['low'],
+            actual_last_price,
+            oi,
+            trade['status'],
+            trade['expiration_date']
+        )
+
+        # Update local trade object for consistency
+        trade.update(update_payload)
 
         # CONDITIONAL LOWEST PRICE UPDATE (Pre-Scale Drawdown Tracking)
         current_lowest = float(trade.get('lowest_price') or 99999)
         day_low = market_data['low']
 
-        # Only update lowest price if the trade is still OPEN
-        if trade['status'] == "OPEN" and day_low > 0 and day_low < current_lowest:
-            update_payload['lowest_price'] = day_low
-            trade['lowest_price'] = day_low  # Update local trade object
 
-        if trade['status'] == "OPEN":
-            profit_target = float(trade['profit_target'])
-            if high >= profit_target:
-                print(f"   💰 SCALE OUT HIT: {trade['ticker']} @ {profit_target:.2f}")
-                # Use the utility function to calculate PnL based on hitting TP
-                # The high is used for moonshot. profit_target is passed as a relevant exit price.
-                final_sim_pnl_pct, final_tp_pnl_pct = calculate_trade_pnl_percentages(
-                    trade, high, profit_target
-                )
-
-                update_payload["status"] = "SCALED"
-                update_payload["tp_hit_date"] = datetime.now(EST).isoformat()
-                update_payload["tp_hit_price"] = profit_target
-                update_payload["final_sim_pnl_pct"] = final_sim_pnl_pct
-                update_payload["final_tp_pnl_pct"] = final_tp_pnl_pct
-
-        elif trade['status'] == "SCALED":
-            # Update the peak high first
-            # 1. Get the current peak high
-            current_high = update_payload["highest_price"]
-
-            # 2. Strategy: 80% at 20% TP + 20% at the NEW Peak High
-            # We pass current_high for BOTH high and exit_price because for a
-            # SCALED trade, the moonshot is valued at its peak, not the current close.
-            final_sim_pnl_pct, _ = calculate_trade_pnl_percentages(
-                trade, current_high, current_high
-            )
-
-            update_payload.update({
-                "final_sim_pnl_pct": final_sim_pnl_pct,
-                "final_tp_pnl_pct": 20.0  # HARD LOCK: Baseline is always 20% for scaled trades
-            })
-
-        stop_oi = int(trade['stop_oi_level'])
-        if oi < stop_oi and trade['status'] != "STOP_OI":
-            print(f"   🛑 STOP OI HIT: {trade['ticker']} (OI {oi} < {stop_oi})")
-
-            # FIX: Use the 'highest_price' from update_payload (Lifetime High)
-            high_price = update_payload["highest_price"]
-            exit_price = close
-
-            # This ensures Moonshot PnL uses the peak from Day 1, even if Stopped on Day 3
-            final_sim_pnl_pct, final_tp_pnl_pct = calculate_trade_pnl_percentages(
-                trade, high_price, exit_price
-            )
-
-            update_payload["final_sim_pnl_pct"] = final_sim_pnl_pct
-            update_payload["final_tp_pnl_pct"] = final_tp_pnl_pct
-
-            update_payload["status"] = "STOP_OI"
-            update_payload["close_date"] = datetime.now(EST).isoformat()
-            update_payload["close_price"] = close
-            update_payload["close_reason"] = "stop_oi"
 
         supabase.table("whale_alerts").update(update_payload).eq("id", trade['id']).execute()
 
@@ -415,6 +342,64 @@ def run_daily_update():
 
     print("\n✅ Daily Update Complete.")
 
+
+# --- IN daily_tracker.py (New Shared Function) ---
+
+# --- IN daily_tracker.py ---
+
+def process_trade_state(trade, high, low, close, oi, current_status, exp_date_str):
+    """
+    The Single Source of Truth for trade transitions.
+    """
+    entry = float(trade['entry_price'])
+    target = float(trade['profit_target'])
+    stop_oi_level = int(trade['stop_oi_level'])
+    exp_date = datetime.strptime(exp_date_str, "%Y-%m-%d").date()
+
+    # We use a dummy date for calculate_trade_pnl_percentages because the
+    # math inside that function is price-based, not time-based.
+    today_est = datetime.now(EST).date()
+
+    new_status = current_status
+    close_reason = None
+
+    # 1. Check Expiration First
+    if today_est >= exp_date:
+        new_status = "EXPIRED"
+        close_reason = "expiration"
+    # 2. Check Stop OI (Only if still OPEN)
+    elif current_status == "OPEN" and 0 < oi < stop_oi_level:
+        new_status = "STOP_OI"
+        close_reason = "stop_oi"
+    # 3. Check Scale (Only if still OPEN)
+    elif current_status == "OPEN" and high >= target:
+        new_status = "SCALED"
+
+    # Capture the "Memorialized" PnL
+    # If the status is no longer OPEN, we lock the values.
+    # Note: For SCALED trades, 'high' ensures moonshot captures the peak.
+    current_high = max(high, float(trade.get('highest_price') or 0))
+    sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, current_high, close if new_status != "SCALED" else target)
+
+    payload = {
+        "status": new_status,
+        "highest_price": current_high,
+        "last_price": close,
+        "last_oi": oi,
+        "final_sim_pnl_pct": sim_pnl if new_status != "OPEN" else None,
+        "final_tp_pnl_pct": tp_pnl if new_status != "OPEN" else None
+    }
+
+    if close_reason:
+        payload["close_reason"] = close_reason
+        payload["close_date"] = today_est.isoformat()
+        payload["close_price"] = close
+
+    # Lowest price only tracks during the high-risk 'OPEN' phase
+    if current_status == "OPEN":
+        existing_low = float(trade.get('lowest_price') or entry)
+        payload["lowest_price"] = min(low, existing_low) if low > 0 else existing_low
+    return new_status, payload
 
 if __name__ == "__main__":
     run_daily_update()

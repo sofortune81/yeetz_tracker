@@ -68,7 +68,12 @@ def fetch_data():
     date_cols = ['discord_timestamp', 'expiration_date', 'tp_hit_date', 'close_date']
     for col in date_cols:
         if col in df.columns:
-            df[col] = pd.to_datetime(df[col], utc=True).dt.tz_convert('US/Eastern')
+            # Add errors='coerce' to skip bad data instead of crashing
+            df[col] = pd.to_datetime(df[col], utc=True, errors='coerce')
+
+            # Only convert timezone if the column isn't all nulls
+            if df[col].notnull().any():
+                df[col] = df[col].dt.tz_convert('US/Eastern')
 
     df['entry_iv'] = df['entry_iv'].fillna(0)
     df['highest_price'] = df['highest_price'].fillna(df['entry_price'])
@@ -103,71 +108,47 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
 
     results = []
 
+    # --- IN dashboard.py -> run_simulation() ---
+
+    # Replace the internal loop logic:
     for _, row in sim_df.iterrows():
         entry = float(row['entry_price'])
+        pos_size = row['pos_size_dollars']
 
-        # FIX: Force high to be at least the entry price for PnL calculations
-        high = max(float(row['highest_price'] or 0), entry)
+        # Check if DB has memorialized values
+        is_finalized = pd.notnull(row['final_sim_pnl_pct'])
 
-        # FIX: Resolve the 9999/0 low price issue
-        raw_low = float(row['lowest_price'] or entry)
-        lowest_price_float = raw_low if (0 < raw_low < 9999) else entry
-
-        # Use these cleaned variables for PnL and Drawdown
-        #entry = float(row['entry_price'])
-        #high = float(row['highest_price'])
-        curr_price = float(row['last_price'] or entry)
-        target_price = entry * (1 + tp_pct / 100.0)
-
-        hit_tp = high >= target_price
-        pnl = 0.0
-        tp_exit_pnl = 0.0
-        status = "OPEN"
-        left_on_table = 0.0
-
-        # PnL Breakdown Initialization
-        scale_pnl = 0.0
-        scale_ret_pct = 0.0
-        moonshot_pnl = 0.0
-        moonshot_ret_pct = 0.0
-        is_winner = False
-
-        # --- MEMORIALIZED SIMULATION ENGINE ---
-        if row['final_tp_pnl_pct'] is not None:
-            # Use fixed history from DB for Curves 1 & 2
-            tp_exit_ret_pct = row['final_tp_pnl_pct']
+        if is_finalized:
+            # CLOSED/SCALED TRADES: Read directly from DB
             sim_ret_pct = row['final_sim_pnl_pct']
-            status = row['status']
-            is_winner = tp_exit_ret_pct > 0
+            tp_exit_ret_pct = row['final_tp_pnl_pct']
             unrealized_pnl_pct = 0.0
+            status = row['status']
         else:
-            # Use live market data for OPEN (Curve 3)
+            # OPEN TRADES: Calculate live fluctuations
             curr_price = float(row['last_price'] or entry)
             live_ret = ((curr_price - entry) / entry) * 100.0 if entry != 0 else 0
-            tp_exit_ret_pct = live_ret
             sim_ret_pct = live_ret
-            status = row['status']
-            is_winner = live_ret > 0
+            tp_exit_ret_pct = live_ret
             unrealized_pnl_pct = live_ret
+            status = "OPEN"
 
-        # Convert to dollars
-        pnl_strategy = row['pos_size_dollars'] * (sim_ret_pct / 100.0)
-        pnl_baseline = row['pos_size_dollars'] * (tp_exit_ret_pct / 100.0)
+        pnl_strategy = pos_size * (sim_ret_pct / 100.0)
+        pnl_baseline = pos_size * (tp_exit_ret_pct / 100.0)
 
-        # Max Drawdown Logic
-        dd_pct = min(0, ((lowest_price_float - entry) / entry) * 100.0) if entry != 0 else 0
+        # Max Drawdown (Historical)
+        raw_low = float(row['lowest_price'] or entry)
+        lowest_price_float = raw_low if (0 < raw_low < 9999) else entry
+        dd_pct = min(0, ((lowest_price_float - entry) / entry) * 100.0)
 
         results.append({
             "id": row['id'],
-            "sim_pnl": pnl_strategy,  # Strategy Curve
-            "tp_exit_pnl": pnl_baseline,  # Baseline Curve
+            "sim_pnl": pnl_strategy,
+            "tp_exit_pnl": pnl_baseline,
             "sim_status": status,
             "sim_ret_pct": sim_ret_pct,
-            "is_winner": is_winner,
             "max_drawdown_pct": dd_pct,
-            "unrealized_pnl_pct": unrealized_pnl_pct,
-            "unrealized_pnl_dollars": row['pos_size_dollars'] * (unrealized_pnl_pct / 100.0),
-            "win_loss": "W" if (is_winner and status != "OPEN") else ("L" if status in ["STOP_OI", "EXPIRED"] else "")
+            "unrealized_pnl_dollars": pos_size * (unrealized_pnl_pct / 100.0)
         })
 
 
@@ -607,7 +588,11 @@ def main():
         col_u1.metric("Total Unrealized PnL", f"${total_unrealized_pnl:,.0f}",
                       help="Sum of PnL for trades currently in OPEN/SCALED status.")
         col_u2.metric("Open Positions", f"{num_unrealized_open:,}")
-        potential_winners = df[df['highest_price'] > df['entry_price']]
+        # FIX: Only include trades that reached SCALED status (the actual strategy winners)
+        potential_winners = df[
+            df['status'].isin(['SCALED', 'STOP_OI', 'EXPIRED']) & (df['highest_price'] >= df['profit_target'])]
+
+        # Calculation: (Peak Price - Entry) / Entry * 100% of Position Size
         max_possible_pnl = (
                 ((potential_winners['highest_price'] - potential_winners['entry_price']) / potential_winners[
                     'entry_price'])
