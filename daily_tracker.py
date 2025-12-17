@@ -310,7 +310,8 @@ def run_daily_update():
             actual_last_price,
             oi,
             trade['status'],
-            trade['expiration_date']
+            trade['expiration_date'],
+            current_date=data_date  # <--- Pass the date the data belongs to
         )
 
         # Update local trade object for consistency
@@ -343,11 +344,7 @@ def run_daily_update():
     print("\n✅ Daily Update Complete.")
 
 
-# --- IN daily_tracker.py (New Shared Function) ---
-
-# --- IN daily_tracker.py ---
-
-def process_trade_state(trade, high, low, close, oi, current_status, exp_date_str):
+def process_trade_state(trade, high, low, close, oi, current_status, exp_date_str, current_date=None):
     """
     The Single Source of Truth for trade transitions.
     """
@@ -356,15 +353,14 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
     stop_oi_level = int(trade['stop_oi_level'])
     exp_date = datetime.strptime(exp_date_str, "%Y-%m-%d").date()
 
-    # We use a dummy date for calculate_trade_pnl_percentages because the
-    # math inside that function is price-based, not time-based.
-    today_est = datetime.now(EST).date()
+    # Use the provided current_date (for backfilling) or default to real-world today
+    check_date = current_date or datetime.now(EST).date()
 
     new_status = current_status
     close_reason = None
 
     # 1. Check Expiration First
-    if today_est >= exp_date:
+    if check_date >= exp_date:
         new_status = "EXPIRED"
         close_reason = "expiration"
     # 2. Check Stop OI (Only if still OPEN)
@@ -392,7 +388,7 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
 
     if close_reason:
         payload["close_reason"] = close_reason
-        payload["close_date"] = today_est.isoformat()
+        payload["close_date"] = check_date.isoformat()
         payload["close_price"] = close
 
     # Lowest price only tracks during the high-risk 'OPEN' phase

@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from supabase import create_client
 import pytz
-
+from logger import setup_logger
 # Shared Project Imports
 from parser import parse_yeetz_alert
 from daily_tracker import calculate_trade_pnl_percentages, get_market_data, fetch_open_interest, process_trade_state
@@ -24,7 +24,7 @@ TARGET_CHANNEL_ID = int(os.getenv("TARGET_CHANNEL_ID"))
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
+logger = setup_logger(name="backfill_manager", log_filename="backfill.log")
 
 class BackfillBot(discord.Client):
     def __init__(self, *args, **kwargs):
@@ -32,12 +32,12 @@ class BackfillBot(discord.Client):
         self.start_scan = None
 
     async def on_ready(self):
-        print(f"✅ Backfill Bot Logged in as {self.user}")
+        logger.info(f"✅ Backfill Bot Logged in as {self.user}")
         await self.run_backfill()
         await self.close()
 
     async def run_backfill(self):
-        print("⏳ Starting Intelligent Backfill...")
+        logger.info("⏳ Starting Intelligent Backfill...")
         channel = self.get_channel(TARGET_CHANNEL_ID)
 
         # 1. Determine Scan Start (CLI Arguments or DB Lookup)
@@ -49,7 +49,7 @@ class BackfillBot(discord.Client):
             prompt_full_repop = 'no'
 
         if prompt_full_repop == 'yes':
-            print("\n🛑 FULL BACKFILL SELECTED: Deleting all existing trade data...")
+            logger.info("\n🛑 FULL BACKFILL SELECTED: Deleting all existing trade data...")
 
             def delete_db_data():
                 supabase.table("whale_performance").delete().neq("alert_id", "0").execute()
@@ -57,12 +57,12 @@ class BackfillBot(discord.Client):
 
             await asyncio.to_thread(delete_db_data)
             self.start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
-            print(f"✅ Database cleared. Scanning the last {days_lookback} days.")
+            logger.info(f"✅ Database cleared. Scanning the last {days_lookback} days.")
         else:
             is_incremental = await self.check_and_set_incremental_start()
             if not is_incremental:
                 self.start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
-                print(f"🔎 Empty DB. Scanning the last {days_lookback} days.")
+                logger.info(f"🔎 Empty DB. Scanning the last {days_lookback} days.")
 
         # 2. Fetch Discord History
         messages = []
@@ -70,7 +70,7 @@ class BackfillBot(discord.Client):
             if message.embeds:
                 messages.append(message)
 
-        print(f"📥 Found {len(messages)} alerts to process.")
+        logger.info(f"📥 Found {len(messages)} alerts to process.")
 
         # 3. Process Each Alert (The Time Machine)
         for msg in messages:
@@ -78,17 +78,17 @@ class BackfillBot(discord.Client):
             await asyncio.sleep(1.5)
 
     async def process_and_simulate(self, message):
-        print(f"\n-> START Processing Message ID: {message.id}")
+        logger.info(f"\n-> START Processing Message ID: {message.id}")
         parsed = parse_yeetz_alert(message.embeds[0])
         if not parsed:
-            print(f"   - SKIPPING {message.id}: Failed to parse alert details.")
+            logger.info(f"   - SKIPPING {message.id}: Failed to parse alert details.")
             return
 
         alert_dt = message.created_at.astimezone(EST)
         exp_date = parsed['expiration_date']
         ticker = parsed['ticker']
 
-        print(f"⚡ Processing: {ticker} {parsed['strike']}{parsed['option_type']} (Alert: {alert_dt.date()})")
+        logger.info(f"⚡ Processing: {ticker} {parsed['strike']}{parsed['option_type']} (Alert: {alert_dt.date()})")
 
         # Initial Trade Record
         trade = {
@@ -112,7 +112,8 @@ class BackfillBot(discord.Client):
         db_res = supabase.table("whale_alerts").upsert(trade, on_conflict="discord_message_id").execute()
         if not db_res.data: return
         trade_id = db_res.data[0]['id']
-        print(f"   ✅ Saved alert. Trade ID: {trade_id}")
+        logger.info(f"   ✅ Saved alert. Trade ID: {trade_id}")
+        logger.info(f"      📍 Contract Details: Exp={trade['expiration_date']} | Entry=${trade['entry_price']:.2f}")
 
         # Simulation Loop (Alert Day -> Today)
         check_date = alert_dt.date()
@@ -123,12 +124,7 @@ class BackfillBot(discord.Client):
             # 1. Define date_int and skip weekends
             date_int = get_theta_date_int(check_date)
 
-            if check_date.weekday() >= 5:
-                day_name = "Saturday" if check_date.weekday() == 5 else "Sunday"
-                print(f"      ☕ {check_date} is {day_name}. Skipping.")
-                check_date += timedelta(days=1)
-                continue
-
+            # 2. Now skip the API calls if it's a weekend
             if check_date.weekday() >= 5:
                 check_date += timedelta(days=1)
                 continue
@@ -144,7 +140,7 @@ class BackfillBot(discord.Client):
             market_data = get_market_data(trade, date_int, (check_date == alert_dt.date()), alert_dt)
 
             if not market_data or market_data['close'] == 0:
-                print(f"      EOD {date_int}: No data. Skipping.")
+                logger.info(f"      EOD {date_int}: No data. Skipping.")
                 check_date += timedelta(days=1)
                 continue
 
@@ -156,7 +152,8 @@ class BackfillBot(discord.Client):
                 market_data['close'],
                 market_data['oi'],
                 trade['status'],
-                trade['expiration_date']
+                trade['expiration_date'],
+                current_date=check_date  # <--- CRITICAL: Pass the simulated date
             )
 
             # Update local trade object for the next loop iteration
@@ -167,7 +164,8 @@ class BackfillBot(discord.Client):
 
             # Update Database - Single Point of Entry
             supabase.table("whale_alerts").update(update_payload).eq("id", trade_id).execute()
-
+            logger.info(
+                f"      💾 Saving Snapshot: High=${market_data['high']:.2f} | Close=${market_data['close']:.2f} | Low=${market_data['low']:.2f} | OI={market_data['oi']}")
             # Save History Snapshot
             supabase.table("whale_performance").upsert({
                 "alert_id": trade_id,
@@ -178,7 +176,7 @@ class BackfillBot(discord.Client):
                 "current_oi": market_data['oi']
             }, on_conflict="alert_id, date").execute()
 
-            print(f"   ☑️ Saved snapshot for {check_date} (Status: {new_status})")
+            logger.info(f"   ☑️ Saved snapshot for {check_date} (Status: {new_status})")
             check_date += timedelta(days=1)
 
     async def check_and_set_incremental_start(self):
@@ -189,7 +187,7 @@ class BackfillBot(discord.Client):
         res = await asyncio.to_thread(fetch_last)
         if res.data:
             self.start_scan = datetime.fromisoformat(res.data[0]['discord_timestamp']).astimezone(pytz.utc)
-            print(f"📅 Resuming from DB timestamp: {self.start_scan}")
+            logger.info(f"📅 Resuming from DB timestamp: {self.start_scan}")
             return True
         return False
 

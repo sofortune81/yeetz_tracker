@@ -159,7 +159,7 @@ def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop
 
     # Merge the original trade data with the new simulation results
     final_df = sim_df.drop(columns=cols_to_drop, errors='ignore').merge(res_df, on='id')
-    final_df = final_df.sort_values('discord_timestamp')
+    final_df = final_df.sort_values(['discord_timestamp', 'id'])
 
     # --- PnL and Equity Curve Calculations (Unrealized PnL is calculated here) ---
 

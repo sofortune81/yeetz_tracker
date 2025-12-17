@@ -78,35 +78,27 @@ def fetch_data_and_handle_error(endpoint, params):
 def filter_and_get_post_alert_high(data_list, alert_dt):
     """
     Takes a list of trade ticks (data_list) and an EST datetime object (alert_dt).
-    Returns the maximum price achieved AFTER the alert_dt time on that day.
+    Returns the maximum price achieved AFTER the alert_dt timestamp.
     """
     post_alert_high = 0.0
-    alert_time_str = alert_dt.strftime('%H:%M:%S.%f')[:-3]  # HH:MM:SS.mmm
 
     if not data_list:
         return 0.0
 
-    # Iterate through all trade ticks
     for tick in data_list:
         try:
-            # Assuming 'trade_timestamp' is present in the tick dict (from Trade Quote endpoint)
             trade_timestamp = tick.get('trade_timestamp')
             price = float(tick.get('price', 0.0))
 
             if not trade_timestamp:
                 continue
 
-            # Extract time string (HH:MM:SS.mmm)
-            # The tick timestamp is ISO format (e.g., 2025-12-12T10:15:00.000Z)
-            # We must convert the Z/UTC timestamp to the local EST time before comparison,
-            # as the alert_dt is in EST.
-
+            # Convert UTC ISO string to offset-aware EST datetime object
             dt_utc = datetime.fromisoformat(trade_timestamp.replace('Z', '+00:00'))
             dt_est = dt_utc.astimezone(EST)
-            trade_time_str = dt_est.strftime('%H:%M:%S.%f')[:-3]
 
-            # Compare time strings (HH:MM:SS.mmm)
-            if trade_time_str >= alert_time_str:
+            # Robust Direct Datetime Comparison
+            if dt_est >= alert_dt:
                 if price > post_alert_high:
                     post_alert_high = price
         except (KeyError, ValueError, IndexError, AttributeError) as parse_e:
@@ -118,10 +110,9 @@ def filter_and_get_post_alert_high(data_list, alert_dt):
 def filter_and_get_post_alert_low(data_list, alert_dt):
     """
     Takes a list of trade ticks (data_list) and an EST datetime object (alert_dt).
-    Returns the minimum price achieved AFTER the alert_dt time on that day.
+    Returns the minimum price achieved AFTER the alert_dt timestamp.
     """
-    post_alert_low = float('inf') # Initialize to a very high number
-    alert_time_str = alert_dt.strftime('%H:%M:%S.%f')[:-3]  # HH:MM:SS.mmm
+    post_alert_low = float('inf')
 
     if not data_list:
         return 0.0
@@ -134,12 +125,12 @@ def filter_and_get_post_alert_low(data_list, alert_dt):
             if not trade_timestamp or price == 0.0:
                 continue
 
+            # Convert UTC ISO string to offset-aware EST datetime object
             dt_utc = datetime.fromisoformat(trade_timestamp.replace('Z', '+00:00'))
             dt_est = dt_utc.astimezone(EST)
-            trade_time_str = dt_est.strftime('%H:%M:%S.%f')[:-3]
 
-            # Compare time strings (HH:MM:SS.mmm)
-            if trade_time_str >= alert_time_str:
+            # Robust Direct Datetime Comparison
+            if dt_est >= alert_dt:
                 if price < post_alert_low:
                     post_alert_low = price
         except (KeyError, ValueError, IndexError, AttributeError) as parse_e:
