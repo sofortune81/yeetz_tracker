@@ -6,8 +6,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from supabase import create_client
 import numpy as np
-from daily_tracker import TP_PCT, SCALE_PCT, STOP_OI_PCT
-
+from yeetz_config import TP_PCT, SCALE_PCT, STOP_OI_PCT
 # --- 1. SETUP & CONFIG ---
 st.set_page_config(
     page_title="WhaleTracker Pro",
