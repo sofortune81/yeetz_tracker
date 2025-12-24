@@ -102,114 +102,46 @@ def fetch_trade_history(alert_id):
 
 # --- 3. SIMULATION ENGINE ---
 @st.cache_data(ttl=600) # Cache the entire simulation result for 10 minutes (or until params change)
-def run_simulation(df_trades, initial_capital, risk_pct, tp_pct, scale_pct, stop_loss_pct):
-    sim_df = df_trades.copy()
-    sim_df['pos_size_dollars'] = initial_capital * (risk_pct / 100.0)
+def run_simulation(df, initial_capital, risk_pct):
+    """
+    Apply User Capital to Pre-Calculated Database Percentages.
+    """
+    sim_df = df.copy()
 
-    results = []
+    # 1. Calculate Position Size ($)
+    sim_df['pos_size'] = initial_capital * (risk_pct / 100.0)
 
-    # --- IN dashboard.py -> run_simulation() ---
+    # 2. Extract Pre-Calculated Percentages (Handle LIVE trades vs CLOSED trades)
+    # The Daily Tracker updates 'final_sim_pnl_pct' every night.
+    # For simplicity, we trust the DB column 'final_sim_pnl_pct' is always up to date
+    # (even for open trades, daily_tracker updates it to the current floating PnL).
 
-    # Replace the internal loop logic:
-    for _, row in sim_df.iterrows():
-        entry = float(row['entry_price'])
-        pos_size = row['pos_size_dollars']
+    sim_df['strat_pct'] = sim_df['final_sim_pnl_pct'].fillna(0.0)
+    sim_df['base_pct'] = sim_df['final_tp_pnl_pct'].fillna(0.0)
 
-        # Check if DB has memorialized values
-        is_finalized = pd.notnull(row['final_sim_pnl_pct'])
+    # 3. Calculate "Max / No Pussy" Curve on the fly
+    # (Because we don't save a 3rd PnL column in DB, but it's simple math)
+    # Logic: If SCALED, we take the peak. If not, we take current.
+    sim_df['peak_ret'] = ((sim_df['highest_price'] - sim_df['entry_price']) / sim_df['entry_price']) * 100.0
+    sim_df['curr_ret'] = ((sim_df['last_price'] - sim_df['entry_price']) / sim_df['entry_price']) * 100.0
 
-        if is_finalized:
-            # CLOSED/SCALED TRADES: Read directly from DB
-            sim_ret_pct = row['final_sim_pnl_pct']
-            tp_exit_ret_pct = row['final_tp_pnl_pct']
-            unrealized_pnl_pct = 0.0
-            status = row['status']
-        else:
-            # OPEN TRADES: Calculate live fluctuations
-            curr_price = float(row['last_price'] or entry)
-            live_ret = ((curr_price - entry) / entry) * 100.0 if entry != 0 else 0
-            sim_ret_pct = live_ret
-            tp_exit_ret_pct = live_ret
-            unrealized_pnl_pct = live_ret
-            status = "OPEN"
-
-        pnl_strategy = pos_size * (sim_ret_pct / 100.0)
-        pnl_baseline = pos_size * (tp_exit_ret_pct / 100.0)
-
-        # Max Drawdown (Historical)
-        raw_low = float(row['lowest_price'] or entry)
-        lowest_price_float = raw_low if (0 < raw_low < 9999) else entry
-        dd_pct = min(0, ((lowest_price_float - entry) / entry) * 100.0)
-
-        results.append({
-            "id": row['id'],
-            "sim_pnl": pnl_strategy,
-            "tp_exit_pnl": pnl_baseline,
-            "sim_status": status,
-            "sim_ret_pct": sim_ret_pct,
-            "max_drawdown_pct": dd_pct,
-            "unrealized_pnl_dollars": pos_size * (unrealized_pnl_pct / 100.0)
-        })
-
-
-    res_df = pd.DataFrame(results)
-    # Drop any stale 'sim_pnl' or 'tp_exit_pnl' columns from the original trade data
-    # to ensure we only use the freshly calculated values from results.
-    cols_to_drop = [col for col in ['sim_pnl', 'tp_exit_pnl', 'max_drawdown_pct'] if col in sim_df.columns]
-
-    # Merge the original trade data with the new simulation results
-    final_df = sim_df.drop(columns=cols_to_drop, errors='ignore').merge(res_df, on='id')
-    final_df = final_df.sort_values(['discord_timestamp', 'id'])
-
-    # --- PnL and Equity Curve Calculations (Unrealized PnL is calculated here) ---
-
-    # Determine if trade is not finalized (OPEN, or SCALED status where final_sim_pnl_pct is still None)
-    # A trade is "unrealized" if its status is OPEN or SCALED AND it has no final PnL recorded yet.
-    is_unfinalized = final_df['final_sim_pnl_pct'].isna() & final_df['status'].isin(['OPEN', 'SCALED'])
-
-    # Calculate Unrealized PnL Dollars (using the current 'last_price')
-    # Use last_price (or entry_price if last_price is null) for the calculation.
-    last_price = final_df['last_price'].fillna(final_df['entry_price'])
-    entry_price = final_df['entry_price']
-
-    final_df['unrealized_pnl_dollars'] = np.where(
-        is_unfinalized,
-        (last_price - entry_price) / entry_price * final_df['pos_size_dollars'],
-        0.0  # Finalized trades or invalid entries have 0 unrealized PnL here
+    sim_df['max_pct'] = np.where(
+        sim_df['status'] == 'SCALED',
+        sim_df['peak_ret'],
+        sim_df['curr_ret']
     )
 
-    # Calculate Unrealized PnL Percentage (Dollars / Position Size)
-    final_df['unrealized_pnl_pct'] = np.where(
-        (final_df['pos_size_dollars'] != 0) & is_unfinalized,
-        (final_df['unrealized_pnl_dollars'] / final_df['pos_size_dollars']) * 100,
-        0.0
-    )
+    # 4. Convert to Dollars (The only math Frontend should do)
+    sim_df['pnl_strategy_$'] = sim_df['pos_size'] * (sim_df['strat_pct'] / 100.0)
+    sim_df['pnl_baseline_$'] = sim_df['pos_size'] * (sim_df['base_pct'] / 100.0)
+    sim_df['pnl_max_$'] = sim_df['pos_size'] * (sim_df['max_pct'] / 100.0)
 
-    # Categorize Unrealized PnL (for metric cards) - This part is fine.
-    final_df['unrealized_profit'] = np.where(
-        (final_df['unrealized_pnl_dollars'] > 0) & is_unfinalized,
-        final_df['unrealized_pnl_dollars'],
-        0.0
-    )
-    final_df['unrealized_drawdown'] = np.where(
-        (final_df['unrealized_pnl_dollars'] < 0) & is_unfinalized,
-        final_df['unrealized_pnl_dollars'],
-        0.0
-    )
+    # 5. Equity Curves
+    sim_df['equity_strategy'] = initial_capital + sim_df['pnl_strategy_$'].cumsum()
+    sim_df['equity_baseline'] = initial_capital + sim_df['pnl_baseline_$'].cumsum()
+    sim_df['equity_max'] = initial_capital + sim_df['pnl_max_$'].cumsum()
 
-    # --- Corrected Equity Curve Calculations ---
-    # FIX: Ensure PnL columns are never NaN before cumulative sum to prevent 'nan' in metric cards
-    final_df['sim_pnl'] = final_df['sim_pnl'].fillna(0.0)
-    final_df['tp_exit_pnl'] = final_df['tp_exit_pnl'].fillna(0.0)
-
-    # Existing lines
-    final_df['equity_curve_scaled'] = initial_capital + final_df['sim_pnl'].cumsum()
-    final_df['equity_curve_tp_exit'] = initial_capital + final_df['tp_exit_pnl'].cumsum()
-
-    # NEW: Curve 3 - Total Portfolio Value (Strategy + Open Trade Fluctuations)
-    final_df['equity_curve_live'] = final_df['equity_curve_scaled'] + final_df['unrealized_pnl_dollars'].cumsum()
-    return final_df
-
+    return sim_df
 # --- 4. VISUALIZATION COMPONENTS ---
 
 def render_todays_activity(df):

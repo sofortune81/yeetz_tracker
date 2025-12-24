@@ -4,20 +4,23 @@ from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
 from supabase import create_client
 import pytz
+from master_logger import setup_logger
 import json
 from theta_api_client import (
     filter_and_get_post_alert_high,
     filter_and_get_post_alert_low,
-    fetch_trade_quote_data, # <-- NEW IMPORT
-    fetch_eod_data,         # <-- NEW IMPORT
-    get_option_root_params, # <-- NEW IMPORT
-    get_theta_date_int      # <-- NEW IMPORT
+    fetch_trade_quote_data,
+    fetch_eod_data,
+    get_option_root_params,
+    get_theta_date_int
 )
 
+log_name = os.path.splitext(os.path.basename(__file__))[0]
+logger = setup_logger(name=log_name, log_filename="yeetz.log")
 
 # --- STRATEGY CONFIGURATION (Single Source of Truth) ---
-TP_PCT = 20.0       # Take Profit target (+20%)
-SCALE_PCT = 80.0    # Percentage of position to sell at TP (80%)
+TP_PCT = 20.0  # Take Profit target (+20%)
+SCALE_PCT = 80.0  # Percentage of position to sell at TP (80%)
 MOON_PCT = 100.0 - SCALE_PCT
 STOP_OI_PCT = 20.0  # Stop loss if OI drops below 20% of entry
 # -------------------------------------------------------
@@ -29,129 +32,72 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 THETA_HTTP_URL = "http://127.0.0.1:25503/v3"
 EST = pytz.timezone('US/Eastern')
 
-# Connect DB
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 else:
     supabase = None
 
 
-def get_option_root_params(trade):
-    """Helper to build standard params for ThetaData (Symbol, Exp, Strike, Right) using JSON format."""
-    right_code = trade['option_type'].lower()[0]
 
-    return {
-        "symbol": trade['ticker'],
-        "expiration": get_theta_date_int(datetime.strptime(trade['expiration_date'], "%Y-%m-%d")),
-        "strike": f"{float(trade['strike']):.3f}",
-        "right": right_code,
-        "format": "json"
-    }
-
-
-def fetch_nested_json_data(endpoint, params):
-    """
-    Handles a standard GET request and extracts the 'data' list from the
-    nested ThetaData structure: {"response": [{"contract": {...}, "data": [...]}]}
-    Returns the 'data' list or None.
-    """
-    url = f"{THETA_HTTP_URL}{endpoint}"
-    print(f"      📡 Request: {url} | Params: {params}")
-
-    try:
-        response = httpx.get(url, params=params, timeout=30)
-        print(f"      ➡️ Status: {response.status_code}")
-
-        if response.status_code == 472:
-            print("      No data found (HTTP 472).")
-            return None
-
-        response.raise_for_status()
-        full_response = response.json()
-
-        # Navigate the nested structure: full_response['response'][0]['data']
-        if (isinstance(full_response, dict) and 'response' in full_response and
-                isinstance(full_response['response'], list) and full_response['response']):
-
-            contract_data = full_response['response'][0]
-            if 'data' in contract_data and contract_data['data']:
-                return contract_data['data']
-
-        return None
-
-    except httpx.HTTPStatusError as e:
-        if e.response.status_code != 472:
-            print(f"   ❌ HTTP Error for {endpoint}: {e}")
-        return None
-    except Exception as e:
-        print(f"   ❌ API Fetch Error for {endpoint}: {e}")
-        return None
-
-
-# --- THETADATA FETCHERS ---
-
-
+# --- SHARED API FETCHERS ---
 
 def fetch_open_interest(trade, date_int):
-    """Fetches Open Interest (OI) using the dedicated endpoint."""
-    params = get_option_root_params(trade)
+    """Fetches Open Interest (OI)."""
+    params = get_option_root_params(trade['ticker'], float(trade['strike']), trade['option_type'][0],
+                                    datetime.strptime(trade['expiration_date'], "%Y-%m-%d"))
     params["date"] = date_int
     endpoint = "/option/history/open_interest"
 
-    data_list = fetch_nested_json_data(endpoint, params)
-
-    if not data_list:
-        return 0
-
+    # Simple direct fetch (Assuming helper in theta_api_client handles this or we inline simple logic)
+    # Re-implementing simplified inline fetch to avoid circular dependency hell if theta_api_client is simple
+    url = f"{THETA_HTTP_URL}{endpoint}"
     try:
-        # OI field is 'open_interest'
-        return int(data_list[0].get('open_interest', 0))
-    except (ValueError, TypeError) as e:
-        print(f"      OI Data Parsing Error: {e}")
+        resp = httpx.get(url, params=params, timeout=10)
+        if resp.status_code == 200:
+            data = resp.json()
+            # Handle nested response structure
+            if 'response' in data and data['response']:
+                item = data['response'][0]
+                if isinstance(item, dict) and 'open_interest' in item:
+                    return int(item['open_interest'])
+                # Some endpoints return [ { "date":..., "open_interest":... } ] directly or in 'data'
+                if 'data' in item and item['data']:
+                    return int(item['data'][0].get('open_interest', 0))
+        return 0
+    except Exception as e:
+        logger.error(f"OI Fetch Error: {e}")
         return 0
 
-
-def check_intraday_high(trade, today_int, alert_dt):
+def calculate_pnl_snapshots(entry, high, close, status):
     """
-    Gets the maximum price achieved *after* the alert time on Day 0
-    using /option/history/trade.
+    Calculates the definitive % return for all 3 curves.
     """
-    params = get_option_root_params(trade)
-    params["date"] = today_int
-    endpoint = "/option/history/trade"
+    if entry == 0: return 0.0, 0.0
 
-    data_list = fetch_nested_json_data(endpoint, params)
+    # 1. BASELINE CURVE (100% @ TP)
+    # If it's a "SCALED" win, we locked 20%. If not, we are floating at current price.
+    if status == "SCALED":
+        baseline_pct = TP_PCT
+    else:
+        baseline_pct = ((close - entry) / entry) * 100.0
 
-    # Use the centralized helper to filter the ticks and find the high
-    post_alert_high = filter_and_get_post_alert_high(data_list, alert_dt)
+    # 2. STRATEGY CURVE (80% @ TP + 20% @ Moonshot)
+    if status == "SCALED":
+        # 80% is locked at TP (20% gain)
+        # 20% is sold at the PEAK High (Moonshot)
+        moon_return = ((high - entry) / entry) * 100.0
+        strategy_pct = (0.8 * TP_PCT) + (0.2 * moon_return)
+    else:
+        # If not a winner, the whole position floats at current price
+        strategy_pct = ((close - entry) / entry) * 100.0
 
-    return post_alert_high
-
-def check_intraday_low(trade, today_int, alert_dt):
-    """
-    Gets the minimum price achieved *after* the alert time on Day 0
-    using /option/history/trade.
-    """
-    params = get_option_root_params(trade)
-    params["date"] = today_int
-    endpoint = "/option/history/trade"
-
-    data_list = fetch_nested_json_data(endpoint, params)
-
-    # Use the centralized helper to filter the ticks and find the low
-    post_alert_low = filter_and_get_post_alert_low(data_list, alert_dt)
-
-    return post_alert_low
-
-# --- PERFORMANCE CHECKERS ---
+    return strategy_pct, baseline_pct
 
 def get_market_data(trade, data_date_int, is_day_0, alert_dt):
     """Unified function to fetch EOD, OI, and calculate High/Low."""
-
-    # 1. Get Official EOD Close and High/Low
-    # Note: We pass expiration as a datetime object for the helper
     exp_dt = datetime.strptime(trade['expiration_date'], "%Y-%m-%d")
 
+    # 1. Get Official EOD Data
     eod_data = fetch_eod_data(
         trade['ticker'],
         trade['strike'],
@@ -160,23 +106,24 @@ def get_market_data(trade, data_date_int, is_day_0, alert_dt):
         data_date_int
     )
 
-
-
-    # 2. Get Open Interest (OI)
+    # 2. Get Open Interest
     oi = fetch_open_interest(trade, data_date_int)
 
     if not eod_data:
-        # Fallback if EOD fails: treat entry as the high/low/close
-        return {"high": float(trade['entry_price']), "close": float(trade['entry_price']),
-                "low": float(trade['entry_price']), "oi": oi, "iv": None}
+        # No data found (likely holiday or missing), fallback to existing state
+        return None
 
     eod_close = eod_data['close']
     eod_day_high = eod_data['high']
     eod_day_low = eod_data['low']
     entry_price = float(trade['entry_price'])
 
+    # 3. Refine High/Low logic
+    final_high = eod_day_high
+    final_low = eod_day_low
+
     if is_day_0:
-        # FIX: Fetch the intraday ticks to define data_list
+        # On Day 0, we must ensure High/Low respects the Alert Timestamp
         data_list = fetch_trade_quote_data(
             trade['ticker'],
             trade['strike'],
@@ -184,206 +131,139 @@ def get_market_data(trade, data_date_int, is_day_0, alert_dt):
             exp_dt,
             data_date_int
         )
-
-        # Get Intraday High/Low (Post-Alert) from the fetched data_list
         post_alert_high = filter_and_get_post_alert_high(data_list, alert_dt)
         post_alert_low = filter_and_get_post_alert_low(data_list, alert_dt)
 
-        # LOGIC: High is the max of (Entry, Ticks, EOD High)
+        # High is max of (Entry, Ticks, EOD High)
         final_high = max(entry_price, post_alert_high, eod_day_high)
 
-        # LOGIC: Low is the min of (Entry, Ticks, EOD Low) - ignoring 0.0
-        valid_ticks_low = post_alert_low if post_alert_low > 0 else entry_price
-        valid_eod_low = eod_day_low if eod_day_low > 0 else entry_price
+        # Low logic: If ticks exist, use them. If not, fallback to EOD. Ignore 0.
+        valid_ticks_low = post_alert_low if post_alert_low > 0 else 99999
+        valid_eod_low = eod_day_low if eod_day_low > 0 else 99999
         final_low = min(entry_price, valid_ticks_low, valid_eod_low)
+        if final_low == 99999: final_low = entry_price
     else:
-        # Day 1+ logic: Compare EOD against entry (High cannot be < entry)
-        final_high = max(eod_day_high, entry_price)
-        final_low = eod_day_low if eod_day_low > 0 else entry_price
+        # Day 1+: Standard High/Low
+        if final_high == 0: final_high = eod_close  # Fallback
+        if final_low == 0: final_low = eod_close  # Fallback
 
     return {
         "high": final_high,
         "close": eod_close,
         "low": final_low,
-        "oi": oi,
-        "iv": None
+        "oi": oi
     }
 
-# Replace the existing calculate_trade_pnl_percentages function:
 
-def calculate_trade_pnl_percentages(trade, high, exit_price):
-    entry = float(trade['entry_price'])
-    if entry == 0: return 0.0, 0.0
+# --- CORE STRATEGY LOGIC ---
+
+def calculate_strategy_pnl(entry, high, close, status):
+    """
+    Calculates the 3 PnL curves.
+    Returns: (Strategy_PnL_%, Baseline_PnL_%, Max_PnL_%)
+    """
+    if entry == 0: return 0.0, 0.0, 0.0
 
     target_price = entry * (1 + TP_PCT / 100.0)
-    hit_tp = high >= target_price
 
-    # 1. Curve 1: Baseline (100% Exit at 20% TP)
+    # Check if TP was EVER hit (implied by SCALED status or current high)
+    hit_tp = (status == "SCALED") or (high >= target_price)
+
     if hit_tp:
-        final_tp_pnl_pct = TP_PCT # Locked
+        # --- SCENARIO: WINNER ---
+
+        # 1. Baseline (100% @ 20% TP)
+        baseline_pct = TP_PCT
+
+        # 2. Strategy (80% @ 20% TP + 20% @ Peak High)
+        # Moonshot portion assumes we sell at the absolute HIGHEST price reached
+        moon_ret_pct = ((high - entry) / entry) * 100.0
+        strategy_pct = (SCALE_PCT / 100.0 * TP_PCT) + (MOON_PCT / 100.0 * moon_ret_pct)
+
+        # 3. Max / "No Pussy" (100% @ Peak High)
+        max_pct = moon_ret_pct
+
     else:
-        # 100% position is valued at exit (e.g. 0.0 if expired)
-        final_tp_pnl_pct = ((exit_price - entry) / entry) * 100.0
+        # --- SCENARIO: LOSER / STILL RUNNING ---
+        # For all curves, if TP isn't hit, we hold the full bag to the current/close price.
+        current_ret_pct = ((close - entry) / entry) * 100.0
 
-    # 2. Curve 2: Scaled (80/20 Strategy)
-    if hit_tp:
-        # 80% locked at 20% gain
-        scale_gain = (SCALE_PCT / 100.0) * TP_PCT
-        # 20% moonshot locked at Peak High
-        moon_gain = (MOON_PCT / 100.0) * (((high - entry) / entry) * 100.0)
-        final_sim_pnl_pct = scale_gain + moon_gain
-    else:
-        # Strategy behaves as 100% block for losers/untriggered trades
-        final_sim_pnl_pct = ((exit_price - entry) / entry) * 100.0
+        baseline_pct = current_ret_pct
+        strategy_pct = current_ret_pct
+        max_pct = current_ret_pct
 
-    return final_sim_pnl_pct, final_tp_pnl_pct
-
-# --- MAIN EXECUTION ---
-
-def run_daily_update():
-    print("🚀 Starting Daily Portfolio Simulator Update (No Greeks)...")
-
-    today = datetime.now(EST).date()
-    today_int = get_theta_date_int(today)
-
-    # Calculate the latest market close date to fetch data for.
-    data_date = today - timedelta(days=1)
-
-    # Handle weekend: if yesterday was Saturday or Sunday, we need Friday's date.
-    if data_date.weekday() == 5:
-        data_date -= timedelta(days=1)
-    elif data_date.weekday() == 6:
-        data_date -= timedelta(days=2)
-
-    data_date_int = get_theta_date_int(data_date)
-    print(f"🗓️ Today: {today} | Data Date: {data_date}")
-
-    response = supabase.table("whale_alerts").select("*").in_("status", ["OPEN", "SCALED"]).execute()
-    active_trades = response.data
-
-    print(f"📂 Processing {len(active_trades)} active trades.")
-
-    for trade in active_trades:
-        print(f"\n--- Processing Trade: {trade['ticker']} | ID: {trade['id']} ---")
-
-        # --- A. Entry IV is permanently skipped ---
-        # NOTE: We can update the DB here to set entry_iv=0 if it's currently null,
-        # but leaving it as null might be better if you re-enable Greeks later.
-        pass
-
-        # --- B. Expiration Check ---
-        exp_date = datetime.strptime(trade['expiration_date'], "%Y-%m-%d").date()
-
-        # --- C. Get Market Data ---
-        trade_entry_dt = datetime.fromisoformat(trade['discord_timestamp']).astimezone(EST)
-        trade_entry_date = trade_entry_dt.date()
-        market_data = None
-
-        is_day_0 = (trade_entry_date == data_date)
-
-        if trade_entry_date <= data_date:
-            # Day 0 or Day 1+
-            market_data = get_market_data(trade, data_date_int, is_day_0, trade_entry_dt)  # <-- UPDATED CALL
-        else:
-            print(f"   ⏩ Skipping {trade['ticker']}. Alert date {trade_entry_date} is after data date {data_date}.")
-            continue
-
-        if not market_data:
-            print(f"   ⚠️ No data for {trade['ticker']}")
-            continue
-
-        high = float(market_data['high'])
-        close = float(market_data['close'])
-        oi = int(market_data['oi'])
-        if data_date >= exp_date:
-            actual_last_price = 0.0
-        elif close > 0:
-            actual_last_price = close
-        else:
-            # Only fallback to previous last_price if it's not expired and market data is missing
-            actual_last_price = float(trade.get('last_price', 0))
-
-        new_status, update_payload = process_trade_state(
-            trade,
-            market_data['high'],
-            market_data['low'],
-            actual_last_price,
-            oi,
-            trade['status'],
-            trade['expiration_date'],
-            current_date=data_date  # <--- Pass the date the data belongs to
-        )
-
-        # Update local trade object for consistency
-        trade.update(update_payload)
-
-        # CONDITIONAL LOWEST PRICE UPDATE (Pre-Scale Drawdown Tracking)
-        current_lowest = float(trade.get('lowest_price') or 99999)
-        day_low = market_data['low']
-
-
-
-        supabase.table("whale_alerts").update(update_payload).eq("id", trade['id']).execute()
-
-        # --- E. Daily Snapshot (History) ---
-        snapshot = {
-            "alert_id": trade['id'],
-            "date": data_date.isoformat(),
-            "price_high": high,
-            "price_close": close,
-            "price_low": market_data['low'],  # <-- NEW: Save Daily Low
-            "current_oi": oi,
-            "implied_volatility": None  # Always None
-        }
-        supabase.table("whale_performance").upsert(
-            # The lines after the block to replace:
-            snapshot,
-            on_conflict="alert_id, date"
-        ).execute()
-
-    print("\n✅ Daily Update Complete.")
+    return strategy_pct, baseline_pct, max_pct
 
 
 def process_trade_state(trade, high, low, close, oi, current_status, exp_date_str, current_date=None):
     """
-    The Single Source of Truth for trade transitions.
+    State Machine for Trade Lifecycle.
     """
     entry = float(trade['entry_price'])
     target = float(trade['profit_target'])
     stop_oi_level = int(trade['stop_oi_level'])
     exp_date = datetime.strptime(exp_date_str, "%Y-%m-%d").date()
 
-    # Use the provided current_date (for backfilling) or default to real-world today
     check_date = current_date or datetime.now(EST).date()
 
+    # 1. Update Persistent High/Low
+    prev_high = float(trade.get('highest_price') or 0)
+    new_highest = max(high, prev_high)
+    if new_highest == 0: new_highest = float(trade['entry_price'])
+
+    # Logic: "Lowest Price" tracks drawdown.
+    prev_low = float(trade.get('lowest_price') or 99999)
+    if prev_low == 99999: prev_low = entry
+    new_lowest = min(low, prev_low) if low > 0 else prev_low
+
+    # 2. Determine Status (Once SCALED, always SCALED)
     new_status = current_status
     close_reason = None
 
-    # 1. Check Expiration First
-    if check_date >= exp_date:
-        new_status = "EXPIRED"
-        close_reason = "expiration"
-    # 2. Check Stop OI (Only if still OPEN)
-    elif current_status == "OPEN" and 0 < oi < stop_oi_level:
-        new_status = "STOP_OI"
-        close_reason = "stop_oi"
-    # 3. Check Scale (Only if still OPEN)
-    elif current_status == "OPEN" and high >= target:
-        new_status = "SCALED"
+    if current_status == "SCALED":
+        # Already won. We just update the moonshot peak (handled by new_highest)
+        pass
+    else:
+        # Still OPEN, check for events
+        if new_highest >= target:
+            new_status = "SCALED"
+        elif check_date >= exp_date:
+            new_status = "EXPIRED"
+            close_reason = "expiration"
+        elif 0 < oi < stop_oi_level:
+            new_status = "STOP_OI"
+            close_reason = "stop_oi"
 
-    # Capture the "Memorialized" PnL
-    # If the status is no longer OPEN, we lock the values.
-    # Note: For SCALED trades, 'high' ensures moonshot captures the peak.
-    current_high = max(high, float(trade.get('highest_price') or 0))
-    sim_pnl, tp_pnl = calculate_trade_pnl_percentages(trade, current_high, close if new_status != "SCALED" else target)
+        # 3. CALCULATE HARD % NUMBERS HERE
+        strat_pct, base_pct = calculate_pnl_snapshots(
+            float(trade['entry_price']),
+            new_highest,
+            close,
+            new_status
+        )
 
+        payload = {
+            "status": new_status,
+            "highest_price": new_highest,
+            "last_price": close,
+            "last_oi": oi,
+            # SAVE THE HARD NUMBERS TO DB
+            "final_sim_pnl_pct": strat_pct,  # Curve B (Strategy)
+            "final_tp_pnl_pct": base_pct,  # Curve A (Baseline)
+        }
+
+    # 4. Construct Payload
     payload = {
         "status": new_status,
-        "highest_price": current_high,
+        "highest_price": new_highest,
+        "lowest_price": new_lowest,
         "last_price": close,
         "last_oi": oi,
-        "final_sim_pnl_pct": sim_pnl if new_status != "OPEN" else None,
-        "final_tp_pnl_pct": tp_pnl if new_status != "OPEN" else None
+        # We update these DAILY so the DB always has the latest "Curve" value
+        "final_sim_pnl_pct": strat_pct,
+        "final_tp_pnl_pct": base_pct,
+        # We can add a custom field for Max Curve if schema allows, otherwise Dashboard calculates it
+        # "final_max_pnl_pct": max_pct
     }
 
     if close_reason:
@@ -391,11 +271,70 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
         payload["close_date"] = check_date.isoformat()
         payload["close_price"] = close
 
-    # Lowest price only tracks during the high-risk 'OPEN' phase
-    if current_status == "OPEN":
-        existing_low = float(trade.get('lowest_price') or entry)
-        payload["lowest_price"] = min(low, existing_low) if low > 0 else existing_low
     return new_status, payload
+
+
+def run_daily_update():
+    print("🚀 Starting Daily Portfolio Simulator Update...")
+    today = datetime.now(EST).date()
+    today_int = get_theta_date_int(today)
+
+    # Data Date = Yesterday (unless market is open, but usually we run this next morning)
+    # If running intra-day, handle logic to get current quote.
+    # For safety, let's assume we want Close of Yesterday.
+    data_date = today - timedelta(days=1)
+    if data_date.weekday() >= 5:  # Skip weekends
+        data_date -= timedelta(days=1 if data_date.weekday() == 5 else 2)
+
+    data_date_int = get_theta_date_int(data_date)
+    print(f"🗓️ Data Date: {data_date}")
+
+    # Fetch OPEN or SCALED trades (SCALED trades need their moonshot value updated)
+    response = supabase.table("whale_alerts").select("*").in_("status", ["OPEN", "SCALED"]).execute()
+    active_trades = response.data
+
+    print(f"📂 Processing {len(active_trades)} active/moonshot trades.")
+
+    for trade in active_trades:
+        print(f"   Processing {trade['ticker']}...")
+
+        trade_entry_dt = datetime.fromisoformat(trade['discord_timestamp']).astimezone(EST)
+        is_day_0 = (trade_entry_dt.date() == data_date)
+
+        if trade_entry_dt.date() > data_date:
+            continue
+
+        market_data = get_market_data(trade, data_date_int, is_day_0, trade_entry_dt)
+        if not market_data:
+            print(f"      ⚠️ No data for {trade['ticker']}")
+            continue
+
+        new_status, payload = process_trade_state(
+            trade,
+            market_data['high'],
+            market_data['low'],
+            market_data['close'],
+            market_data['oi'],
+            trade['status'],
+            trade['expiration_date'],
+            current_date=data_date
+        )
+
+        # Update DB
+        supabase.table("whale_alerts").update(payload).eq("id", trade['id']).execute()
+
+        # Save History
+        supabase.table("whale_performance").upsert({
+            "alert_id": trade['id'],
+            "date": data_date.isoformat(),
+            "price_high": market_data['high'],
+            "price_low": market_data['low'],
+            "price_close": market_data['close'],
+            "current_oi": market_data['oi']
+        }, on_conflict="alert_id, date").execute()
+
+    print("✅ Daily Update Complete.")
+
 
 if __name__ == "__main__":
     run_daily_update()
