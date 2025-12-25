@@ -95,9 +95,10 @@ def run_simulation(df, initial_capital, risk_pct):
     sim_df['sim_ret_pct'] = sim_df['final_sim_pnl_pct'].fillna(sim_df['curr_ret_pct'])
     sim_df['tp_exit_ret_pct'] = sim_df['final_tp_pnl_pct'].fillna(sim_df['curr_ret_pct'])
 
-    # DBAP (Don't Be A Pussy) uses the Peak price for winners,
-    # but respects the actual loss/drawdown for trades that failed to hit the target.
-    sim_df['dbap_ret_pct'] = np.where(sim_df['status'] == 'SCALED', sim_df['peak_ret_pct'], sim_df['sim_ret_pct'])
+    # Use the stored DBAP value first; if it doesn't exist (live trades), use the logic
+    sim_df['dbap_ret_pct'] = sim_df['final_dbap_pnl_pct'].fillna(
+        np.where(sim_df['status'] == 'SCALED', sim_df['peak_ret_pct'], sim_df['sim_ret_pct'])
+    )
 
     # 4. Calculate $$$
     sim_df['sim_pnl'] = sim_df['pos_size_dollars'] * (sim_df['sim_ret_pct'] / 100.0)

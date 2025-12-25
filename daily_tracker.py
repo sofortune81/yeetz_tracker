@@ -83,7 +83,14 @@ def calculate_pnl_snapshots(entry, high, close, status):
     else:
         strategy_pct = ((close - entry) / entry) * 100.0
 
-    return strategy_pct, baseline_pct
+    # 3. DBAP CURVE (The "What If" Ceiling)
+    if status == "SCALED":
+        dbap_pct = ((high - entry) / entry) * 100.0
+    else:
+        # Crucial: DBAP still takes the loss if the whale left or it expired
+        dbap_pct = ((close - entry) / entry) * 100.0
+
+    return strategy_pct, baseline_pct, dbap_pct
 
 
 def get_market_data(trade, data_date_int, is_day_0, alert_dt):
@@ -192,13 +199,13 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
             new_status = "EXPIRED"
             close_reason = "expiration"
             close = 0.0  # Force true 0 on loss
-        elif check_date > entry_date and 0 < oi < stop_oi_level:
+        elif check_date > entry_date and oi < stop_oi_level:
             new_status = "STOP_OI"
             close_reason = "stop_oi"
             # Keep 'close' as API provided for STOP_OI
 
     # 3. Final PnL Calculation
-    strat_pct, base_pct = calculate_pnl_snapshots(entry, new_highest, close, new_status)
+    strat_pct, base_pct, dbap_pct = calculate_pnl_snapshots(entry, new_highest, close, new_status)
 
     payload = {
         "status": new_status,
@@ -208,6 +215,7 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
         "last_oi": oi,
         "final_sim_pnl_pct": strat_pct,
         "final_tp_pnl_pct": base_pct,
+        "final_dbap_pnl_pct": dbap_pct
     }
 
     if close_reason:
