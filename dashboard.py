@@ -327,23 +327,38 @@ def main():
 
         with col_stats:
             st.markdown("### Strategy Deep Dive")
-            s1, s2 = st.columns(2)
-            s3, s4 = st.columns(2)
 
-            # 100%+ Runners
+            # Row 1: The "Accounting" (Wins + Losses + Open = Total)
+            s1, s2, s3 = st.columns(3)
+
+            # Row 2: The "Why" (Breakdown of outcomes)
+            s4, s5, s6 = st.columns(3)
+
+            # Calculations
             runners = sim_df[sim_df['peak_ret_pct'] >= 100]
             runner_pct = (len(runners) / total_trades * 100) if total_trades > 0 else 0
 
-            # Worthless (Expired and lost > 95%)
-            worthless = sim_df[(sim_df['status'] == 'EXPIRED') & (sim_df['sim_ret_pct'] <= -95)]
-            worthless_pct = (len(worthless) / total_trades * 100) if total_trades > 0 else 0
+            # Refined Loss Breakdown
+            stop_oi_exits = sim_df[sim_df['status'] == 'STOP_OI']
+            stop_oi_pct = (len(stop_oi_exits) / total_trades * 100) if total_trades > 0 else 0
 
-            # Use the variables to show counts and percentages
-            s1.metric("Total Wins", f"{len(wins_df)}", f"{wr:.1f}% of total")
-            s2.metric("Total Losses", f"{len(losses_df)}", f"{(len(losses_df) / total_trades * 100):.1f}% of total",
+            expired_worthless = sim_df[sim_df['status'] == 'EXPIRED']
+            expired_pct = (len(expired_worthless) / total_trades * 100) if total_trades > 0 else 0
+
+            open_pct = (len(open_df) / total_trades * 100) if total_trades > 0 else 0
+
+            # Row 1: Totals
+            s1.metric("Total Wins", f"{len(wins_df)}", f"{wr:.1f}%")
+            s2.metric("Total Losses", f"{len(losses_df)}", f"{(len(losses_df) / total_trades * 100):.1f}%",
                       delta_color="inverse")
-            s3.metric("100%+ Runners", f"{len(runners)}", f"{runner_pct:.1f}% of total")
-            s4.metric("Expired Worthless", f"{len(worthless)}", f"{worthless_pct:.1f}% of total", delta_color="inverse")
+            s3.metric("Open Positions", f"{len(open_df)}", f"{open_pct:.1f}%")
+
+            # Row 2: Details
+            s4.metric("100%+ Runners", f"{len(runners)}", f"{runner_pct:.1f}% Home Run Rate")
+            s5.metric("Stop OI Exits", f"{len(stop_oi_exits)}", f"{stop_oi_pct:.1f}% Risk Cut",
+                      help="Trades closed because whale Open Interest dropped below 20% of entry.")
+            s6.metric("Expired Worthless", f"{len(expired_worthless)}", f"{expired_pct:.1f}% Max Loss",
+                      delta_color="inverse", help="Trades that reached expiration without hitting the profit target.")
 
         st.divider()
         render_equity_chart(sim_df)
