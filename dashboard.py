@@ -94,7 +94,10 @@ def run_simulation(df, initial_capital, risk_pct):
     # 3. Retrieve Backend PnL
     sim_df['sim_ret_pct'] = sim_df['final_sim_pnl_pct'].fillna(sim_df['curr_ret_pct'])
     sim_df['tp_exit_ret_pct'] = sim_df['final_tp_pnl_pct'].fillna(sim_df['curr_ret_pct'])
-    sim_df['dbap_ret_pct'] = sim_df['peak_ret_pct']
+
+    # DBAP (Don't Be A Pussy) uses the Peak price for winners,
+    # but respects the actual loss/drawdown for trades that failed to hit the target.
+    sim_df['dbap_ret_pct'] = np.where(sim_df['status'] == 'SCALED', sim_df['peak_ret_pct'], sim_df['sim_ret_pct'])
 
     # 4. Calculate $$$
     sim_df['sim_pnl'] = sim_df['pos_size_dollars'] * (sim_df['sim_ret_pct'] / 100.0)
@@ -265,29 +268,48 @@ def main():
 
     tab1, tab2 = st.tabs(["📊 Portfolio", "🔍 Finder"])
     with tab1:
-        # Date Tracking Info
-        first_date = sim_df['discord_timestamp'].min().strftime('%B %d, %Y')
-        st.caption(f"Tracking performance since: **{first_date}**")
+        # 1. Date Tracking Header
+        first_trade_date = sim_df['discord_timestamp'].min().strftime('%B %d, %Y')
+        st.caption(f"📈 Tracking performance since: **{first_trade_date}**")
 
-        st.subheader("High-Level Summary")
+        # 2. Key Metrics Row
         m1, m2, m3, m4 = st.columns(4)
-
         total_trades = len(sim_df)
-        winners = sim_df[sim_df['win_loss'] == 'WIN']
-        losers = sim_df[sim_df['win_loss'] == 'LOSS']
-        wr = (len(winners) / total_trades * 100) if total_trades > 0 else 0
+        wins_df = sim_df[sim_df['win_loss'] == 'WIN']
+        losses_df = sim_df[sim_df['win_loss'] == 'LOSS']
+        open_df = sim_df[sim_df['win_loss'] == 'PENDING']
 
-        m1.metric("Net Portfolio Value", f"${sim_df['equity_curve_scaled'].iloc[0]:,.0f}")
+        wr = (len(wins_df) / total_trades * 100) if total_trades > 0 else 0
+
+        m1.metric("Portfolio Value", f"${sim_df['equity_curve_scaled'].iloc[0]:,.0f}")
         m2.metric("Total Trades", total_trades)
         m3.metric("Win Rate", f"{wr:.1f}%")
-        m4.metric("Profit Factor",
-                  f"{abs(sim_df[sim_df['sim_pnl'] > 0]['sim_pnl'].sum() / sim_df[sim_df['sim_pnl'] < 0]['sim_pnl'].sum()):.2f}" if len(
-                      losers) > 0 else "N/A")
+        # Profit Factor Calculation
+        total_win_val = wins_df['sim_pnl'].sum()
+        total_loss_val = abs(losses_df['sim_pnl'].sum())
+        pf = total_win_val / total_loss_val if total_loss_val > 0 else 0
+        m4.metric("Profit Factor", f"{pf:.2f}")
 
         st.divider()
 
-        # Visual Analytics Row
-        col_chart, col_stats = st.columns([1, 2])
+        # 3. Returns Comparison (Strategy vs Baseline vs Max)
+        st.subheader("Returns Comparison")
+        r1, r2, r3 = st.columns(3)
+
+        strat_total = sim_df['sim_pnl'].sum()
+        base_total = sim_df['tp_exit_pnl'].sum()
+        # Use the calculated PnL column which now includes the losses
+        max_total = sim_df['dbap_pnl'].sum()
+
+        r1.metric("Strategy (80/20)", f"${strat_total:,.0f}", help="Hybrid scaling strategy. Includes all losses.")
+        r2.metric("Baseline (100% TP)", f"${base_total:,.0f}", help="Full exit at 20% target. Includes all losses.")
+        r3.metric("Max Potential (Peak)", f"${max_total:,.0f}",
+                  help="Selling every winner at its absolute peak, while accounting for losses on failed trades.")
+
+        st.divider()
+
+        # 4. Visual Analytics & Deep Dive
+        col_chart, col_stats = st.columns([1, 1.5])
 
         with col_chart:
             # Win/Loss Pie Chart
@@ -296,43 +318,32 @@ def main():
                 names=counts.index,
                 values=counts.values,
                 color=counts.index,
-                color_discrete_map={'WIN': '#00CC96', 'LOSS': '#EF553B', 'PENDING': '#636EFA'},
+                color_discrete_map={'WIN': '#00CC96', 'LOSS': '#EF553B', 'PENDING': '#636EFA', 'EVEN': '#7F7F7F'},
                 hole=0.4,
                 title="Trade Distribution"
             )
-            fig_pie.update_layout(showlegend=False, margin=dict(t=30, b=0, l=0, r=0), height=250)
+            fig_pie.update_layout(showlegend=True, margin=dict(t=40, b=0, l=0, r=0), height=300)
             st.plotly_chart(fig_pie, use_container_width=True)
 
         with col_stats:
             st.markdown("### Strategy Deep Dive")
             s1, s2 = st.columns(2)
+            s3, s4 = st.columns(2)
 
             # 100%+ Runners
             runners = sim_df[sim_df['peak_ret_pct'] >= 100]
             runner_pct = (len(runners) / total_trades * 100) if total_trades > 0 else 0
 
-            # Worthless (assume < -90% return or EXPIRED status with negative pnl)
-            worthless = sim_df[(sim_df['status'] == 'EXPIRED') & (sim_df['sim_ret_pct'] <= -90)]
+            # Worthless (Expired and lost > 95%)
+            worthless = sim_df[(sim_df['status'] == 'EXPIRED') & (sim_df['sim_ret_pct'] <= -95)]
             worthless_pct = (len(worthless) / total_trades * 100) if total_trades > 0 else 0
 
-            s1.metric("100%+ Runners", f"{len(runners)} trades", f"{runner_pct:.1f}% of total")
-            s2.metric("Expired Worthless", f"{len(worthless)} trades", f"{worthless_pct:.1f}% of total",
+            # Use the variables to show counts and percentages
+            s1.metric("Total Wins", f"{len(wins_df)}", f"{wr:.1f}% of total")
+            s2.metric("Total Losses", f"{len(losses_df)}", f"{(len(losses_df) / total_trades * 100):.1f}% of total",
                       delta_color="inverse")
-
-        st.divider()
-
-        # Performance Grouping
-        st.subheader("Returns Comparison")
-        r1, r2, r3 = st.columns(3)
-
-        # Calculate totals
-        strat_total = sim_df['sim_pnl'].sum()
-        base_total = sim_df['tp_exit_pnl'].sum()
-        max_total = (sim_df['pos_size_dollars'] * (sim_df['peak_ret_pct'] / 100)).sum()
-
-        r1.metric("Strategy Return (80/20)", f"${strat_total:,.0f}", help="Our hybrid scaling strategy")
-        r2.metric("Baseline Return (100% TP)", f"${base_total:,.0f}", help="Profit if we exited 100% at the 20% target")
-        r3.metric("Max Potential Return", f"${max_total:,.0f}", help="The 'Don't Be A Pussy' theoretical peak")
+            s3.metric("100%+ Runners", f"{len(runners)}", f"{runner_pct:.1f}% of total")
+            s4.metric("Expired Worthless", f"{len(worthless)}", f"{worthless_pct:.1f}% of total", delta_color="inverse")
 
         st.divider()
         render_equity_chart(sim_df)
