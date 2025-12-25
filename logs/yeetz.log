@@ -392,3 +392,221 @@
 ========================================
 
 2025-12-25 19:46:59 - backfill_manager - INFO     - 👋 Backfill complete. Shutting down bot...
+2025-12-25 22:36:50 - daily_tracker - INFO     - 🚀 Starting Daily Portfolio Simulator Update...
+2025-12-25 22:36:50 - daily_tracker - INFO     - 🗓️ Processing Data For Date: 2025-12-24
+2025-12-25 22:36:51 - daily_tracker - INFO     - 📂 Found 106 active/moonshot trades to process.
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for ABTC: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for ABTC
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for EU: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for EU
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for XRX: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for XRX
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for TLRY: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for TLRY: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for TLRY: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for BITF: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for SG: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for SG
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for AG: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for AG
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for CRON: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for CRON
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for CRON: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for CRON
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for TDOC: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for RZLV: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for FUBO: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for ENVX: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for ENVX
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for ULCC: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for ULCC
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for SABR: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for SABR
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for ENVX: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for ENVX
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for IRBT: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for IRBT
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for WEN: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for CRON: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for CRON
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for ALLT: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for ALLT
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for PDYN: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for PDYN
+2025-12-25 22:36:51 - daily_tracker - ERROR    - OI Fetch Error for RPTX: [Errno 111] Connection refused
+2025-12-25 22:36:51 - daily_tracker - WARNING  -       ⚠️ No data found for RPTX
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for ACVA: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for ACVA
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for BITF: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for KOPN: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for LAZR: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for RUM: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for RUM
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for WEN: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for FUBO: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for FIP: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for FIP
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for RR: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for SNDL: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for SNDL
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for ASST: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for LAZR: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for RZLT: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for RZLT
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for RZLV: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for BLNK: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for BLNK
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for SOC: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for SOC
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for SVC: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for SVC
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for TDOC: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for TLRY: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for CMPS: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for CMPS
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for FUBO: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for ABR: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for BCRX: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for BCRX
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for CODX: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for CODX
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for SPCE: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for PLBY: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for PLBY
+2025-12-25 22:36:52 - daily_tracker - ERROR    - OI Fetch Error for ABR: [Errno 111] Connection refused
+2025-12-25 22:36:52 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for SPCE: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for RC: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for RC
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for USAS: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for USAS
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for GOSS: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for GOSS
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for EQ: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for EQ
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for SAVA: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for NXDR: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for NXDR
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for RZLV: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for JBLU: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for POET: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for LUNR: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for LUNR
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for SKIN: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for SKIN
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for CLOV: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for CXM: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for CXM
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for ABR: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for SPCE: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for TDOC: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for TDOC: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for RR: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for CCCC: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for CCCC
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for TDOC: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for CGC: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for CGC
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for SABR: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for SABR
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for FFAI: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for FFAI
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for SAVA: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for NVAX: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for NVAX
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for BYND: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for BYND
+2025-12-25 22:36:53 - daily_tracker - ERROR    - OI Fetch Error for NXDR: [Errno 111] Connection refused
+2025-12-25 22:36:53 - daily_tracker - WARNING  -       ⚠️ No data found for NXDR
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for NGD: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for DEFT: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for DEFT
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for SPCE: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for ASPI: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for ASPI
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for POET: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for SPCE: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for LAES: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for LAES
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for LAC: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for LAC
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for ALT: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for ALT
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for TLRY: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for TDOC: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for RCAT: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for RCAT
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for MAPS: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for MAPS
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for SPCE: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for RZLV: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for CATX: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for CATX
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for CLOV: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for ABR: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for SPCE: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for ABR: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for ARBE: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for BITF: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for NRDY: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for NRDY
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for ARBE: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for POET: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-25 22:36:54 - daily_tracker - ERROR    - OI Fetch Error for ENVX: [Errno 111] Connection refused
+2025-12-25 22:36:54 - daily_tracker - WARNING  -       ⚠️ No data found for ENVX
+2025-12-25 22:36:55 - daily_tracker - ERROR    - OI Fetch Error for TDOC: [Errno 111] Connection refused
+2025-12-25 22:36:55 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-25 22:36:55 - daily_tracker - INFO     - ✅ Daily Update Complete. Updated 0 trades.
+2025-12-25 22:37:04 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2025-12-25 22:37:04 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
