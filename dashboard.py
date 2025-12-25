@@ -263,48 +263,78 @@ def main():
 
     render_todays_activity(sim_df)
 
-    tab1, tab2 = st.tabs(["📊 Portfolio", "🔎 Finder"])
+    tab1, tab2 = st.tabs(["📊 Portfolio", "🔍 Finder"])
     with tab1:
-        st.subheader("Key Metrics")
-        c1, c2, c3 = st.columns(3)
-        c1.metric("Net Portfolio Value", f"${sim_df['equity_curve_scaled'].iloc[0]:,.0f}")
-        c2.metric("Total Trades", len(sim_df))
-        winners = sim_df[sim_df['sim_pnl'] > 0]
-        wr = len(winners) / len(sim_df) * 100 if len(sim_df) > 0 else 0
-        c3.metric("Realized Win Rate", f"{wr:.1f}%")
+        # Date Tracking Info
+        first_date = sim_df['discord_timestamp'].min().strftime('%B %d, %Y')
+        st.caption(f"Tracking performance since: **{first_date}**")
+
+        st.subheader("High-Level Summary")
+        m1, m2, m3, m4 = st.columns(4)
+
+        total_trades = len(sim_df)
+        winners = sim_df[sim_df['win_loss'] == 'WIN']
+        losers = sim_df[sim_df['win_loss'] == 'LOSS']
+        wr = (len(winners) / total_trades * 100) if total_trades > 0 else 0
+
+        m1.metric("Net Portfolio Value", f"${sim_df['equity_curve_scaled'].iloc[0]:,.0f}")
+        m2.metric("Total Trades", total_trades)
+        m3.metric("Win Rate", f"{wr:.1f}%")
+        m4.metric("Profit Factor",
+                  f"{abs(sim_df[sim_df['sim_pnl'] > 0]['sim_pnl'].sum() / sim_df[sim_df['sim_pnl'] < 0]['sim_pnl'].sum()):.2f}" if len(
+                      losers) > 0 else "N/A")
+
         st.divider()
 
-        # RESTORED 5-COLUMN LAYOUT
-        st.subheader("Realized Performance")
-        closed = sim_df[sim_df['status'].isin(['SCALED', 'STOP_OI', 'EXPIRED'])]
-        r1, r2, r3, r4, r5 = st.columns(5)
+        # Visual Analytics Row
+        col_chart, col_stats = st.columns([1, 2])
 
-        net_realized = closed['sim_pnl'].sum()
-        win_pnl = closed[closed['sim_pnl'] > 0]['sim_pnl'].sum()
-        loss_pnl = closed[closed['sim_pnl'] <= 0]['sim_pnl'].sum()
-        pf = abs(win_pnl / loss_pnl) if loss_pnl != 0 else 0
-        baseline_tot = closed['tp_exit_pnl'].sum()
+        with col_chart:
+            # Win/Loss Pie Chart
+            counts = sim_df['win_loss'].value_counts()
+            fig_pie = px.pie(
+                names=counts.index,
+                values=counts.values,
+                color=counts.index,
+                color_discrete_map={'WIN': '#00CC96', 'LOSS': '#EF553B', 'PENDING': '#636EFA'},
+                hole=0.4,
+                title="Trade Distribution"
+            )
+            fig_pie.update_layout(showlegend=False, margin=dict(t=30, b=0, l=0, r=0), height=250)
+            st.plotly_chart(fig_pie, use_container_width=True)
 
-        r1.metric("Net Realized PnL", f"${net_realized:,.0f}")
-        r2.metric("Total Win PnL", f"${win_pnl:,.0f}")
-        r3.metric("Total Loss PnL", f"${loss_pnl:,.0f}")
-        r4.metric("Profit Factor", f"{pf:.2f}")
-        r5.metric("Baseline PnL", f"${baseline_tot:,.0f}")
+        with col_stats:
+            st.markdown("### Strategy Deep Dive")
+            s1, s2 = st.columns(2)
+
+            # 100%+ Runners
+            runners = sim_df[sim_df['peak_ret_pct'] >= 100]
+            runner_pct = (len(runners) / total_trades * 100) if total_trades > 0 else 0
+
+            # Worthless (assume < -90% return or EXPIRED status with negative pnl)
+            worthless = sim_df[(sim_df['status'] == 'EXPIRED') & (sim_df['sim_ret_pct'] <= -90)]
+            worthless_pct = (len(worthless) / total_trades * 100) if total_trades > 0 else 0
+
+            s1.metric("100%+ Runners", f"{len(runners)} trades", f"{runner_pct:.1f}% of total")
+            s2.metric("Expired Worthless", f"{len(worthless)} trades", f"{worthless_pct:.1f}% of total",
+                      delta_color="inverse")
+
         st.divider()
 
-        # RESTORED 3-COLUMN LAYOUT
-        st.subheader("Unrealized Exposure")
-        open_trades = sim_df[sim_df['status'] == 'OPEN']
-        u1, u2, u3 = st.columns(3)
+        # Performance Grouping
+        st.subheader("Returns Comparison")
+        r1, r2, r3 = st.columns(3)
 
-        unr_pnl = open_trades['sim_pnl'].sum()
-        max_pot = (sim_df['pos_size_dollars'] * (sim_df['peak_ret_pct'] / 100)).sum()
+        # Calculate totals
+        strat_total = sim_df['sim_pnl'].sum()
+        base_total = sim_df['tp_exit_pnl'].sum()
+        max_total = (sim_df['pos_size_dollars'] * (sim_df['peak_ret_pct'] / 100)).sum()
 
-        u1.metric("Total Unrealized PnL", f"${unr_pnl:,.0f}")
-        u2.metric("Open Positions", len(open_trades))
-        u3.metric("Max Potential Return", f"${max_pot:,.0f}")
+        r1.metric("Strategy Return (80/20)", f"${strat_total:,.0f}", help="Our hybrid scaling strategy")
+        r2.metric("Baseline Return (100% TP)", f"${base_total:,.0f}", help="Profit if we exited 100% at the 20% target")
+        r3.metric("Max Potential Return", f"${max_total:,.0f}", help="The 'Don't Be A Pussy' theoretical peak")
+
         st.divider()
-
         render_equity_chart(sim_df)
 
     with tab2:
