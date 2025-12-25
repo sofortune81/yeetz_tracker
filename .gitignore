@@ -27,3 +27,4 @@ __pycache__/
 # Windows/macOS/Linux metadata files
 .DS_Store
 /.streamlit/secrets.toml
+*.sql
