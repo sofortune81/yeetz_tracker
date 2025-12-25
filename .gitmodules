@@ -1,0 +1,6 @@
+[submodule "Pythonutils"]
+	path = Pythonutils
+	url = https://github.com/sofortune81/Pythonutils.git
+[submodule "flow_stack"]
+	path = flow_stack
+	url = https://github.com/sofortune81/flow_stack.git
