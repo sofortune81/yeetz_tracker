@@ -261,7 +261,8 @@ CREATE TABLE whale_alerts (
     entry_premium numeric,
     final_sim_pnl_pct real,
     final_tp_pnl_pct real,
-    lowest_price numeric);
+    lowest_price numeric,
+    final_dbap_pnl_pct double precision);
 
 CREATE TABLE whale_performance (
     id bigint,
