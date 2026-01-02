@@ -1589,3 +1589,1106 @@
 2025-12-26 00:22:38 - daily_tracker - INFO     - ✅ Daily Update Complete. Updated 0 trades.
 2025-12-26 00:22:46 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
 2025-12-26 00:22:46 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2025-12-26 06:00:12 - daily_tracker - INFO     - 🚀 Starting Daily Portfolio Simulator Update...
+2025-12-26 06:00:12 - daily_tracker - INFO     - 🗓️ Processing Data For Date: 2025-12-24
+2025-12-26 06:00:13 - daily_tracker - INFO     - 📂 Found 149 active/moonshot trades to process.
+2025-12-26 06:00:13 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-26 06:00:14 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-26 06:00:14 - daily_tracker - WARNING  -       ⚠️ No data found for GROY
+2025-12-26 06:00:15 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-26 06:00:16 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-26 06:00:16 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-26 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-26 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-26 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-26 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for LUNR
+2025-12-26 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for NAT
+2025-12-26 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for ONDS
+2025-12-26 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for BCRX
+2025-12-26 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-26 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-26 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-26 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-26 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-26 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-26 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for USAS
+2025-12-26 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for CMPS
+2025-12-26 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-26 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-26 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for DNUT
+2025-12-26 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for REPL
+2025-12-26 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for DDD
+2025-12-26 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE
+2025-12-26 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-26 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for NVAX
+2025-12-26 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-26 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for IRWD
+2025-12-26 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-26 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN
+2025-12-26 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for SKIN
+2025-12-26 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for GT
+2025-12-26 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for AMPY
+2025-12-26 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-26 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for DIBS
+2025-12-26 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for RPTX
+2025-12-26 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-26 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for DEFT
+2025-12-26 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-26 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-26 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-26 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-26 06:00:40 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-26 06:00:40 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-26 06:00:41 - daily_tracker - WARNING  -       ⚠️ No data found for RVPH
+2025-12-26 06:00:41 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-26 06:00:42 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-26 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-26 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for MNKD
+2025-12-26 06:00:46 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-26 06:00:47 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-26 06:00:47 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-26 06:00:50 - daily_tracker - WARNING  -       ⚠️ No data found for AG
+2025-12-26 06:00:54 - daily_tracker - WARNING  -       ⚠️ No data found for BULL
+2025-12-26 06:00:57 - daily_tracker - WARNING  -       ⚠️ No data found for CXM
+2025-12-26 06:00:58 - daily_tracker - WARNING  -       ⚠️ No data found for APLT
+2025-12-26 06:00:59 - daily_tracker - WARNING  -       ⚠️ No data found for CCCC
+2025-12-26 06:00:59 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-26 06:01:00 - daily_tracker - WARNING  -       ⚠️ No data found for SOC
+2025-12-26 06:01:00 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-26 06:01:01 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-26 06:01:01 - daily_tracker - WARNING  -       ⚠️ No data found for ALT
+2025-12-26 06:01:02 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-26 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for ABTC
+2025-12-26 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for BLMN
+2025-12-26 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for IRBT
+2025-12-26 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-26 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-26 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-26 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for CODX
+2025-12-26 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-26 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-26 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-26 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-26 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-26 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-26 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for EMPD
+2025-12-26 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for SVC
+2025-12-26 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-26 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for PDYN
+2025-12-26 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-26 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for ASPI
+2025-12-26 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-26 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for LAES
+2025-12-26 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-26 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-26 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for RZLT
+2025-12-26 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-26 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for EU
+2025-12-26 06:01:19 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-26 06:01:19 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-26 06:01:19 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-26 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for ACVA
+2025-12-26 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for SG
+2025-12-26 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for RUM
+2025-12-26 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-26 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for FIP
+2025-12-26 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for NXDR
+2025-12-26 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for LAC
+2025-12-26 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for CATX
+2025-12-26 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-26 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-26 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-26 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-26 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-26 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for ULCC
+2025-12-26 06:01:30 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-26 06:01:31 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-26 06:01:31 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-26 06:01:32 - daily_tracker - WARNING  -       ⚠️ No data found for RILY
+2025-12-26 06:01:32 - daily_tracker - WARNING  -       ⚠️ No data found for EQ
+2025-12-26 06:01:35 - daily_tracker - INFO     - ✅ Daily Update Complete. Updated 35 trades.
+2025-12-27 01:05:25 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2025-12-27 01:05:25 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2025-12-27 01:05:25 - listener     - INFO     -       - Embed 1 Title: 🕑 JBLU 5.5 C 1/30/2026 (35D) - yeet
+2025-12-27 01:05:25 - listener     - INFO     -    🧩 PARSED OK: JBLU 5.5C Exp:2026-01-30 @ $0.13
+2025-12-27 01:05:26 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved JBLU (ID: 1942)
+2025-12-27 02:53:32 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2025-12-27 02:53:32 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2025-12-27 02:53:32 - listener     - INFO     -       - Embed 1 Title: 🕑 JBLU 5.0 C 2/20/2026 (56D) - yeet
+2025-12-27 02:53:32 - listener     - INFO     -    🧩 PARSED OK: JBLU 5.0C Exp:2026-02-20 @ $0.33
+2025-12-27 02:53:32 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved JBLU (ID: 1943)
+2025-12-27 06:00:16 - daily_tracker - INFO     - 🚀 Starting Daily Portfolio Simulator Update...
+2025-12-27 06:00:16 - daily_tracker - INFO     - 🗓️ Processing Data For Date: 2025-12-25
+2025-12-27 06:00:16 - daily_tracker - INFO     - 📂 Found 151 active/moonshot trades to process.
+2025-12-27 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-27 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-27 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for GROY
+2025-12-27 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for GOSS
+2025-12-27 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-27 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-27 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-27 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-27 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-27 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-27 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for LUNR
+2025-12-27 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for NAT
+2025-12-27 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for ONDS
+2025-12-27 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for BCRX
+2025-12-27 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-27 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-27 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-27 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-27 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-27 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-27 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for USAS
+2025-12-27 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for CMPS
+2025-12-27 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for BLNK
+2025-12-27 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-27 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-27 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for BYND
+2025-12-27 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for DNUT
+2025-12-27 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for REPL
+2025-12-27 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for DDD
+2025-12-27 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE
+2025-12-27 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-27 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for NVAX
+2025-12-27 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-27 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for IRWD
+2025-12-27 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-27 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN
+2025-12-27 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for SKIN
+2025-12-27 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for GT
+2025-12-27 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for AMPY
+2025-12-27 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-27 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for DIBS
+2025-12-27 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for RPTX
+2025-12-27 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-27 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for DEFT
+2025-12-27 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-27 06:00:40 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-27 06:00:40 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-27 06:00:41 - daily_tracker - WARNING  -       ⚠️ No data found for SABR
+2025-12-27 06:00:42 - daily_tracker - WARNING  -       ⚠️ No data found for CGC
+2025-12-27 06:00:42 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-27 06:00:43 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-27 06:00:43 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE
+2025-12-27 06:00:44 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-27 06:00:44 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-27 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for RVPH
+2025-12-27 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-27 06:00:46 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-27 06:00:46 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-27 06:00:47 - daily_tracker - WARNING  -       ⚠️ No data found for ENVX
+2025-12-27 06:00:47 - daily_tracker - WARNING  -       ⚠️ No data found for MAPS
+2025-12-27 06:00:48 - daily_tracker - WARNING  -       ⚠️ No data found for FFAI
+2025-12-27 06:00:48 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-27 06:00:49 - daily_tracker - WARNING  -       ⚠️ No data found for MNKD
+2025-12-27 06:00:49 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-27 06:00:50 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-27 06:00:50 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-27 06:00:51 - daily_tracker - WARNING  -       ⚠️ No data found for NVAX
+2025-12-27 06:00:51 - daily_tracker - WARNING  -       ⚠️ No data found for ENVX
+2025-12-27 06:00:52 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-27 06:00:52 - daily_tracker - WARNING  -       ⚠️ No data found for AG
+2025-12-27 06:00:53 - daily_tracker - WARNING  -       ⚠️ No data found for ALLT
+2025-12-27 06:00:53 - daily_tracker - WARNING  -       ⚠️ No data found for ENVX
+2025-12-27 06:00:54 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-27 06:00:55 - daily_tracker - WARNING  -       ⚠️ No data found for SABR
+2025-12-27 06:00:55 - daily_tracker - WARNING  -       ⚠️ No data found for CRON
+2025-12-27 06:00:56 - daily_tracker - WARNING  -       ⚠️ No data found for BULL
+2025-12-27 06:00:56 - daily_tracker - WARNING  -       ⚠️ No data found for RC
+2025-12-27 06:00:57 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-27 06:00:57 - daily_tracker - WARNING  -       ⚠️ No data found for PLBY
+2025-12-27 06:00:58 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-27 06:00:58 - daily_tracker - WARNING  -       ⚠️ No data found for CXM
+2025-12-27 06:00:59 - daily_tracker - WARNING  -       ⚠️ No data found for ABTC
+2025-12-27 06:00:59 - daily_tracker - WARNING  -       ⚠️ No data found for APLT
+2025-12-27 06:01:00 - daily_tracker - WARNING  -       ⚠️ No data found for CCCC
+2025-12-27 06:01:00 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-27 06:01:01 - daily_tracker - WARNING  -       ⚠️ No data found for SOC
+2025-12-27 06:01:01 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-27 06:01:02 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-27 06:01:02 - daily_tracker - WARNING  -       ⚠️ No data found for ALT
+2025-12-27 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-27 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for ABTC
+2025-12-27 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for BLMN
+2025-12-27 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for IRBT
+2025-12-27 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-27 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-27 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-27 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for CODX
+2025-12-27 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-27 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-27 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-27 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-27 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-27 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-27 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-27 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for EMPD
+2025-12-27 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for SVC
+2025-12-27 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-27 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for PDYN
+2025-12-27 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-27 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for CRON
+2025-12-27 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for ASPI
+2025-12-27 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-27 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for LAES
+2025-12-27 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-27 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-27 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for SNDL
+2025-12-27 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for RZLT
+2025-12-27 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-27 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for EU
+2025-12-27 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for NXDR
+2025-12-27 06:01:19 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-27 06:01:19 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-27 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-27 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for ACVA
+2025-12-27 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for SG
+2025-12-27 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for RUM
+2025-12-27 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-27 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for FIP
+2025-12-27 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for NXDR
+2025-12-27 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for LAC
+2025-12-27 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for CATX
+2025-12-27 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-27 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-27 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-27 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-27 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-27 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for ULCC
+2025-12-27 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-27 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-27 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-27 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for RILY
+2025-12-27 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for EQ
+2025-12-27 06:01:30 - daily_tracker - WARNING  -       ⚠️ No data found for BYND
+2025-12-27 06:01:30 - daily_tracker - WARNING  -       ⚠️ No data found for RCAT
+2025-12-27 06:01:31 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-27 06:01:31 - daily_tracker - WARNING  -       ⚠️ No data found for XRX
+2025-12-27 06:01:32 - daily_tracker - WARNING  -       ⚠️ No data found for CRON
+2025-12-27 06:01:32 - daily_tracker - WARNING  -       ⚠️ No data found for NRDY
+2025-12-27 06:01:33 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-27 06:01:33 - daily_tracker - INFO     - ✅ Daily Update Complete. Updated 0 trades.
+2025-12-27 22:24:23 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2025-12-27 22:24:23 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2025-12-28 06:00:16 - daily_tracker - INFO     - 🚀 Starting Daily Portfolio Simulator Update...
+2025-12-28 06:00:16 - daily_tracker - INFO     - 🗓️ Processing Data For Date: 2025-12-26
+2025-12-28 06:00:16 - daily_tracker - INFO     - 📂 Found 151 active/moonshot trades to process.
+2025-12-28 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-28 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-28 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for GROY
+2025-12-28 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-28 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-28 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-28 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-28 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-28 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-28 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for LUNR
+2025-12-28 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for NAT
+2025-12-28 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for ONDS
+2025-12-28 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for BCRX
+2025-12-28 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-28 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-28 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-28 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-28 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-28 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-28 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for USAS
+2025-12-28 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for CMPS
+2025-12-28 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-28 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-28 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for DNUT
+2025-12-28 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for REPL
+2025-12-28 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for DDD
+2025-12-28 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE
+2025-12-28 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-28 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for NVAX
+2025-12-28 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-28 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for IRWD
+2025-12-28 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-28 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN
+2025-12-28 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for SKIN
+2025-12-28 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for GT
+2025-12-28 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for AMPY
+2025-12-28 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-28 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for DIBS
+2025-12-28 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for RPTX
+2025-12-28 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-28 06:00:40 - daily_tracker - WARNING  -       ⚠️ No data found for DEFT
+2025-12-28 06:00:40 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-28 06:00:41 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-28 06:00:44 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-28 06:00:44 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-28 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-28 06:00:46 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-28 06:00:46 - daily_tracker - WARNING  -       ⚠️ No data found for RVPH
+2025-12-28 06:00:47 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-28 06:00:48 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-28 06:00:51 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-28 06:00:51 - daily_tracker - WARNING  -       ⚠️ No data found for MNKD
+2025-12-28 06:00:52 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-28 06:00:52 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-28 06:00:53 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-28 06:00:55 - daily_tracker - WARNING  -       ⚠️ No data found for AG
+2025-12-28 06:01:00 - daily_tracker - WARNING  -       ⚠️ No data found for BULL
+2025-12-28 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for CXM
+2025-12-28 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for APLT
+2025-12-28 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for CCCC
+2025-12-28 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-28 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for SOC
+2025-12-28 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-28 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-28 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for ALT
+2025-12-28 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-28 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for ABTC
+2025-12-28 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for BLMN
+2025-12-28 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for IRBT
+2025-12-28 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-28 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-28 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-28 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for CODX
+2025-12-28 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-28 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-28 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-28 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-28 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-28 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-28 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for EMPD
+2025-12-28 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for SVC
+2025-12-28 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-28 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for PDYN
+2025-12-28 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-28 06:01:19 - daily_tracker - WARNING  -       ⚠️ No data found for ASPI
+2025-12-28 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-28 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for LAES
+2025-12-28 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-28 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-28 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for RZLT
+2025-12-28 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-28 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for EU
+2025-12-28 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-28 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-28 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-28 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for ACVA
+2025-12-28 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for SG
+2025-12-28 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for RUM
+2025-12-28 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-28 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for FIP
+2025-12-28 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for NXDR
+2025-12-28 06:01:30 - daily_tracker - WARNING  -       ⚠️ No data found for LAC
+2025-12-28 06:01:30 - daily_tracker - WARNING  -       ⚠️ No data found for CATX
+2025-12-28 06:01:31 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-28 06:01:31 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-28 06:01:32 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-28 06:01:32 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-28 06:01:33 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-28 06:01:33 - daily_tracker - WARNING  -       ⚠️ No data found for ULCC
+2025-12-28 06:01:34 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-28 06:01:34 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-28 06:01:35 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-28 06:01:35 - daily_tracker - WARNING  -       ⚠️ No data found for RILY
+2025-12-28 06:01:36 - daily_tracker - WARNING  -       ⚠️ No data found for EQ
+2025-12-28 06:01:42 - daily_tracker - INFO     - ✅ Daily Update Complete. Updated 37 trades.
+2025-12-29 05:02:22 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2025-12-29 05:02:22 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2025-12-29 06:00:14 - daily_tracker - INFO     - 🚀 Starting Daily Portfolio Simulator Update...
+2025-12-29 06:00:14 - daily_tracker - INFO     - 🗓️ Processing Data For Date: 2025-12-26
+2025-12-29 06:00:15 - daily_tracker - INFO     - 📂 Found 145 active/moonshot trades to process.
+2025-12-29 06:00:16 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-29 06:00:16 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-29 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for GROY
+2025-12-29 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-29 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-29 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-29 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-29 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-29 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-29 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for LUNR
+2025-12-29 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for NAT
+2025-12-29 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for ONDS
+2025-12-29 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for BCRX
+2025-12-29 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-29 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-29 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-29 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-29 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-29 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-29 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for USAS
+2025-12-29 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for CMPS
+2025-12-29 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-29 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-29 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for DNUT
+2025-12-29 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for REPL
+2025-12-29 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for DDD
+2025-12-29 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE
+2025-12-29 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-29 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for NVAX
+2025-12-29 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-29 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for IRWD
+2025-12-29 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-29 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN
+2025-12-29 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for SKIN
+2025-12-29 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for GT
+2025-12-29 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for AMPY
+2025-12-29 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-29 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for DIBS
+2025-12-29 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for RPTX
+2025-12-29 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-29 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for DEFT
+2025-12-29 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-29 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-29 06:00:41 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-29 06:00:42 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-29 06:00:44 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-29 06:00:44 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-29 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for RVPH
+2025-12-29 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-29 06:00:47 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-29 06:00:48 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-29 06:00:48 - daily_tracker - WARNING  -       ⚠️ No data found for MNKD
+2025-12-29 06:00:49 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-29 06:00:49 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-29 06:00:50 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-29 06:00:52 - daily_tracker - WARNING  -       ⚠️ No data found for AG
+2025-12-29 06:00:55 - daily_tracker - WARNING  -       ⚠️ No data found for BULL
+2025-12-29 06:00:58 - daily_tracker - WARNING  -       ⚠️ No data found for CXM
+2025-12-29 06:00:59 - daily_tracker - WARNING  -       ⚠️ No data found for APLT
+2025-12-29 06:01:00 - daily_tracker - WARNING  -       ⚠️ No data found for CCCC
+2025-12-29 06:01:00 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-29 06:01:01 - daily_tracker - WARNING  -       ⚠️ No data found for SOC
+2025-12-29 06:01:01 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-29 06:01:02 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-29 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for ALT
+2025-12-29 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-29 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for ABTC
+2025-12-29 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for BLMN
+2025-12-29 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for IRBT
+2025-12-29 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-29 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-29 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-29 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for CODX
+2025-12-29 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-29 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-29 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-29 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-29 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-29 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-29 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for EMPD
+2025-12-29 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for SVC
+2025-12-29 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-29 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for PDYN
+2025-12-29 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-29 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for ASPI
+2025-12-29 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-29 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for LAES
+2025-12-29 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-29 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-29 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for RZLT
+2025-12-29 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-29 06:01:19 - daily_tracker - WARNING  -       ⚠️ No data found for EU
+2025-12-29 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-29 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-29 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-29 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for ACVA
+2025-12-29 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for SG
+2025-12-29 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for RUM
+2025-12-29 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-29 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for FIP
+2025-12-29 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for NXDR
+2025-12-29 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for LAC
+2025-12-29 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for CATX
+2025-12-29 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-29 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-29 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-29 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-29 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-29 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for ULCC
+2025-12-29 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-29 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-29 06:01:30 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-29 06:01:30 - daily_tracker - WARNING  -       ⚠️ No data found for RILY
+2025-12-29 06:01:31 - daily_tracker - WARNING  -       ⚠️ No data found for EQ
+2025-12-29 06:01:36 - daily_tracker - INFO     - ✅ Daily Update Complete. Updated 31 trades.
+2025-12-30 00:34:13 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2025-12-30 00:34:13 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2025-12-30 00:34:13 - listener     - INFO     -       - Embed 1 Title: 🕑 SBET 9.5 C 1/2/2026 (4D) - yeet
+2025-12-30 00:34:13 - listener     - INFO     -    🧩 PARSED OK: SBET 9.5C Exp:2026-01-02 @ $0.09
+2025-12-30 00:34:13 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved SBET (ID: 1944)
+2025-12-30 02:02:27 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2025-12-30 02:02:27 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2025-12-30 02:02:27 - listener     - INFO     -       - Embed 1 Title: 🕑 SGMO 1.0 C 5/15/2026 (137D) - yeet
+2025-12-30 02:02:27 - listener     - INFO     -    🧩 PARSED OK: SGMO 1.0C Exp:2026-05-15 @ $0.09
+2025-12-30 02:02:28 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved SGMO (ID: 1945)
+2025-12-30 04:23:25 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2025-12-30 04:23:25 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2025-12-30 04:23:25 - listener     - INFO     -       - Embed 1 Title: 🕑 CYPH 1.5 C 1/16/2026 (18D) - yeet
+2025-12-30 04:23:25 - listener     - INFO     -    🧩 PARSED OK: CYPH 1.5C Exp:2026-01-16 @ $0.15
+2025-12-30 04:23:25 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved CYPH (ID: 1946)
+2025-12-30 06:00:16 - daily_tracker - INFO     - 🚀 Starting Daily Portfolio Simulator Update...
+2025-12-30 06:00:16 - daily_tracker - INFO     - 🗓️ Processing Data For Date: 2025-12-26
+2025-12-30 06:00:16 - daily_tracker - INFO     - 📂 Found 148 active/moonshot trades to process.
+2025-12-30 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-30 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-30 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for GROY
+2025-12-30 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-30 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-30 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-30 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-30 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-30 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-30 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for LUNR
+2025-12-30 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for NAT
+2025-12-30 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for ONDS
+2025-12-30 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for BCRX
+2025-12-30 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-30 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-30 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-30 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-30 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-30 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-30 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for USAS
+2025-12-30 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for CMPS
+2025-12-30 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-30 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-30 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for DNUT
+2025-12-30 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for REPL
+2025-12-30 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for DDD
+2025-12-30 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE
+2025-12-30 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-30 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for NVAX
+2025-12-30 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-30 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for IRWD
+2025-12-30 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-30 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN
+2025-12-30 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for SKIN
+2025-12-30 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for GT
+2025-12-30 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for AMPY
+2025-12-30 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-30 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for DIBS
+2025-12-30 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for RPTX
+2025-12-30 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-30 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for DEFT
+2025-12-30 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-30 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-30 06:00:41 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-30 06:00:43 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-30 06:00:44 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-30 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-30 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for RVPH
+2025-12-30 06:00:46 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-30 06:00:47 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-30 06:00:48 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-30 06:00:49 - daily_tracker - WARNING  -       ⚠️ No data found for MNKD
+2025-12-30 06:00:49 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-30 06:00:50 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-30 06:00:50 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-30 06:00:52 - daily_tracker - WARNING  -       ⚠️ No data found for AG
+2025-12-30 06:00:55 - daily_tracker - WARNING  -       ⚠️ No data found for BULL
+2025-12-30 06:00:58 - daily_tracker - WARNING  -       ⚠️ No data found for CXM
+2025-12-30 06:01:00 - daily_tracker - WARNING  -       ⚠️ No data found for APLT
+2025-12-30 06:01:00 - daily_tracker - WARNING  -       ⚠️ No data found for CCCC
+2025-12-30 06:01:01 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-30 06:01:01 - daily_tracker - WARNING  -       ⚠️ No data found for SOC
+2025-12-30 06:01:02 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-30 06:01:02 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-30 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for ALT
+2025-12-30 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-30 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for ABTC
+2025-12-30 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for BLMN
+2025-12-30 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for IRBT
+2025-12-30 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-30 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-30 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-30 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for CODX
+2025-12-30 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-30 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-30 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-30 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-30 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-30 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-30 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for EMPD
+2025-12-30 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for SVC
+2025-12-30 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-30 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for PDYN
+2025-12-30 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-30 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for ASPI
+2025-12-30 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-30 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for LAES
+2025-12-30 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-30 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-30 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for RZLT
+2025-12-30 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-30 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for EU
+2025-12-30 06:01:19 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-30 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-30 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-30 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for ACVA
+2025-12-30 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for SG
+2025-12-30 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for RUM
+2025-12-30 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-30 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for FIP
+2025-12-30 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for NXDR
+2025-12-30 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for LAC
+2025-12-30 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for CATX
+2025-12-30 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-30 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-30 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-30 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-30 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-30 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for ULCC
+2025-12-30 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-30 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-30 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-30 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for RILY
+2025-12-30 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for EQ
+2025-12-30 06:01:35 - daily_tracker - INFO     - ✅ Daily Update Complete. Updated 31 trades.
+2025-12-30 22:54:33 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2025-12-30 22:54:33 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2025-12-30 22:54:33 - listener     - INFO     -       - Embed 1 Title: 🕑 ALTS 1.5 C 2/20/2026 (52D) - yeet
+2025-12-30 22:54:33 - listener     - INFO     -    🧩 PARSED OK: ALTS 1.5C Exp:2026-02-20 @ $0.17
+2025-12-30 22:54:34 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ALTS (ID: 1947)
+2025-12-30 22:56:06 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2025-12-30 22:56:06 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2025-12-30 22:56:06 - listener     - INFO     -       - Embed 1 Title: 🕑 CLOV 2.5 C 1/2/2026 (3D) - yeet
+2025-12-30 22:56:06 - listener     - INFO     -    🧩 PARSED OK: CLOV 2.5C Exp:2026-01-02 @ $0.05
+2025-12-30 22:56:06 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved CLOV (ID: 1948)
+2025-12-31 00:54:22 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2025-12-31 00:54:22 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2025-12-31 00:54:22 - listener     - INFO     -       - Embed 1 Title: 🕑 ABR 8.0 C 1/2/2026 (3D) - yeet
+2025-12-31 00:54:22 - listener     - INFO     -    🧩 PARSED OK: ABR 8.0C Exp:2026-01-02 @ $0.06
+2025-12-31 00:54:22 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ABR (ID: 1949)
+2025-12-31 04:53:39 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2025-12-31 04:53:39 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2025-12-31 04:53:39 - listener     - INFO     -       - Embed 1 Title: 🕑 EU 3.0 C 2/20/2026 (52D) - yeet
+2025-12-31 04:53:39 - listener     - INFO     -    🧩 PARSED OK: EU 3.0C Exp:2026-02-20 @ $0.2
+2025-12-31 04:53:39 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved EU (ID: 1950)
+2025-12-31 06:00:14 - daily_tracker - INFO     - 🚀 Starting Daily Portfolio Simulator Update...
+2025-12-31 06:00:14 - daily_tracker - INFO     - 🗓️ Processing Data For Date: 2025-12-29
+2025-12-31 06:00:15 - daily_tracker - INFO     - 📂 Found 152 active/moonshot trades to process.
+2025-12-31 06:00:16 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-31 06:00:16 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-31 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for GROY
+2025-12-31 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-31 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-31 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-31 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-31 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-31 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-31 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for LUNR
+2025-12-31 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for NAT
+2025-12-31 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for ONDS
+2025-12-31 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for BCRX
+2025-12-31 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-31 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-31 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-31 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-31 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-31 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-31 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for USAS
+2025-12-31 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for CMPS
+2025-12-31 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-31 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-31 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for DNUT
+2025-12-31 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for REPL
+2025-12-31 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for DDD
+2025-12-31 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE
+2025-12-31 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-31 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for NVAX
+2025-12-31 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-31 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for IRWD
+2025-12-31 06:00:40 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2025-12-31 06:00:40 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN
+2025-12-31 06:00:41 - daily_tracker - WARNING  -       ⚠️ No data found for SKIN
+2025-12-31 06:00:41 - daily_tracker - WARNING  -       ⚠️ No data found for GT
+2025-12-31 06:00:42 - daily_tracker - WARNING  -       ⚠️ No data found for AMPY
+2025-12-31 06:00:42 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-31 06:00:43 - daily_tracker - WARNING  -       ⚠️ No data found for DIBS
+2025-12-31 06:00:43 - daily_tracker - WARNING  -       ⚠️ No data found for RPTX
+2025-12-31 06:00:44 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-31 06:00:44 - daily_tracker - WARNING  -       ⚠️ No data found for DEFT
+2025-12-31 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-31 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-31 06:00:46 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-31 06:00:47 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-31 06:00:48 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-31 06:00:52 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-31 06:00:52 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2025-12-31 06:00:53 - daily_tracker - WARNING  -       ⚠️ No data found for RVPH
+2025-12-31 06:00:54 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-31 06:00:55 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-31 06:00:56 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-31 06:00:57 - daily_tracker - WARNING  -       ⚠️ No data found for MNKD
+2025-12-31 06:00:57 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-31 06:00:58 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-31 06:00:58 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-31 06:00:59 - daily_tracker - WARNING  -       ⚠️ No data found for ENVX
+2025-12-31 06:01:00 - daily_tracker - WARNING  -       ⚠️ No data found for AG
+2025-12-31 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-31 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for BULL
+2025-12-31 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for CXM
+2025-12-31 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for APLT
+2025-12-31 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for CCCC
+2025-12-31 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-31 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for SOC
+2025-12-31 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-31 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2025-12-31 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for ALT
+2025-12-31 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-31 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for ABTC
+2025-12-31 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for BLMN
+2025-12-31 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for IRBT
+2025-12-31 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-31 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-31 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2025-12-31 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for CODX
+2025-12-31 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-31 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-31 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-31 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-31 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-31 06:01:19 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2025-12-31 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for EMPD
+2025-12-31 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for SVC
+2025-12-31 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-31 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for PDYN
+2025-12-31 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2025-12-31 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for ASPI
+2025-12-31 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2025-12-31 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for LAES
+2025-12-31 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2025-12-31 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-31 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for RCAT
+2025-12-31 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for RZLT
+2025-12-31 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-31 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for EU
+2025-12-31 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-31 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-31 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2025-12-31 06:01:36 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2025-12-31 06:01:37 - daily_tracker - WARNING  -       ⚠️ No data found for ACVA
+2025-12-31 06:01:38 - daily_tracker - WARNING  -       ⚠️ No data found for SG
+2025-12-31 06:01:38 - daily_tracker - WARNING  -       ⚠️ No data found for RUM
+2025-12-31 06:01:39 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-31 06:01:39 - daily_tracker - WARNING  -       ⚠️ No data found for FIP
+2025-12-31 06:01:40 - daily_tracker - WARNING  -       ⚠️ No data found for NXDR
+2025-12-31 06:01:40 - daily_tracker - WARNING  -       ⚠️ No data found for LAC
+2025-12-31 06:01:41 - daily_tracker - WARNING  -       ⚠️ No data found for CATX
+2025-12-31 06:01:41 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-31 06:01:42 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-31 06:01:42 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2025-12-31 06:01:43 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2025-12-31 06:01:43 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2025-12-31 06:01:44 - daily_tracker - WARNING  -       ⚠️ No data found for ULCC
+2025-12-31 06:01:44 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2025-12-31 06:01:45 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2025-12-31 06:01:45 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2025-12-31 06:01:46 - daily_tracker - WARNING  -       ⚠️ No data found for RILY
+2025-12-31 06:01:46 - daily_tracker - WARNING  -       ⚠️ No data found for EQ
+2025-12-31 06:01:49 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2025-12-31 06:01:52 - daily_tracker - INFO     - ✅ Daily Update Complete. Updated 28 trades.
+2026-01-01 00:17:14 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-01 00:17:14 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-01-01 00:17:14 - listener     - INFO     -       - Embed 1 Title: 🕑 RR 3.5 C 1/16/2026 (16D) - yeet
+2026-01-01 00:17:14 - listener     - INFO     -    🧩 PARSED OK: RR 3.5C Exp:2026-01-16 @ $0.18
+2026-01-01 00:17:14 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved RR (ID: 1951)
+2026-01-01 00:35:43 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-01 00:35:43 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-01-01 00:35:43 - listener     - INFO     -       - Embed 1 Title: 🕑 RR 4.5 C 1/16/2026 (16D) - yeet
+2026-01-01 00:35:43 - listener     - INFO     -    🧩 PARSED OK: RR 4.5C Exp:2026-01-16 @ $0.15
+2026-01-01 00:35:43 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved RR (ID: 1952)
+2026-01-01 01:43:08 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-01 01:43:08 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-01-01 01:43:08 - listener     - INFO     -       - Embed 1 Title: 🕑 RR 4.0 C 1/9/2026 (9D) - yeet
+2026-01-01 01:43:08 - listener     - INFO     -    🧩 PARSED OK: RR 4.0C Exp:2026-01-09 @ $0.13
+2026-01-01 01:43:09 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved RR (ID: 1953)
+2026-01-01 06:00:13 - daily_tracker - INFO     - 🚀 Starting Daily Portfolio Simulator Update...
+2026-01-01 06:00:13 - daily_tracker - INFO     - 🗓️ Processing Data For Date: 2025-12-30
+2026-01-01 06:00:14 - daily_tracker - INFO     - 📂 Found 155 active/moonshot trades to process.
+2026-01-01 06:00:15 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-01 06:00:15 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-01 06:00:16 - daily_tracker - WARNING  -       ⚠️ No data found for GROY
+2026-01-01 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-01 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2026-01-01 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2026-01-01 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2026-01-01 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2026-01-01 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-01 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for LUNR
+2026-01-01 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for NAT
+2026-01-01 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for ONDS
+2026-01-01 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for BCRX
+2026-01-01 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-01 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2026-01-01 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-01 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2026-01-01 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-01 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2026-01-01 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for USAS
+2026-01-01 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for CMPS
+2026-01-01 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2026-01-01 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2026-01-01 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for DNUT
+2026-01-01 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for REPL
+2026-01-01 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for DDD
+2026-01-01 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE
+2026-01-01 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-01 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for NVAX
+2026-01-01 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2026-01-01 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for IRWD
+2026-01-01 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2026-01-01 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN
+2026-01-01 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for SKIN
+2026-01-01 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for GT
+2026-01-01 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for AMPY
+2026-01-01 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2026-01-01 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for DIBS
+2026-01-01 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for RPTX
+2026-01-01 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2026-01-01 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for DEFT
+2026-01-01 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2026-01-01 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2026-01-01 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2026-01-01 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-01 06:00:40 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2026-01-01 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-01 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2026-01-01 06:00:46 - daily_tracker - WARNING  -       ⚠️ No data found for RVPH
+2026-01-01 06:00:46 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-01 06:00:47 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2026-01-01 06:00:49 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2026-01-01 06:00:49 - daily_tracker - WARNING  -       ⚠️ No data found for MNKD
+2026-01-01 06:00:50 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-01 06:00:50 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2026-01-01 06:00:51 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2026-01-01 06:00:52 - daily_tracker - WARNING  -       ⚠️ No data found for ENVX
+2026-01-01 06:00:52 - daily_tracker - WARNING  -       ⚠️ No data found for AG
+2026-01-01 06:00:54 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2026-01-01 06:00:58 - daily_tracker - WARNING  -       ⚠️ No data found for BULL
+2026-01-01 06:01:01 - daily_tracker - WARNING  -       ⚠️ No data found for CXM
+2026-01-01 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for APLT
+2026-01-01 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for CCCC
+2026-01-01 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-01 06:01:04 - daily_tracker - WARNING  -       ⚠️ No data found for SOC
+2026-01-01 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2026-01-01 06:01:05 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2026-01-01 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for ALT
+2026-01-01 06:01:06 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-01 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for ABTC
+2026-01-01 06:01:07 - daily_tracker - WARNING  -       ⚠️ No data found for BLMN
+2026-01-01 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for IRBT
+2026-01-01 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2026-01-01 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-01 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2026-01-01 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for CODX
+2026-01-01 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-01 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-01 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-01 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-01 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2026-01-01 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2026-01-01 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for EMPD
+2026-01-01 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for SVC
+2026-01-01 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2026-01-01 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for PDYN
+2026-01-01 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2026-01-01 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for ASPI
+2026-01-01 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2026-01-01 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for LAES
+2026-01-01 06:01:18 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2026-01-01 06:01:19 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2026-01-01 06:01:19 - daily_tracker - WARNING  -       ⚠️ No data found for RCAT
+2026-01-01 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for RZLT
+2026-01-01 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-01 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for EU
+2026-01-01 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-01 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2026-01-01 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-01 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2026-01-01 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for ACVA
+2026-01-01 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for SG
+2026-01-01 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for RUM
+2026-01-01 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-01 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for FIP
+2026-01-01 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for NXDR
+2026-01-01 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for LAC
+2026-01-01 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for CATX
+2026-01-01 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-01 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-01 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2026-01-01 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2026-01-01 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-01 06:01:30 - daily_tracker - WARNING  -       ⚠️ No data found for ULCC
+2026-01-01 06:01:30 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-01 06:01:31 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-01 06:01:31 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2026-01-01 06:01:32 - daily_tracker - WARNING  -       ⚠️ No data found for RILY
+2026-01-01 06:01:32 - daily_tracker - WARNING  -       ⚠️ No data found for EQ
+2026-01-01 06:01:35 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2026-01-01 06:01:37 - daily_tracker - INFO     - ✅ Daily Update Complete. Updated 32 trades.
+2026-01-02 01:26:33 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-02 01:26:33 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: 'i stg if this opens at like $5 i'mma lose it <@454524714849927169>'
+2026-01-02 01:38:59 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-02 01:38:59 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: 'its ces next week'
+2026-01-02 01:39:14 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-02 01:39:14 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: '(might moon)'
+2026-01-02 01:40:25 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-02 01:40:25 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: 'i'm 3 for 3 on that mf and barely any big gains aside from the %, was waiting for the dip buy but expected lower'
+2026-01-02 06:00:13 - daily_tracker - INFO     - 🚀 Starting Daily Portfolio Simulator Update...
+2026-01-02 06:00:13 - daily_tracker - INFO     - 🗓️ Processing Data For Date: 2025-12-31
+2026-01-02 06:00:13 - daily_tracker - INFO     - 📂 Found 155 active/moonshot trades to process.
+2026-01-02 06:00:13 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-02 06:00:14 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-02 06:00:14 - daily_tracker - WARNING  -       ⚠️ No data found for GROY
+2026-01-02 06:00:16 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-02 06:00:16 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2026-01-02 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2026-01-02 06:00:17 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2026-01-02 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2026-01-02 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-02 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for LUNR
+2026-01-02 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for NAT
+2026-01-02 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for ONDS
+2026-01-02 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for BCRX
+2026-01-02 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-02 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2026-01-02 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-02 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2026-01-02 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-02 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2026-01-02 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for USAS
+2026-01-02 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for CMPS
+2026-01-02 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2026-01-02 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2026-01-02 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for DNUT
+2026-01-02 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for REPL
+2026-01-02 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for DDD
+2026-01-02 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE
+2026-01-02 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-02 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for NVAX
+2026-01-02 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2026-01-02 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for IRWD
+2026-01-02 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for NFE
+2026-01-02 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN
+2026-01-02 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for SKIN
+2026-01-02 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for GT
+2026-01-02 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for AMPY
+2026-01-02 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2026-01-02 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for DIBS
+2026-01-02 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for RPTX
+2026-01-02 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2026-01-02 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for DEFT
+2026-01-02 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2026-01-02 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2026-01-02 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2026-01-02 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-02 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2026-01-02 06:00:44 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-02 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for NGD
+2026-01-02 06:00:45 - daily_tracker - WARNING  -       ⚠️ No data found for RVPH
+2026-01-02 06:00:46 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-02 06:00:47 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2026-01-02 06:00:48 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2026-01-02 06:00:49 - daily_tracker - WARNING  -       ⚠️ No data found for MNKD
+2026-01-02 06:00:49 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-02 06:00:50 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2026-01-02 06:00:50 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2026-01-02 06:00:51 - daily_tracker - WARNING  -       ⚠️ No data found for ENVX
+2026-01-02 06:00:52 - daily_tracker - WARNING  -       ⚠️ No data found for AG
+2026-01-02 06:00:53 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2026-01-02 06:00:58 - daily_tracker - WARNING  -       ⚠️ No data found for BULL
+2026-01-02 06:01:01 - daily_tracker - WARNING  -       ⚠️ No data found for CXM
+2026-01-02 06:01:02 - daily_tracker - WARNING  -       ⚠️ No data found for APLT
+2026-01-02 06:01:02 - daily_tracker - WARNING  -       ⚠️ No data found for CCCC
+2026-01-02 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-02 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for SOC
+2026-01-02 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2026-01-02 06:01:08 - daily_tracker - WARNING  -       ⚠️ No data found for BITF
+2026-01-02 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for ALT
+2026-01-02 06:01:09 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-02 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for ABTC
+2026-01-02 06:01:10 - daily_tracker - WARNING  -       ⚠️ No data found for BLMN
+2026-01-02 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for IRBT
+2026-01-02 06:01:11 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2026-01-02 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-02 06:01:12 - daily_tracker - WARNING  -       ⚠️ No data found for CLOV
+2026-01-02 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for CODX
+2026-01-02 06:01:13 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-02 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-02 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-02 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-02 06:01:15 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2026-01-02 06:01:16 - daily_tracker - WARNING  -       ⚠️ No data found for WEN
+2026-01-02 06:01:17 - daily_tracker - WARNING  -       ⚠️ No data found for EMPD
+2026-01-02 06:01:21 - daily_tracker - WARNING  -       ⚠️ No data found for SVC
+2026-01-02 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2026-01-02 06:01:23 - daily_tracker - WARNING  -       ⚠️ No data found for PDYN
+2026-01-02 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for POET
+2026-01-02 06:01:24 - daily_tracker - WARNING  -       ⚠️ No data found for ASPI
+2026-01-02 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for SAVA
+2026-01-02 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for LAES
+2026-01-02 06:01:25 - daily_tracker - WARNING  -       ⚠️ No data found for RR
+2026-01-02 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2026-01-02 06:01:26 - daily_tracker - WARNING  -       ⚠️ No data found for RCAT
+2026-01-02 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for RZLT
+2026-01-02 06:01:27 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-02 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for EU
+2026-01-02 06:01:28 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-02 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2026-01-02 06:01:29 - daily_tracker - WARNING  -       ⚠️ No data found for ASST
+2026-01-02 06:01:30 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY
+2026-01-02 06:01:30 - daily_tracker - WARNING  -       ⚠️ No data found for ACVA
+2026-01-02 06:01:31 - daily_tracker - WARNING  -       ⚠️ No data found for SG
+2026-01-02 06:01:31 - daily_tracker - WARNING  -       ⚠️ No data found for RUM
+2026-01-02 06:01:32 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-02 06:01:32 - daily_tracker - WARNING  -       ⚠️ No data found for FIP
+2026-01-02 06:01:33 - daily_tracker - WARNING  -       ⚠️ No data found for NXDR
+2026-01-02 06:01:33 - daily_tracker - WARNING  -       ⚠️ No data found for LAC
+2026-01-02 06:01:34 - daily_tracker - WARNING  -       ⚠️ No data found for CATX
+2026-01-02 06:01:34 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-02 06:01:35 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-02 06:01:35 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU
+2026-01-02 06:01:36 - daily_tracker - WARNING  -       ⚠️ No data found for FUBO
+2026-01-02 06:01:36 - daily_tracker - WARNING  -       ⚠️ No data found for TDOC
+2026-01-02 06:01:37 - daily_tracker - WARNING  -       ⚠️ No data found for ULCC
+2026-01-02 06:01:37 - daily_tracker - WARNING  -       ⚠️ No data found for ABR
+2026-01-02 06:01:38 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE
+2026-01-02 06:01:38 - daily_tracker - WARNING  -       ⚠️ No data found for LAZR
+2026-01-02 06:01:39 - daily_tracker - WARNING  -       ⚠️ No data found for RILY
+2026-01-02 06:01:39 - daily_tracker - WARNING  -       ⚠️ No data found for EQ
+2026-01-02 06:01:42 - daily_tracker - WARNING  -       ⚠️ No data found for RZLV
+2026-01-02 06:01:46 - daily_tracker - INFO     - ✅ Daily Update Complete. Updated 35 trades.
+2026-01-02 12:02:47 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2026-01-02 12:02:47 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2026-01-02 22:36:19 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-02 22:36:19 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-01-02 22:36:19 - listener     - INFO     -       - Embed 1 Title: 🕑 ENVX 8.0 C 1/9/2026 (7D) - yeet
+2026-01-02 22:36:19 - listener     - INFO     -    🧩 PARSED OK: ENVX 8.0C Exp:2026-01-09 @ $0.22
+2026-01-02 22:36:19 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ENVX (ID: 1954)
+2026-01-02 23:03:10 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-02 23:03:10 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-01-02 23:03:10 - listener     - INFO     -       - Embed 1 Title: 🕑 TDOC 7.5 C 1/9/2026 (7D) - yeet
+2026-01-02 23:03:10 - listener     - INFO     -    🧩 PARSED OK: TDOC 7.5C Exp:2026-01-09 @ $0.1
+2026-01-02 23:03:10 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved TDOC (ID: 1955)
+2026-01-02 23:07:42 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-02 23:07:42 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-01-02 23:07:42 - listener     - INFO     -       - Embed 1 Title: 🕑 MOMO 7.0 C 2/20/2026 (49D) - yeet
+2026-01-02 23:07:42 - listener     - INFO     -    🧩 PARSED OK: MOMO 7.0C Exp:2026-02-20 @ $0.21
+2026-01-02 23:07:43 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved MOMO (ID: 1956)
+2026-01-03 01:37:01 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-03 01:37:01 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-01-03 01:37:01 - listener     - INFO     -       - Embed 1 Title: 🕑 ASST 1.0 C 2/20/2026 (49D) - yeet
+2026-01-03 01:37:01 - listener     - INFO     -    🧩 PARSED OK: ASST 1.0C Exp:2026-02-20 @ $0.1
+2026-01-03 01:37:02 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ASST (ID: 1957)
+2026-01-03 02:24:14 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-03 02:24:14 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-01-03 02:24:14 - listener     - INFO     -       - Embed 1 Title: 🕑 ABR 8.0 C 1/9/2026 (7D) - yeet
+2026-01-03 02:24:14 - listener     - INFO     -    🧩 PARSED OK: ABR 8.0C Exp:2026-01-09 @ $0.13
+2026-01-03 02:24:14 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ABR (ID: 1958)
+2026-01-03 02:56:10 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2026-01-03 02:56:10 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2026-01-03 03:29:22 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-01-03 03:29:22 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-01-03 03:29:22 - listener     - INFO     -       - Embed 1 Title: 🕑 SPCE 3.5 C 1/9/2026 (7D) - yeet
+2026-01-03 03:29:22 - listener     - INFO     -    🧩 PARSED OK: SPCE 3.5C Exp:2026-01-09 @ $0.08
+2026-01-03 03:29:22 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved SPCE (ID: 1959)
