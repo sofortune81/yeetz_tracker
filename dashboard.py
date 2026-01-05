@@ -357,7 +357,7 @@ def main():
             # Row 2: Details
             s4.metric("100%+ Runners", f"{len(runners)}", f"{runner_pct:.1f}% Home Run Rate")
             s5.metric("Stop OI Exits", f"{len(stop_oi_exits)}", f"{stop_oi_pct:.1f}% Risk Cut",
-                      help="Trades closed because whale Open Interest dropped below 20% of entry.")
+                      help="Trades closed because dropped below 80% of entry OI.")
             s6.metric("Expired Worthless", f"{len(expired_worthless)}", f"{expired_pct:.1f}% Max Loss",
                       delta_color="inverse", help="Trades that reached expiration without hitting the profit target.")
 

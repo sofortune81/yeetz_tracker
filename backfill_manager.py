@@ -157,7 +157,7 @@ class BackfillBot(discord.Client):
             "entry_size": parsed['entry_size'],
             "entry_oi": parsed['entry_oi'],
             "profit_target": parsed['entry_price'] * 1.20,
-            "stop_oi_level": int((parsed['entry_oi'] + parsed['entry_size']) * 0.20),
+            "stop_oi_level": int((parsed['entry_oi'] + parsed['entry_size']) * 0.80),
             "discord_timestamp": alert_dt.isoformat(),
             "status": "OPEN",
             "highest_price": parsed['entry_price'],

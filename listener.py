@@ -83,7 +83,7 @@ class YeetzListener(discord.Client):
             vol_oi_ratio = round((interval_vol / embed_oi) if embed_oi > 0 else 0.0, 2)
             premium_usd = avg_fill * interval_vol * 100
             profit_target = avg_fill * 1.20
-            stop_oi_level = int(interval_vol * 0.20)
+            stop_oi_level = int((embed_oi + interval_vol) * 0.80)
 
             logger.info(f"   🧩 PARSED OK: {ticker} {strike}{opt_type} Exp:{exp_date} @ ${avg_fill}")
 

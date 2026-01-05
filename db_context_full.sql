@@ -1,79 +1,32 @@
 -- GENERATED FULL CONTEXT DUMP
 
+-- Generated: 2026-01-04 23:52:56 HKT
+-- ------------------------------
+
 ------------------------------
 -- 1. CRON JOBS --
 ------------------------------
+-- ID: 19 [ACTIVE] Schedule: 0 9 * * *
+
+    -- Clean flow tables using native DATE logic
+    DELETE FROM public.flow_1min WHERE expiration < (now() at time zone 'America/New_York' - interval '1 day')::date;
+    DELETE FROM public.flow_5min WHERE expiration < (now() at time zone 'America/New_York' - interval '1 day')::date;
+    
+    -- Clean worker/snapshot tables
+    DELETE FROM public.options_data WHERE expiration < (now() at time zone 'America/New_York' - interval '1 day')::date;
+    DELETE FROM public.gex_data WHERE expiration < (now() at time zone 'America/New_York' - interval '1 day')::date;
+
+    -- Standard timestamp-based cleanup
+    DELETE FROM public.flow_1min WHERE timestamp < now() - interval '3 days';
+    DELETE FROM public.flow_5min WHERE bucket < now() - interval '5 days';
+    DELETE FROM public.intraday_flow WHERE updated_at < now() - interval '1 day';
+    ;
+
 -- ID: 9 [ACTIVE] Schedule: 0 */6 * * *
 
     SELECT
         net.http_get('https://sofortunegex.streamlit.app'),
         net.http_get('https://sofortuneyeetz.streamlit.app');
-    ;
-
--- ID: 11 [ACTIVE] Schedule: 0 9 * * *
-
-    -----------------------------------------------------------------
-    -- 1. CLEAN EXPIRED DATA (100% Safe - Contract is dead)
-    -----------------------------------------------------------------
-
-    -- Clean flow_1min where expiration is strictly yesterday or older
-    -- (Uses integer format YYYYMMDD based on US/Eastern time)
-    DELETE FROM flow_1min
-    WHERE expiration < to_char(now() at time zone 'America/New_York' - interval '1 day', 'YYYYMMDD')::int;
-
-    -- [NEW] Clean flow_5min for dead contracts
-    -- (expiration is stored as text in this table, so we compare as text)
-    DELETE FROM flow_5min
-    WHERE expiration < to_char(now() at time zone 'America/New_York' - interval '1 day', 'YYYYMMDD');
-
-    -- Clean options_data where expiration is strictly yesterday or older
-    -- (Uses Date format YYYY-MM-DD based on US/Eastern time)
-    DELETE FROM options_data
-    WHERE expiration < (now() at time zone 'America/New_York' - interval '1 day')::date;
-
-    -- Clean gex_data (Calculated snapshots)
-    DELETE FROM gex_data
-    WHERE expiration < (now() at time zone 'America/New_York' - interval '1 day')::date;
-
-    -----------------------------------------------------------------
-    -- 2. CLEAN STALE INTRADAY DATA (Keep recent history for charts/backfill)
-    -----------------------------------------------------------------
-
-    -- Keep 3 DAYS of history for flow logs to bridge weekends/holidays safeley
-    -- This ensures backfill_manager always finds a 'last_timestamp'
-    DELETE FROM flow_1min
-    WHERE timestamp < now() - interval '3 days';
-
-    -- [NEW] Clean flow_5min (Aggregated logs)
-    -- We keep this a bit longer (7 days) since it's small and efficient
-    DELETE FROM flow_5min
-    WHERE bucket < now() - interval '5 days';
-
-    -- Clean intraday_flow (This is the daily accumulator)
-    -- If it hasn't been updated in 24h, the ticker is dead/session is over.
-    DELETE FROM intraday_flow
-    WHERE updated_at < now() - interval '1 day';
-
-    -----------------------------------------------------------------
-    -- 3. CLEAN OLD SNAPSHOTS (Data regenerated live by worker)
-    -----------------------------------------------------------------
-
-    -- Options snapshots are replaced every cycle by background_worker.
-    -- We delete anything older than 24h to catch dead tickers.
-    DELETE FROM options_data WHERE created_at < now() - interval '3 day';
-    DELETE FROM metadata WHERE updated_at < now() - interval '3 day';
-
-    -- Derived Metrics: Delete older than 5d
-    DELETE FROM gex_data WHERE timestamp < now() - interval '3 day';
-    DELETE FROM gex_levels WHERE timestamp < now() - interval '3 day';
-    DELETE FROM vanna_exposure WHERE timestamp < now() - interval '3 day';
-    DELETE FROM vanna_adjusted_gex WHERE timestamp < now() - interval '3 day';
-    DELETE FROM gamma_profiles WHERE timestamp < now() - interval '3 day';
-
-    -----------------------------------------------------------------
-    -- 4. CLEAN RATES (Keep 30 days for safety fallback)
-    -----------------------------------------------------------------
-    DELETE FROM risk_free_rates WHERE created_at < now() - interval '30 days';
     ;
 
 -- ID: 16 [ACTIVE] Schedule: */5 * * * *
@@ -90,21 +43,21 @@ CREATE TABLE flow_1min (
     timestamp timestamp with time zone,
     ticker text,
     strike numeric,
-    expiration integer,
     right text,
     volume integer,
     net_premium_flow numeric,
     gamma_snapshot numeric,
     gex_impact numeric,
-    net_quantity bigint);
+    net_quantity bigint,
+    expiration date);
 
 CREATE TABLE flow_5min (
     bucket timestamp with time zone,
     ticker text,
     strike numeric,
-    expiration integer,
     gex_impact_sum numeric,
-    net_quantity_sum numeric);
+    net_quantity_sum numeric,
+    expiration date);
 
 CREATE TABLE flow_snapshots (
     id bigint,
