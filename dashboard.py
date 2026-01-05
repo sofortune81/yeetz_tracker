@@ -218,17 +218,38 @@ def render_trade_finder(df):
     if f_month: filt = filt[filt['Month'].isin(f_month)]
     if f_win: filt = filt[filt['sim_pnl'] > 0]
 
+    # --- PAGINATION AFTER FILTERING ---
+    rows_per_page = 50  # You can change this number
+
+    total_rows = len(filt)
+    total_pages = max(1, (total_rows + rows_per_page - 1) // rows_per_page)
+
+    col_left, col_mid, col_right = st.columns([1, 2, 1])
+    with col_mid:
+        page_num = st.number_input(
+            "Page",
+            min_value=1,
+            max_value=total_pages,
+            value=1,
+            step=1,
+            key="trade_finder_page"
+        )
+
+    start_idx = (page_num - 1) * rows_per_page
+    end_idx = start_idx + rows_per_page
+    page_df = filt.iloc[start_idx:end_idx]
+
     st.dataframe(
-        filt[[
+        page_df[[
             'discord_timestamp', 'ticker', 'expiration_date', 'strike', 'option_type',
             'entry_price', 'last_price', 'highest_price', 'lowest_price',
             'status', 'win_loss',
-            'scale_pnl_pct', 'scale_pnl_dollars',  # Added pct here
-            'moonshot_pnl_pct', 'moonshot_pnl_dollars',  # Added pct here
+            'scale_pnl_pct', 'scale_pnl_dollars',
+            'moonshot_pnl_pct', 'moonshot_pnl_dollars',
             'sim_pnl', 'sim_ret_pct', 'max_drawdown_pct'
         ]],
         hide_index=True,
-        width='stretch',
+        use_container_width=True,
         column_config={
             "discord_timestamp": st.column_config.DatetimeColumn("Date", format="MM-DD HH:mm"),
             "entry_price": st.column_config.NumberColumn("Entry", format="$%.2f"),
@@ -249,6 +270,8 @@ def render_trade_finder(df):
             ),
         }
     )
+
+    st.caption(f"Showing rows {start_idx + 1}–{min(end_idx, total_rows)} of {total_rows} trades")
 
 
 def main():
@@ -285,11 +308,24 @@ def main():
         m1.metric("Portfolio Value", f"${sim_df['equity_curve_scaled'].iloc[0]:,.0f}")
         m2.metric("Total Trades", total_trades)
         m3.metric("Win Rate", f"{wr:.1f}%")
+
         # Profit Factor Calculation
         total_win_val = wins_df['sim_pnl'].sum()
         total_loss_val = abs(losses_df['sim_pnl'].sum())
-        pf = total_win_val / total_loss_val if total_loss_val > 0 else 0
-        m4.metric("Profit Factor", f"{pf:.2f}")
+
+        if total_loss_val == 0:
+            if total_win_val > 0:
+                pf_display = "∞"  # Infinite (perfect so far)
+                pf_help = "No losses recorded yet — infinite profit factor."
+            else:
+                pf_display = "N/A"
+                pf_help = "No wins or losses yet."
+        else:
+            pf = total_win_val / total_loss_val
+            pf_display = f"{pf:.2f}"
+            pf_help = "Gross profit from winners divided by gross loss from losers."
+
+        m4.metric("Profit Factor", pf_display, help=pf_help)
 
         st.divider()
 
