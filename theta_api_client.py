@@ -75,22 +75,25 @@ def fetch_data_and_handle_error(endpoint, params):
         return None
 
 
-def filter_and_get_post_alert_high(data_list, alert_dt):
+def filter_and_get_post_alert_high(ohlc_list, alert_dt):
     post_alert_high = 0.0
-    if not data_list: return 0.0
+    if not ohlc_list: return 0.0
 
-    for tick in data_list:
+    for bar in ohlc_list:
+        # OHLC bars usually provide 'ms_of_day' or 'datetime'
+        # Check logic depends on how your local ThetaData proxy formats the JSON
         try:
-            trade_timestamp = tick.get('trade_timestamp') or tick.get('ms_of_day')
-            price = float(tick.get('price', 0.0))
-            if not trade_timestamp or isinstance(trade_timestamp, int): continue
+            # Most ThetaData OHLC responses use 'ms_of_day' or ISO strings
+            # We convert the bar time to compare against alert_dt
+            bar_time = bar.get('datetime')
+            if not bar_time: continue
 
-            dt_utc = datetime.fromisoformat(trade_timestamp.replace('Z', '+00:00'))
-            dt_est = dt_utc.astimezone(EST)
+            dt_est = datetime.fromisoformat(bar_time.replace('Z', '+00:00')).astimezone(EST)
 
             if dt_est >= alert_dt:
-                if price > post_alert_high:
-                    post_alert_high = price
+                high_val = float(bar.get('high', 0.0))
+                if high_val > post_alert_high:
+                    post_alert_high = high_val
         except Exception:
             continue
     return post_alert_high
@@ -122,14 +125,15 @@ def filter_and_get_post_alert_low(data_list, alert_dt):
 
 # --- ENDPOINTS ---
 
-def fetch_trade_quote_data(ticker, strike, opt_type_char, exp_date, date_int):
-    """Fetches intraday trade/quote data."""
+def fetch_ohlc_data(ticker, strike, opt_type_char, exp_date, date_int, interval=1):
+    """Fetches intraday OHLC data at a specified minute interval."""
     params = get_option_root_params(ticker, strike, opt_type_char, exp_date)
-    params["date"] = date_int
-    # REMOVED: params["use_csv"] = "false" (This caused the 410 Error)
-    endpoint = "/option/history/trade_quote"
+    params.update({
+        "date": date_int,
+        "ivl": interval * 60000  # ThetaData expects milliseconds (1m = 60000ms)
+    })
+    endpoint = "/option/history/ohlc"
     return fetch_data_and_handle_error(endpoint, params)
-
 
 def fetch_eod_data(ticker, strike, opt_type_char, exp_date, date_int):
     """Fetches EOD Summary."""

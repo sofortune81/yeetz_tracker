@@ -9,12 +9,11 @@ from yeetz_config import TP_PCT, SCALE_PCT, MOON_PCT
 from theta_api_client import (
     filter_and_get_post_alert_high,
     filter_and_get_post_alert_low,
-    fetch_trade_quote_data,
+    fetch_ohlc_data,  # Changed from fetch_trade_quote_data
     fetch_eod_data,
     get_option_root_params,
     get_theta_date_int
 )
-
 
 print(f"DEBUG: Current Working Directory is: {os.getcwd()}")
 print(f"DEBUG: Log file should be at: {os.path.join(os.getcwd(), 'logs', 'yeetz.log')}")
@@ -125,15 +124,16 @@ def get_market_data(trade, data_date_int, is_day_0, alert_dt):
     final_low = eod_day_low
 
     if is_day_0:
-        logger.debug(f"   🔎 Day 0 Detected for {trade['ticker']}. Fetching Intraday Ticks...")
+        logger.debug(f"   🔎 Day 0 Detected for {trade['ticker']}. Fetching 1m OHLC...")
 
-        # HEAVY LIFTING: Fetch all ticks for the day
-        data_list = fetch_trade_quote_data(
+        # Switch from fetch_trade_quote_data to fetch_ohlc_data
+        data_list = fetch_ohlc_data(
             trade['ticker'],
             trade['strike'],
             trade['option_type'][0],
             exp_dt,
-            data_date_int
+            data_date_int,
+            interval=1
         )
 
         # FILTER: Only look at prices AFTER the alert timestamp
@@ -191,23 +191,42 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
     entry_dt = datetime.fromisoformat(trade['discord_timestamp']).astimezone(EST)
     entry_date = entry_dt.date()
 
-    # IMMUNITY: If already SCALED, it stays SCALED. We only update prices.
+    # 2. Determine Status (PRIORITY: Win > Loss)
+    new_status = current_status
+    close_reason = None
+
+    # Initialize payload early so we can add to it during settlement or status changes
+    payload = {}
+
+    # --- DAY 1 SETTLEMENT LOGIC ---
+    if current_status == "OPEN" and check_date > entry_date:
+        if not trade.get('oi_settled', False):
+            # Update the local variable used for the stop check below
+            stop_oi_level = int(oi * 0.80)
+
+            # Record these in the payload for the DB update
+            payload["stop_oi_level"] = stop_oi_level
+            payload["oi_settled"] = True
+            logger.info(f"⚓ SETTLEMENT: {trade['ticker']} OI settled at {oi}. New Stop: {stop_oi_level}")
+
+    # STATUS LOGIC (Immunity: If already SCALED, it stays SCALED)
     if current_status != "SCALED":
         if new_highest >= target:
             new_status = "SCALED"
         elif check_date >= exp_date:
             new_status = "EXPIRED"
             close_reason = "expiration"
-            close = 0.0  # Force true 0 on loss
-        elif check_date > entry_date and oi < stop_oi_level:
-            new_status = "STOP_OI"
-            close_reason = "stop_oi"
-            # Keep 'close' as API provided for STOP_OI
+            close = 0.0
+        elif check_date > entry_date:
+            if oi < stop_oi_level:
+                new_status = "STOP_OI"
+                close_reason = "stop_oi"
 
     # 3. Final PnL Calculation
     strat_pct, base_pct, dbap_pct = calculate_pnl_snapshots(entry, new_highest, close, new_status)
 
-    payload = {
+    # Merge the rest of the tracking data into the payload
+    payload.update({
         "status": new_status,
         "highest_price": new_highest,
         "lowest_price": new_lowest,
@@ -216,7 +235,7 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
         "final_sim_pnl_pct": strat_pct,
         "final_tp_pnl_pct": base_pct,
         "final_dbap_pnl_pct": dbap_pct
-    }
+    })
 
     if close_reason:
         payload["close_date"] = check_date.isoformat()

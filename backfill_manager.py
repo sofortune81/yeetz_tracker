@@ -174,9 +174,10 @@ class BackfillBot(discord.Client):
         check_date = alert_dt.date()
         today = datetime.now(EST).date()
 
-        while check_date <= today:
-            # print(f"      -> Simulating {check_date}...", end='\r') # Show progress inline
+        trade_updates = []
+        performance_history = []
 
+        while check_date <= today:
             if check_date.weekday() >= 5:
                 check_date += timedelta(days=1)
                 continue
@@ -185,16 +186,13 @@ class BackfillBot(discord.Client):
                 break
 
             date_int = get_theta_date_int(check_date)
-
-            # --- DEBUG: Print exactly when we hit the API ---
-            # print(f"      -> Fetching API for {check_date}...", end='\r')
-
             market_data = get_market_data(trade, date_int, (check_date == alert_dt.date()), alert_dt)
 
             if not market_data:
                 check_date += timedelta(days=1)
                 continue
 
+            # Process the state logic
             new_status, update_payload = process_trade_state(
                 trade,
                 market_data['high'],
@@ -206,22 +204,24 @@ class BackfillBot(discord.Client):
                 current_date=check_date
             )
 
+            # Update the local trade object so next iteration has current status
             trade.update(update_payload)
-            supabase.table("whale_alerts").update(update_payload).eq("id", trade['id']).execute()
 
-            supabase.table("whale_performance").upsert({
+            # ADD TO BULK LISTS instead of executing DB calls here
+            update_payload["id"] = trade['id']
+            trade_updates.append(update_payload)
+
+            performance_history.append({
                 "alert_id": trade['id'],
                 "date": check_date.isoformat(),
                 "price_high": market_data['high'],
                 "price_low": market_data['low'],
                 "price_close": market_data['close'],
                 "current_oi": market_data['oi']
-            }, on_conflict="alert_id, date").execute()
+            })
 
-            # --- VERBOSE LOG (Detailed Contract View) ---
-            # Format: TICKER YYYYMMDD Strike P/C
+            # KEEP DEBUG LOGS ACTIVE
             contract_str = f"{trade['ticker']} {trade['expiration_date'].replace('-', '')} {trade['strike']} {trade['option_type']}"
-
             print(
                 f"      [{check_date}] {contract_str} | Entry: ${trade['entry_price']:.2f} | High: ${market_data['high']:.2f} | Low: ${market_data['low']:.2f} | Status: {new_status}")
 
@@ -231,7 +231,16 @@ class BackfillBot(discord.Client):
             check_date += timedelta(days=1)
             await asyncio.sleep(0.01)
 
-        print("")  # Clear line
+        # 2. PERFORM BULK UPSERTS (Outside the while loop)
+        if trade_updates:
+            # We use upsert on 'id' to ensure we only have one final record per alert
+            supabase.table("whale_alerts").upsert(trade_updates, on_conflict="id").execute()
+
+        if performance_history:
+            # This records every single day of the backfill into the performance table
+            supabase.table("whale_performance").upsert(performance_history, on_conflict="alert_id, date").execute()
+
+        print(f"   ✅ Bulk sync complete for {trade['ticker']}")
         return True
 
 

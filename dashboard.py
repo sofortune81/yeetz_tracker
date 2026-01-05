@@ -97,7 +97,8 @@ def run_simulation(df, initial_capital, risk_pct):
 
     # Use the stored DBAP value first; if it doesn't exist (live trades), use the logic
     sim_df['dbap_ret_pct'] = sim_df['final_dbap_pnl_pct'].fillna(
-        np.where(sim_df['status'] == 'SCALED', sim_df['peak_ret_pct'], sim_df['sim_ret_pct'])
+        pd.Series(np.where(sim_df['status'] == 'SCALED', sim_df['peak_ret_pct'], sim_df['sim_ret_pct']),
+                  index=sim_df.index)
     )
 
     # 4. Calculate $$$
