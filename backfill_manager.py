@@ -189,8 +189,19 @@ class BackfillBot(discord.Client):
             market_data = get_market_data(trade, date_int, (check_date == alert_dt.date()), alert_dt)
 
             if not market_data:
-                check_date += timedelta(days=1)
-                continue
+                # FORCE EXPIRATION CHECK IF DATA IS MISSING (Same logic as daily_tracker)
+                exp_dt = datetime.strptime(trade['expiration_date'], "%Y-%m-%d").date()
+                if check_date >= exp_dt:
+                    # Create dummy data to force the status update
+                    market_data = {
+                        "high": float(trade.get('highest_price') or 0),
+                        "low": float(trade.get('lowest_price') or 0),
+                        "close": 0.0,
+                        "oi": 0
+                    }
+                else:
+                    check_date += timedelta(days=1)
+                    continue
 
             # Process the state logic
             new_status, update_payload = process_trade_state(

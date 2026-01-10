@@ -97,7 +97,7 @@ def run_simulation(df, initial_capital, risk_pct):
 
     # Use the stored DBAP value first; if it doesn't exist (live trades), use the logic
     sim_df['dbap_ret_pct'] = sim_df['final_dbap_pnl_pct'].fillna(
-        pd.Series(np.where(sim_df['status'] == 'SCALED', sim_df['peak_ret_pct'], sim_df['sim_ret_pct']),
+        pd.Series(np.where(sim_df['status'].isin(['SCALED', 'SCALED_EXP']), sim_df['peak_ret_pct'], sim_df['sim_ret_pct']),
                   index=sim_df.index)
     )
 
@@ -113,7 +113,7 @@ def run_simulation(df, initial_capital, risk_pct):
     sim_df['scale_pnl_dollars'] = 0.0
     sim_df['moonshot_pnl_dollars'] = 0.0
 
-    mask_win = sim_df['status'] == 'SCALED'
+    mask_win = sim_df['status'].isin(['SCALED', 'SCALED_EXP'])
 
     # Winners: Split PnL
     sim_df.loc[mask_win, 'scale_pnl_dollars'] = (sim_df.loc[mask_win, 'pos_size_dollars'] * portion_scale) * (
@@ -140,7 +140,7 @@ def run_simulation(df, initial_capital, risk_pct):
     # If lowest_price is 0 or NaN, fallback to entry_price to show 0% DD
     safe_low = sim_df['lowest_price'].replace(0, np.nan).fillna(sim_df['entry_price'])
 
-    mask_win = sim_df['status'] == 'SCALED'
+    # Corrected Mask for SCALED/SCALED_EXP
     sim_df['scale_pnl_pct'] = np.where(mask_win, TP_PCT, sim_df['sim_ret_pct'])
     sim_df['moonshot_pnl_pct'] = np.where(mask_win, sim_df['peak_ret_pct'], 0.0)
 
@@ -150,11 +150,25 @@ def run_simulation(df, initial_capital, risk_pct):
     # Clip to ensure DD is never positive
     sim_df['max_drawdown_pct'] = sim_df['max_drawdown_pct'].clip(upper=0.0)
 
-    # 7. Unrealized
+    # 7. Realized vs Unrealized Split
+    sim_df['realized_pnl_dollars'] = sim_df['sim_pnl']
+    sim_df['unrealized_pnl_dollars'] = 0.0
+    
+    # CASE 1: OPEN trades -> All Unrealized
     mask_open = sim_df['status'] == 'OPEN'
-    sim_df['unrealized_pnl_dollars'] = np.where(mask_open, sim_df['sim_pnl'], 0.0)
+    sim_df.loc[mask_open, 'unrealized_pnl_dollars'] = sim_df.loc[mask_open, 'sim_pnl']
+    sim_df.loc[mask_open, 'realized_pnl_dollars'] = 0.0
+    
+    # CASE 2: SCALED (Active Winners) -> Split
+    # SCALED_EXP are fully realized (closed), so only 'SCALED' needs splitting
+    mask_active_scaled = sim_df['status'] == 'SCALED'
+    sim_df.loc[mask_active_scaled, 'realized_pnl_dollars'] = sim_df.loc[mask_active_scaled, 'scale_pnl_dollars']
+    sim_df.loc[mask_active_scaled, 'unrealized_pnl_dollars'] = sim_df.loc[mask_active_scaled, 'moonshot_pnl_dollars']
 
-    # 8. Equity Curves
+    # 8. Moonshot Contribution
+    sim_df['moonshot_contribution'] = sim_df['sim_pnl'] - sim_df['tp_exit_pnl']
+
+    # 9. Equity Curves
     sim_df = sim_df.sort_values('discord_timestamp', ascending=True)
     sim_df['equity_curve_scaled'] = initial_capital + sim_df['sim_pnl'].cumsum()
     sim_df['equity_curve_tp_exit'] = initial_capital + sim_df['tp_exit_pnl'].cumsum()
@@ -280,7 +294,42 @@ def main():
         st.title("🐋 Config")
         cap = st.number_input("Capital", value=100000)
         risk = st.slider("Risk %", 0.5, 5.0, 1.0)
+        
+        st.divider()
+        
+        # --- 3. Time-Based Filters ---
+        st.subheader("📅 Time Filter")
+        time_filter = st.selectbox(
+            "Period",
+            ["All Time", "Year to Date", "Last 30 Days", "Last 90 Days", "Custom Range"]
+        )
+        
+        custom_start = None
+        custom_end = None
+        
+        if time_filter == "Custom Range":
+            c1, c2 = st.columns(2)
+            custom_start = c1.date_input("Start", value=datetime.now().date())
+            custom_end = c2.date_input("End", value=datetime.now().date())
+        
+        st.divider()
+
         if st.button("Refresh"): st.cache_data.clear()
+        
+        # --- 1. Methodology & Notes ---
+        with st.expander("ℹ️ Methodology & Notes", expanded=False):
+            st.markdown("""
+            **Strategy Basis (Hybrid 80/20):**
+            *   **80% Core:** Sold automatically when the trade hits the 20% profit target.
+            *   **20% Moonshot:** Holds for the absolute peak, never selling below the profit target.
+
+            **PnL Definitions:**
+            *   **Realized:** Cash banked from the 80% scale + fully closed trades (wins/losses).
+            *   **Unrealized:** Paper profit from the 20% moonshot runners + completely open trades.
+            
+            **DBAP Curve:**
+            *   Tracks the "Perfect" scenario: Selling every winner at its absolute peak (High of Day) while still taking full losses on losers.
+            """)
 
     raw_df = fetch_data()
     if raw_df.empty:
@@ -288,6 +337,62 @@ def main():
         return
 
     sim_df = run_simulation(raw_df, cap, risk)
+    
+    # --- APPLY FILTERS ---
+    if time_filter != "All Time":
+        sim_df['date_only'] = sim_df['discord_timestamp'].dt.date
+        today = datetime.now().date()
+        
+        if time_filter == "Year to Date":
+            start_date = datetime(today.year, 1, 1).date()
+            sim_df = sim_df[sim_df['date_only'] >= start_date]
+        elif time_filter == "Last 30 Days":
+            start_date = today - pd.Timedelta(days=30)
+            sim_df = sim_df[sim_df['date_only'] >= start_date]
+        elif time_filter == "Last 90 Days":
+            start_date = today - pd.Timedelta(days=90)
+            sim_df = sim_df[sim_df['date_only'] >= start_date]
+        elif time_filter == "Custom Range" and custom_start and custom_end:
+            sim_df = sim_df[(sim_df['date_only'] >= custom_start) & (sim_df['date_only'] <= custom_end)]
+    
+    # --- 2. Live Position Pulse ---
+    # We calculate this AFTER filtering if the user wants to see "Active trades entered in this period"
+    # Or we could calculate it from raw_df to always show ALL active. 
+    # Given the prompt "Time-based filters to view performance", consistent filtering is usually better.
+    
+    active_now = sim_df[sim_df['status'].isin(['OPEN', 'SCALED'])]
+    
+    with st.sidebar:
+        st.divider()
+        with st.expander("🟢 Active Pulse", expanded=True):
+            if active_now.empty:
+                st.caption("No active positions in this period.")
+            else:
+                # Count 'Winning' as currently green PnL
+                # Note: SCALED trades are always 'Winning' partially, but let's check their current total PnL
+                # Actually, SCALED trades have Realized profit, but the moonshot part might be red?
+                # Usually SCALED means we locked profit. Let's count SCALED as Winners.
+                # For OPEN, check sim_pnl > 0.
+                
+                wins = active_now[
+                    (active_now['status'] == 'SCALED') | 
+                    ((active_now['status'] == 'OPEN') & (active_now['sim_pnl'] > 0))
+                ]
+                losses = active_now[
+                    (active_now['status'] == 'OPEN') & (active_now['sim_pnl'] <= 0)
+                ]
+                
+                cnt_win = len(wins)
+                cnt_loss = len(losses)
+                total_active = len(active_now)
+                
+                win_pct = (cnt_win / total_active) if total_active > 0 else 0
+                
+                k1, k2 = st.columns(2)
+                k1.metric("Green", cnt_win)
+                k2.metric("Red", cnt_loss)
+                
+                st.progress(win_pct, text=f"{win_pct:.0%} Green")
 
     render_todays_activity(sim_df)
 
@@ -327,6 +432,21 @@ def main():
             pf_help = "Gross profit from winners divided by gross loss from losers."
 
         m4.metric("Profit Factor", pf_display, help=pf_help)
+        
+        # New Metrics Row
+        m5, m6, m7, m8 = st.columns(4)
+        
+        realized = sim_df['realized_pnl_dollars'].sum()
+        unrealized = sim_df['unrealized_pnl_dollars'].sum()
+        m5.metric("Realized PnL", f"${realized:,.0f}", help="Banked profits + Closed losses")
+        m6.metric("Unrealized PnL", f"${unrealized:,.0f}", help="Paper profits on open positions + Moonshot portion of active winners")
+        
+        avg_win = wins_df['sim_pnl'].mean() if not wins_df.empty else 0
+        avg_loss = losses_df['sim_pnl'].mean() if not losses_df.empty else 0
+        m7.metric("Avg Win / Loss", f"${avg_win:,.0f} / ${avg_loss:,.0f}")
+        
+        moon_contrib = sim_df['moonshot_contribution'].sum()
+        m8.metric("Moonshot Contrib", f"${moon_contrib:,.0f}", help="Extra PnL generated by the Moonshot strategy vs Baseline")
 
         st.divider()
 

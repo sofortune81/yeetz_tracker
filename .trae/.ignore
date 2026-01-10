@@ -1,0 +1,26 @@
+# File extensions
+*.logs
+*.log
+*.sql
+*.md
+
+# Directories (root and nested)
+logs/
+scripts/
+supabase/
+.streamlit/
+references/
+.idea/
+.trae/
+
+# Python specifics
+__pycache__/
+*.pyc
+
+#Secrets
+.env
+.env.local
+
+# System/Misc (Good since you are on a mapped drive/NAS)
+.DS_Store
+Thumbs.db

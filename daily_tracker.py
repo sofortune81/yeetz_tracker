@@ -9,20 +9,16 @@ from yeetz_config import TP_PCT, SCALE_PCT, MOON_PCT
 from theta_api_client import (
     filter_and_get_post_alert_high,
     filter_and_get_post_alert_low,
-    fetch_ohlc_data,  # Changed from fetch_trade_quote_data
+    fetch_ohlc_data,
     fetch_eod_data,
     get_option_root_params,
     get_theta_date_int
 )
 
-print(f"DEBUG: Current Working Directory is: {os.getcwd()}")
-print(f"DEBUG: Log file should be at: {os.path.join(os.getcwd(), 'logs', 'yeetz.log')}")
-
-# --- LOGGING SETUP ---
+# --- SETUP ---
 log_name = os.path.splitext(os.path.basename(__file__))[0]
 logger = setup_logger(name=log_name, log_filename="yeetz.log")
 
-# --- CONFIGURATION ---
 load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
@@ -35,6 +31,34 @@ else:
     logger.error("❌ Supabase Credentials Missing in .env")
     supabase = None
 
+# --- WORKER STATE MANAGEMENT ---
+# ID 2 is dedicated to Yeetz Tracker to avoid conflict with GEX worker (ID 1)
+YEETZ_WORKER_ID = 2 
+
+def get_last_processed_date():
+    """Fetch the last successfully processed date from DB."""
+    try:
+        resp = supabase.table("worker_status").select("last_run").eq("id", YEETZ_WORKER_ID).execute()
+        if resp.data and resp.data[0]['last_run']:
+            return datetime.strptime(resp.data[0]['last_run'], "%Y-%m-%d").date()
+    except Exception as e:
+        logger.warning(f"⚠️ Could not fetch worker status: {e}")
+    
+    # Default to 2 days ago if no record found (Safe fallback)
+    return datetime.now(EST).date() - timedelta(days=2)
+
+def update_last_processed_date(processed_date):
+    """Checkpoint the date we just finished."""
+    try:
+        supabase.table("worker_status").upsert({
+            "id": YEETZ_WORKER_ID,
+            "last_run": processed_date.isoformat(),
+            "status": "OK",
+            "worker_name": "YEETZ_DAILY_TRACKER"
+        }).execute()
+        logger.info(f"💾 Checkpoint saved: {processed_date}")
+    except Exception as e:
+        logger.error(f"❌ Failed to save checkpoint: {e}")
 
 # --- SHARED API FETCHERS ---
 
@@ -65,43 +89,35 @@ def fetch_open_interest(trade, date_int):
         logger.error(f"OI Fetch Error for {trade['ticker']}: {e}")
         return 0
 
-
 def calculate_pnl_snapshots(entry, high, close, status):
-    if entry == 0: return 0.0, 0.0
+    if entry == 0: return 0.0, 0.0, 0.0
 
     # 1. BASELINE CURVE (100% sold at TP)
-    if status == "SCALED":
+    if status in ["SCALED", "SCALED_EXP"]:
         baseline_pct = TP_PCT
     else:
         baseline_pct = ((close - entry) / entry) * 100.0
 
     # 2. STRATEGY CURVE (80% @ TP + 20% @ Peak High)
-    if status == "SCALED":
+    if status in ["SCALED", "SCALED_EXP"]:
         moon_return = ((high - entry) / entry) * 100.0
-        strategy_pct = ((SCALE_PCT / 100.0) * TP_PCT) + ((MOON_PCT / 100.0) * moon_return)
+        min_moon = 0.20 * TP_PCT
+        final_moon = max(moon_return, min_moon)
+        strategy_pct = ((SCALE_PCT / 100.0) * TP_PCT) + ((MOON_PCT / 100.0) * final_moon)
     else:
         strategy_pct = ((close - entry) / entry) * 100.0
 
     # 3. DBAP CURVE (The "What If" Ceiling)
-    if status == "SCALED":
+    if status in ["SCALED", "SCALED_EXP"]:
         dbap_pct = ((high - entry) / entry) * 100.0
     else:
-        # Crucial: DBAP still takes the loss if the whale left or it expired
         dbap_pct = ((close - entry) / entry) * 100.0
 
     return strategy_pct, baseline_pct, dbap_pct
 
-
 def get_market_data(trade, data_date_int, is_day_0, alert_dt):
-    """
-    Retrieves market data.
-    CRITICAL LOGIC:
-    - If is_day_0: Uses intraday ticks to find High/Low strictly AFTER the alert.
-    - If NOT is_day_0: Uses standard EOD High/Low/Close.
-    """
     exp_dt = datetime.strptime(trade['expiration_date'], "%Y-%m-%d")
 
-    # 1. Get Official EOD Data (Always needed for Close & OI)
     eod_data = fetch_eod_data(
         trade['ticker'],
         trade['strike'],
@@ -112,7 +128,6 @@ def get_market_data(trade, data_date_int, is_day_0, alert_dt):
     oi = fetch_open_interest(trade, data_date_int)
 
     if not eod_data:
-        # If EOD fails, we can't get a reliable close, so we abort this day.
         return None
 
     eod_close = eod_data['close']
@@ -125,8 +140,6 @@ def get_market_data(trade, data_date_int, is_day_0, alert_dt):
 
     if is_day_0:
         logger.debug(f"   🔎 Day 0 Detected for {trade['ticker']}. Fetching 1m OHLC...")
-
-        # Switch from fetch_trade_quote_data to fetch_ohlc_data
         data_list = fetch_ohlc_data(
             trade['ticker'],
             trade['strike'],
@@ -135,23 +148,17 @@ def get_market_data(trade, data_date_int, is_day_0, alert_dt):
             data_date_int,
             interval=1
         )
-
-        # FILTER: Only look at prices AFTER the alert timestamp
         post_alert_high = filter_and_get_post_alert_high(data_list, alert_dt)
         post_alert_low = filter_and_get_post_alert_low(data_list, alert_dt)
 
-        # Logic: High is max of (Entry, Post-Alert High, EOD High)
-        # Usually Post-Alert High is what we want, but EOD high covers edge cases if alert was EOD.
         final_high = max(entry_price, post_alert_high)
-        if final_high == 0: final_high = eod_day_high  # Fallback
+        if final_high == 0: final_high = eod_day_high
 
-        # Logic: Low is min of (Entry, Post-Alert Low)
         valid_ticks_low = post_alert_low if post_alert_low > 0 else 99999
         final_low = min(entry_price, valid_ticks_low)
-        if final_low == 99999: final_low = eod_day_low  # Fallback
+        if final_low == 99999: final_low = eod_day_low
 
     else:
-        # Standard Day: Just use the EOD values
         if final_high == 0: final_high = eod_close
         if final_low == 0: final_low = eod_close
 
@@ -162,7 +169,6 @@ def get_market_data(trade, data_date_int, is_day_0, alert_dt):
         "oi": oi
     }
 
-
 def process_trade_state(trade, high, low, close, oi, current_status, exp_date_str, current_date=None):
     entry = float(trade['entry_price'])
     target = float(trade['profit_target'])
@@ -170,47 +176,36 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
     exp_date = datetime.strptime(exp_date_str, "%Y-%m-%d").date()
     check_date = current_date or datetime.now(EST).date()
 
-    # 1. Update Persistent High/Low
     prev_high = float(trade.get('highest_price') or entry)
     new_highest = max(high, prev_high, entry)
 
     prev_low = float(trade.get('lowest_price') or entry)
     if prev_low == 0: prev_low = entry
 
-    # Only track heat while the trade is still looking for a win
     if current_status == "OPEN":
-        # Ignore 0 values from API to prevent false -100% drawdown
         new_lowest = min(low, prev_low) if low > 0 else prev_low
     else:
         new_lowest = prev_low
 
-    # 2. Determine Status (PRIORITY: Win > Loss)
     new_status = current_status
     close_reason = None
-
     entry_dt = datetime.fromisoformat(trade['discord_timestamp']).astimezone(EST)
     entry_date = entry_dt.date()
-
-    # 2. Determine Status (PRIORITY: Win > Loss)
-    new_status = current_status
-    close_reason = None
-
-    # Initialize payload early so we can add to it during settlement or status changes
     payload = {}
 
-    # --- DAY 1 SETTLEMENT LOGIC ---
     if current_status == "OPEN" and check_date > entry_date:
         if not trade.get('oi_settled', False):
-            # Update the local variable used for the stop check below
             stop_oi_level = int(oi * 0.80)
-
-            # Record these in the payload for the DB update
             payload["stop_oi_level"] = stop_oi_level
             payload["oi_settled"] = True
             logger.info(f"⚓ SETTLEMENT: {trade['ticker']} OI settled at {oi}. New Stop: {stop_oi_level}")
 
-    # STATUS LOGIC (Immunity: If already SCALED, it stays SCALED)
-    if current_status != "SCALED":
+    if current_status == "SCALED":
+        if check_date >= exp_date:
+            new_status = "SCALED_EXP"
+            logger.info(f"🏁 {trade['ticker']} (SCALED) has expired. Moving to SCALED_EXP.")
+            
+    elif current_status != "SCALED_EXP":
         if new_highest >= target:
             new_status = "SCALED"
         elif check_date >= exp_date:
@@ -222,10 +217,8 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
                 new_status = "STOP_OI"
                 close_reason = "stop_oi"
 
-    # 3. Final PnL Calculation
     strat_pct, base_pct, dbap_pct = calculate_pnl_snapshots(entry, new_highest, close, new_status)
 
-    # Merge the rest of the tracking data into the payload
     payload.update({
         "status": new_status,
         "highest_price": new_highest,
@@ -243,73 +236,119 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
 
     return new_status, payload
 
+# --- CORE PROCESSING FUNCTION (Single Day) ---
 
-def run_daily_update():
-    logger.info("🚀 Starting Daily Portfolio Simulator Update...")
+def process_single_day(processing_date):
+    """Processes ALL active trades for a specific historical date."""
+    
+    date_int = get_theta_date_int(processing_date)
+    logger.info(f"🗓️ Processing Batch: {processing_date}")
 
-    try:
-        today = datetime.now(EST).date()
-        data_date = today - timedelta(days=1)
-        if data_date.weekday() >= 5:
-            data_date -= timedelta(days=1 if data_date.weekday() == 5 else 2)
+    # Fetch OPEN or SCALED trades
+    # We re-fetch from DB every day-loop because a trade might have closed in the previous loop iteration
+    response = supabase.table("whale_alerts").select("*").in_("status", ["OPEN", "SCALED"]).execute()
+    active_trades = response.data
+    updates_count = 0
 
-        data_date_int = get_theta_date_int(data_date)
-        logger.info(f"🗓️ Processing Data For Date: {data_date}")
+    if not active_trades:
+        logger.info(f"   💤 No active trades to process for {processing_date}.")
+        return
 
-        response = supabase.table("whale_alerts").select("*").in_("status", ["OPEN", "SCALED"]).execute()
-        active_trades = response.data
+    for trade in active_trades:
+        try:
+            trade_entry_dt = datetime.fromisoformat(trade['discord_timestamp']).astimezone(EST)
+            
+            # Skip if this trade didn't exist yet on 'processing_date'
+            if trade_entry_dt.date() > processing_date:
+                continue
 
-        logger.info(f"📂 Found {len(active_trades)} active/moonshot trades to process.")
-        updates_count = 0
+            is_day_0 = (trade_entry_dt.date() == processing_date)
 
-        for trade in active_trades:
-            try:
-                trade_entry_dt = datetime.fromisoformat(trade['discord_timestamp']).astimezone(EST)
-                if trade_entry_dt.date() > data_date:
+            # 1. GET DATA
+            market_data = get_market_data(trade, date_int, is_day_0, trade_entry_dt)
+
+            # 2. SELF-HEALING EXPIRATION CHECK
+            # If API returns no data, check if the contract expired ON or BEFORE this processing date
+            if not market_data:
+                exp_dt = datetime.strptime(trade['expiration_date'], "%Y-%m-%d").date()
+                if processing_date >= exp_dt:
+                    logger.warning(f"      🧟 Zombie Trade Detected: {trade['ticker']} (Exp: {exp_dt} vs Date: {processing_date})")
+                    # Force data to trigger expiration logic
+                    market_data = {
+                        "high": float(trade.get('highest_price') or 0),
+                        "low": float(trade.get('lowest_price') or 0),
+                        "close": 0.0,
+                        "oi": 0
+                    }
+                else:
+                    logger.warning(f"      ⚠️ No data found for {trade['ticker']} on {processing_date}. Skipping.")
                     continue
 
-                # DETECT IF THIS IS THE TRADE DATE
-                is_day_0 = (trade_entry_dt.date() == data_date)
+            # 3. PROCESS STATE
+            new_status, payload = process_trade_state(
+                trade,
+                market_data['high'],
+                market_data['low'],
+                market_data['close'],
+                market_data['oi'],
+                trade['status'],
+                trade['expiration_date'],
+                current_date=processing_date
+            )
 
-                market_data = get_market_data(trade, data_date_int, is_day_0, trade_entry_dt)
-                if not market_data:
-                    logger.warning(f"      ⚠️ No data found for {trade['ticker']}")
-                    continue
+            # 4. UPDATE DB
+            supabase.table("whale_alerts").update(payload).eq("id", trade['id']).execute()
+            
+            supabase.table("whale_performance").upsert({
+                "alert_id": trade['id'],
+                "date": processing_date.isoformat(),
+                "price_high": market_data['high'],
+                "price_low": market_data['low'],
+                "price_close": market_data['close'],
+                "current_oi": market_data['oi']
+            }, on_conflict="alert_id, date").execute()
 
-                new_status, payload = process_trade_state(
-                    trade,
-                    market_data['high'],
-                    market_data['low'],
-                    market_data['close'],
-                    market_data['oi'],
-                    trade['status'],
-                    trade['expiration_date'],
-                    current_date=data_date
-                )
+            updates_count += 1
+            if new_status != trade['status']:
+                logger.info(f"      👉 {trade['ticker']} updated: {trade['status']} -> {new_status}")
 
-                supabase.table("whale_alerts").update(payload).eq("id", trade['id']).execute()
+        except Exception as e:
+            logger.error(f"❌ Error processing {trade.get('ticker', 'Unknown')}: {e}")
 
-                supabase.table("whale_performance").upsert({
-                    "alert_id": trade['id'],
-                    "date": data_date.isoformat(),
-                    "price_high": market_data['high'],
-                    "price_low": market_data['low'],
-                    "price_close": market_data['close'],
-                    "current_oi": market_data['oi']
-                }, on_conflict="alert_id, date").execute()
+    logger.info(f"   ✅ Batch {processing_date} Complete. Updated {updates_count} trades.")
 
-                updates_count += 1
 
-            except Exception as e:
-                # CATCH-ALL FOR ITERATION ERRORS
-                logger.error(f"❌ Error processing {trade.get('ticker', 'Unknown')}: {e}")
+# --- MAIN SELF-HEALING LOOP ---
 
-        logger.info(f"✅ Daily Update Complete. Updated {updates_count} trades.")
+def run_smart_catchup():
+    logger.info("🚀 Starting Smart Tracker...")
 
-    except Exception as e:
-        logger.exception(f"🔥 CRITICAL FAILURE in Daily Tracker: {e}")
-        raise e
+    # 1. Determine Date Range
+    last_processed = get_last_processed_date()
+    yesterday = datetime.now(EST).date() - timedelta(days=1)
+    
+    if last_processed >= yesterday:
+        logger.info(f"✅ System Up to Date. (Last processed: {last_processed}). Nothing to do.")
+        return
 
+    logger.info(f"📉 Gap Detected! Catching up from {last_processed + timedelta(days=1)} to {yesterday}")
+
+    # 2. Loop through every day in the gap
+    current_date = last_processed + timedelta(days=1)
+    
+    while current_date <= yesterday:
+        # Check for weekends
+        if current_date.weekday() >= 5: # 5=Sat, 6=Sun
+            logger.info(f"⏭️ Skipping Weekend: {current_date}")
+        else:
+            # RUN THE LOGIC FOR THIS SPECIFIC DAY
+            process_single_day(current_date)
+            # Save checkpoint immediately so if it crashes, we don't redo this day
+            update_last_processed_date(current_date)
+        
+        current_date += timedelta(days=1)
+
+    logger.info("🏁 All caught up!")
 
 if __name__ == "__main__":
-    run_daily_update()
+    run_smart_catchup()

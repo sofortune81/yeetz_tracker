@@ -1,6 +1,9 @@
 [submodule "Pythonutils"]
-	path = Pythonutils
-	url = https://github.com/sofortune81/Pythonutils.git
+    path = Pythonutils
+    url = https://github.com/sofortune81/Pythonutils.git
+    ignore = dirty
+
 [submodule "flow_stack"]
-	path = flow_stack
-	url = https://github.com/sofortune81/flow_stack.git
+    path = flow_stack
+    url = https://github.com/sofortune81/flow_stack.git
+    ignore = dirty

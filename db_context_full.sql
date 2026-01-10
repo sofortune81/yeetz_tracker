@@ -1,6 +1,6 @@
 -- GENERATED FULL CONTEXT DUMP
 
--- Generated: 2026-01-04 23:52:56 HKT
+-- Generated: 2026-01-11 00:12:17 HKT
 -- ------------------------------
 
 ------------------------------
@@ -21,6 +21,9 @@
     DELETE FROM public.flow_5min WHERE bucket < now() - interval '5 days';
     DELETE FROM public.intraday_flow WHERE updated_at < now() - interval '1 day';
     ;
+
+-- ID: 20 [ACTIVE] Schedule: */5 * * * *
+SELECT update_anchored_markers();
 
 -- ID: 9 [ACTIVE] Schedule: 0 */6 * * *
 
@@ -102,6 +105,14 @@ CREATE TABLE intraday_flow (
     net_quantity numeric,
     net_flow_spot numeric,
     option_right text);
+
+CREATE TABLE intraday_markers (
+    ticker text,
+    strike numeric,
+    gex_15m numeric,
+    gex_30m numeric,
+    gex_60m numeric,
+    updated_at timestamp with time zone);
 
 CREATE TABLE metadata (
     id integer,
@@ -215,7 +226,8 @@ CREATE TABLE whale_alerts (
     final_sim_pnl_pct real,
     final_tp_pnl_pct real,
     lowest_price numeric,
-    final_dbap_pnl_pct double precision);
+    final_dbap_pnl_pct double precision,
+    oi_settled boolean);
 
 CREATE TABLE whale_performance (
     id bigint,
@@ -254,15 +266,15 @@ CREATE OR REPLACE VIEW view_anchored_markers AS
     live.net_flow AS live_gex,
     COALESCE(( SELECT s.gex_value
            FROM flow_snapshots s
-          WHERE ((s.ticker = live.ticker) AND (s.strike = live.strike) AND ((s."timestamp" >= (t.t15 - '00:02:00'::interval)) AND (s."timestamp" <= (t.t15 + '00:02:00'::interval))))
+          WHERE ((s.ticker = live.ticker) AND (s.strike = live.strike) AND (s.expiration = live.expiration) AND ((s."timestamp" >= (t.t15 - '00:02:00'::interval)) AND (s."timestamp" <= (t.t15 + '00:02:00'::interval))))
          LIMIT 1), (0)::numeric) AS gex_15m,
     COALESCE(( SELECT s.gex_value
            FROM flow_snapshots s
-          WHERE ((s.ticker = live.ticker) AND (s.strike = live.strike) AND ((s."timestamp" >= (t.t30 - '00:02:00'::interval)) AND (s."timestamp" <= (t.t30 + '00:02:00'::interval))))
+          WHERE ((s.ticker = live.ticker) AND (s.strike = live.strike) AND (s.expiration = live.expiration) AND ((s."timestamp" >= (t.t30 - '00:02:00'::interval)) AND (s."timestamp" <= (t.t30 + '00:02:00'::interval))))
          LIMIT 1), (0)::numeric) AS gex_30m,
     COALESCE(( SELECT s.gex_value
            FROM flow_snapshots s
-          WHERE ((s.ticker = live.ticker) AND (s.strike = live.strike) AND ((s."timestamp" >= (t.t60 - '00:02:00'::interval)) AND (s."timestamp" <= (t.t60 + '00:02:00'::interval))))
+          WHERE ((s.ticker = live.ticker) AND (s.strike = live.strike) AND (s.expiration = live.expiration) AND ((s."timestamp" >= (t.t60 - '00:02:00'::interval)) AND (s."timestamp" <= (t.t60 + '00:02:00'::interval))))
          LIMIT 1), (0)::numeric) AS gex_60m,
     t.anchor_time AS last_anchor_update
    FROM (intraday_flow live
@@ -323,6 +335,59 @@ BEGIN
     -- 15m/30m/60m comparison view.
     DELETE FROM flow_snapshots 
     WHERE timestamp < (now() - interval '24 hours');
+END;
+
+$$;
+
+-- Function: update_anchored_markers
+CREATE OR REPLACE FUNCTION update_anchored_markers AS $$
+
+DECLARE
+    target_15 timestamp with time zone := NOW() - INTERVAL '15 minutes';
+    target_30 timestamp with time zone := NOW() - INTERVAL '30 minutes';
+    target_60 timestamp with time zone := NOW() - INTERVAL '60 minutes';
+BEGIN
+    -- Clear old data (optional, or we can upsert)
+    DELETE FROM public.intraday_markers;
+
+    INSERT INTO public.intraday_markers (ticker, strike, gex_15m, gex_30m, gex_60m, updated_at)
+    SELECT 
+        live.ticker,
+        live.strike,
+        -- 15m Marker: Find snapshot closest to T-15 (within +/- 3 min)
+        COALESCE((
+            SELECT s.gex_value 
+            FROM flow_snapshots s
+            WHERE s.ticker = live.ticker AND s.strike = live.strike AND s.expiration = live.expiration
+              AND s.timestamp BETWEEN target_15 - INTERVAL '3 minutes' AND target_15 + INTERVAL '3 minutes'
+            ORDER BY ABS(EXTRACT(EPOCH FROM (s.timestamp - target_15))) ASC
+            LIMIT 1
+        ), 0) as gex_15m,
+        
+        -- 30m Marker
+        COALESCE((
+            SELECT s.gex_value 
+            FROM flow_snapshots s
+            WHERE s.ticker = live.ticker AND s.strike = live.strike AND s.expiration = live.expiration
+              AND s.timestamp BETWEEN target_30 - INTERVAL '3 minutes' AND target_30 + INTERVAL '3 minutes'
+            ORDER BY ABS(EXTRACT(EPOCH FROM (s.timestamp - target_30))) ASC
+            LIMIT 1
+        ), 0) as gex_30m,
+
+        -- 60m Marker
+        COALESCE((
+            SELECT s.gex_value 
+            FROM flow_snapshots s
+            WHERE s.ticker = live.ticker AND s.strike = live.strike AND s.expiration = live.expiration
+              AND s.timestamp BETWEEN target_60 - INTERVAL '3 minutes' AND target_60 + INTERVAL '3 minutes'
+            ORDER BY ABS(EXTRACT(EPOCH FROM (s.timestamp - target_60))) ASC
+            LIMIT 1
+        ), 0) as gex_60m,
+        
+        NOW() as updated_at
+
+    FROM intraday_flow live;
+
 END;
 
 $$;
