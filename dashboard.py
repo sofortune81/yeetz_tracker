@@ -6,6 +6,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from supabase import create_client
 import numpy as np
+import calendar
+import plotly.graph_objects as go
 
 # --- IMPORT CONFIG ---
 from yeetz_config import TP_PCT, SCALE_PCT, STOP_OI_PCT
@@ -49,7 +51,10 @@ def fetch_data():
     date_cols = ['discord_timestamp', 'expiration_date', 'close_date']
     for col in date_cols:
         if col in df.columns:
+            # force=True ensures we don't silently fail
             df[col] = pd.to_datetime(df[col], utc=True, errors='coerce')
+
+            # Only convert non-nulls
             if df[col].notnull().any():
                 df[col] = df[col].dt.tz_convert('US/Eastern')
 
@@ -153,7 +158,24 @@ def run_simulation(df, initial_capital, risk_pct):
     # 7. Realized vs Unrealized Split
     sim_df['realized_pnl_dollars'] = sim_df['sim_pnl']
     sim_df['unrealized_pnl_dollars'] = 0.0
-    
+
+    # Convert 'close_date' to date object, handle NaT
+    # If close_date is NaT (Open trade), use Today
+    today_date = datetime.now().date()
+
+    # Ensure dates are dates (not datetimes) for subtraction
+    entry_dates = sim_df['discord_timestamp'].dt.date
+
+    # 1. Start with the actual close dates from DB
+    actual_close_dates = sim_df['close_date'].dt.date
+
+    # 2. Only fill NaTs (Open trades) with today. Leave existing dates alone.
+    final_close_dates = actual_close_dates.fillna(today_date)
+
+    # Calculate days held (add 1 so same-day isn't 0)
+    sim_df['days_held'] = (final_close_dates - entry_dates).apply(lambda x: x.days)
+    sim_df['days_held'] = sim_df['days_held'].clip(lower=1)  # Minimum 1 day for stats
+
     # CASE 1: OPEN trades -> All Unrealized
     mask_open = sim_df['status'] == 'OPEN'
     sim_df.loc[mask_open, 'unrealized_pnl_dollars'] = sim_df.loc[mask_open, 'sim_pnl']
@@ -215,17 +237,19 @@ def render_equity_chart(df):
     st.plotly_chart(fig, width='stretch')
 
 
-def render_trade_finder(df):
+@st.fragment
+def render_trade_finder(df, key_suffix=""):
     st.header("🔎 Smart Trade Finder")
     c1, c2, c3, c4 = st.columns(4)
     with c1:
-        f_tick = st.multiselect("Ticker", df['ticker'].unique())
+        # ADD unique keys here
+        f_tick = st.multiselect("Ticker", df['ticker'].unique(), key=f"tick_{key_suffix}")
     with c2:
-        f_stat = st.multiselect("Status", df['status'].unique())
+        f_stat = st.multiselect("Status", df['status'].unique(), key=f"stat_{key_suffix}")
     with c3:
-        f_month = st.multiselect("Month", df['Month'].unique())
+        f_month = st.multiselect("Month", df['Month'].unique(), key=f"mth_{key_suffix}")
     with c4:
-        f_win = st.checkbox("Winners Only")
+        f_win = st.checkbox("Winners Only", key=f"win_{key_suffix}")
 
     filt = df.copy()
     if f_tick: filt = filt[filt['ticker'].isin(f_tick)]
@@ -233,35 +257,15 @@ def render_trade_finder(df):
     if f_month: filt = filt[filt['Month'].isin(f_month)]
     if f_win: filt = filt[filt['sim_pnl'] > 0]
 
-    # --- PAGINATION AFTER FILTERING ---
-    rows_per_page = 50  # You can change this number
-
-    total_rows = len(filt)
-    total_pages = max(1, (total_rows + rows_per_page - 1) // rows_per_page)
-
-    col_left, col_mid, col_right = st.columns([1, 2, 1])
-    with col_mid:
-        page_num = st.number_input(
-            "Page",
-            min_value=1,
-            max_value=total_pages,
-            value=1,
-            step=1,
-            key="trade_finder_page"
-        )
-
-    start_idx = (page_num - 1) * rows_per_page
-    end_idx = start_idx + rows_per_page
-    page_df = filt.iloc[start_idx:end_idx]
-
+    # --- NO PAGINATION, SHOW ALL FOR NATIVE SORTING ---
     st.dataframe(
-        page_df[[
+        filt[[
             'discord_timestamp', 'ticker', 'expiration_date', 'strike', 'option_type',
             'entry_price', 'last_price', 'highest_price', 'lowest_price',
             'status', 'win_loss',
             'scale_pnl_pct', 'scale_pnl_dollars',
             'moonshot_pnl_pct', 'moonshot_pnl_dollars',
-            'sim_pnl', 'sim_ret_pct', 'max_drawdown_pct'
+            'sim_pnl', 'sim_ret_pct', 'peak_ret_pct', 'max_drawdown_pct'
         ]],
         hide_index=True,
         use_container_width=True,
@@ -278,6 +282,7 @@ def render_trade_finder(df):
             "moonshot_pnl_dollars": st.column_config.NumberColumn("Moon $", format="$%.0f"),
             "sim_pnl": st.column_config.NumberColumn("Total PnL", format="$%.0f"),
             "sim_ret_pct": st.column_config.NumberColumn("Total %", format="%.1f%%"),
+            "peak_ret_pct": st.column_config.NumberColumn("Max Gain %", format="%.1f%%"),
             "max_drawdown_pct": st.column_config.NumberColumn(
                 "Max DD",
                 format="%.1f%%",
@@ -286,7 +291,7 @@ def render_trade_finder(df):
         }
     )
 
-    st.caption(f"Showing rows {start_idx + 1}–{min(end_idx, total_rows)} of {total_rows} trades")
+    st.caption(f"Showing all {len(filt)} trades")
 
 
 def main():
@@ -396,10 +401,11 @@ def main():
 
     render_todays_activity(sim_df)
 
-    tab1, tab2 = st.tabs(["📊 Portfolio", "🔍 Finder"])
+    tab1, tab2, tab3 = st.tabs(["📊 Portfolio", "🗓️ Monthly", "🔍 Finder"])
+
     with tab1:
         # 1. Date Tracking Header
-        first_trade_date = sim_df['discord_timestamp'].min().strftime('%B %d, %Y')
+        first_trade_date = raw_df['discord_timestamp'].min().strftime('%B %d, %Y')
         st.caption(f"📈 Tracking performance since: **{first_trade_date}**")
 
         # 2. Key Metrics Row
@@ -465,6 +471,16 @@ def main():
                   help="Selling every winner at its absolute peak, while accounting for losses on failed trades.")
 
         st.divider()
+        st.subheader("⏱️ Trade Efficiency")
+        e1, e2, e3 = st.columns(3)
+
+        avg_hold = sim_df['days_held'].mean()
+        avg_dd = sim_df['max_drawdown_pct'].mean()
+
+        e1.metric("Avg Hold Time", f"{avg_hold:.1f} Days")
+        e2.metric("Avg Drawdown", f"{avg_dd:.1f}%", help="Average maximum loss % experienced across all trades.")
+        e3.metric("Trades/Month",
+                  f"{len(sim_df) / sim_df['Month'].nunique():.1f}" if sim_df['Month'].nunique() > 0 else "0")
 
         # 4. Visual Analytics & Deep Dive
         col_chart, col_stats = st.columns([1, 1.5])
@@ -522,8 +538,46 @@ def main():
         render_equity_chart(sim_df)
 
     with tab2:
-        render_trade_finder(sim_df)
+        st.header("🗓️ Monthly Performance Matrix")
 
+        # Group by Month
+        monthly = sim_df.groupby('Month').agg({
+            'ticker': 'count',
+            'sim_pnl': 'sum',
+            'win_loss': lambda x: (x == 'WIN').sum(),  # Count wins
+            'days_held': 'mean',
+            'max_drawdown_pct': 'mean'
+        }).rename(columns={
+            'ticker': 'Count',
+            'sim_pnl': 'Total PnL',
+            'days_held': 'Avg Hold (Days)',
+            'max_drawdown_pct': 'Avg DD %'
+        })
+
+        # Calculate Win Rate
+        monthly['Win Rate'] = (monthly['win_loss'] / monthly['Count']) * 100
+        monthly = monthly.drop(columns=['win_loss'])
+
+        # Reorder columns
+        monthly = monthly[['Count', 'Win Rate', 'Total PnL', 'Avg Hold (Days)', 'Avg DD %']]
+
+        # Sort by Month Descending
+        monthly = monthly.sort_index(ascending=False)
+
+        # Display with formatting
+        st.dataframe(
+            monthly.style.background_gradient(subset=['Total PnL'], cmap='RdYlGn', vmin=-1000, vmax=1000)
+            .format({
+                'Total PnL': "${:,.0f}",
+                'Win Rate': "{:.1f}%",
+                'Avg Hold (Days)': "{:.1f}",
+                'Avg DD %': "{:.1f}%"
+            }),
+            use_container_width=True
+        )
+
+    with tab3:
+        render_trade_finder(sim_df, key_suffix="tab3")
 
 if __name__ == "__main__":
     main()
