@@ -31,3 +31,4 @@ __pycache__/
 db_context_full.sql
 *.log
 /logs
+.trae/documents/Fix Trade Status Logic in Daily Tracker.md

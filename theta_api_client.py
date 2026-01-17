@@ -128,10 +128,16 @@ def filter_and_get_post_alert_low(data_list, alert_dt):
 def fetch_ohlc_data(ticker, strike, opt_type_char, exp_date, date_int, interval=1):
     """Fetches intraday OHLC data at a specified minute interval."""
     params = get_option_root_params(ticker, strike, opt_type_char, exp_date)
+
+    # FIX: Convert integer interval to string format (e.g., 1 -> "1m")
+    # and use the key "interval" instead of "ivl"
+    interval_str = f"{interval}m"
+
     params.update({
         "date": date_int,
-        "ivl": interval * 60000  # ThetaData expects milliseconds (1m = 60000ms)
+        "interval": interval_str  # Renamed from 'ivl' and value changed from ms to string
     })
+
     endpoint = "/option/history/ohlc"
     return fetch_data_and_handle_error(endpoint, params)
 

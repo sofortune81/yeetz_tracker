@@ -161,6 +161,7 @@ def get_market_data(trade, data_date_int, is_day_0, alert_dt):
     else:
         if final_high == 0: final_high = eod_close
         if final_low == 0: final_low = eod_close
+        final_high = max(final_high, eod_close)
 
     return {
         "high": final_high,
@@ -195,7 +196,7 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
 
     if current_status == "OPEN" and check_date > entry_date:
         if not trade.get('oi_settled', False):
-            stop_oi_level = int(oi * 0.80)
+            stop_oi_level = int(oi * 0.20)
             payload["stop_oi_level"] = stop_oi_level
             payload["oi_settled"] = True
             logger.info(f"⚓ SETTLEMENT: {trade['ticker']} OI settled at {oi}. New Stop: {stop_oi_level}")
@@ -204,10 +205,11 @@ def process_trade_state(trade, high, low, close, oi, current_status, exp_date_st
         if check_date >= exp_date:
             new_status = "SCALED_EXP"
             logger.info(f"🏁 {trade['ticker']} (SCALED) has expired. Moving to SCALED_EXP.")
-            
-    elif current_status != "SCALED_EXP":
+
+    elif current_status == "OPEN":
         if new_highest >= target:
             new_status = "SCALED"
+            close_reason = "target_hit"
         elif check_date >= exp_date:
             new_status = "EXPIRED"
             close_reason = "expiration"

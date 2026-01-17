@@ -48,7 +48,6 @@ class BackfillBot(discord.Client):
         }
 
     async def on_ready(self):
-        print("DEBUG: Bot Ready! Starting scan...")
         logger.info(f"✅ Backfill Bot Logged in as {self.user}")
         asyncio.create_task(self.run_backfill_and_close())
 
@@ -56,7 +55,6 @@ class BackfillBot(discord.Client):
         try:
             await self.run_backfill()
         except Exception as e:
-            print(f"🔥 CRITICAL ERROR: {e}")
             logger.exception(f"🔥 Critical Backfill Failure: {e}")
         finally:
             self.log_summary()
@@ -80,7 +78,6 @@ class BackfillBot(discord.Client):
             f"   • Errors / Skipped:   {self.stats['errors']}\n"
             f"========================================\n"
         )
-        print(summary)
         logger.info(summary)
 
     async def run_backfill(self):
@@ -96,7 +93,7 @@ class BackfillBot(discord.Client):
 
         if prompt_full_repop == 'yes':
             self.stats['mode'] = "FULL REPOPULATE"
-            print("🛑 Clearing Database...")
+            logger.info("🛑 Clearing Database...")
             await asyncio.to_thread(lambda: supabase.table("whale_performance").delete().neq("alert_id", "0").execute())
             await asyncio.to_thread(lambda: supabase.table("whale_alerts").delete().neq("id", "0").execute())
             self.start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
@@ -110,19 +107,19 @@ class BackfillBot(discord.Client):
             else:
                 self.start_scan = datetime.now(pytz.utc) - timedelta(days=days_lookback)
 
-        print(f"📥 Fetching messages since {self.start_scan.date()}...")
+        logger.info(f"📥 Fetching messages since {self.start_scan.date()}...")
         messages = []
         async for message in channel.history(after=self.start_scan, limit=None, oldest_first=True):
             if message.embeds:
                 messages.append(message)
 
         self.stats['total_found'] = len(messages)
-        print(f"📥 Found {len(messages)} alerts to process.")
+        logger.info(f"📥 Found {len(messages)} alerts to process.")
 
         for i, msg in enumerate(messages):
             try:
                 # Print NEWLINE to ensure it clears previous line
-                print(f"\nProcessing {i + 1}/{len(messages)}...", flush=True)
+                logger.info(f"\nProcessing {i + 1}/{len(messages)}...")
 
                 success = await self.process_and_simulate(msg)
                 if success:
@@ -132,20 +129,20 @@ class BackfillBot(discord.Client):
             except Exception as e:
                 self.stats['errors'] += 1
                 logger.error(f"❌ Error processing message {msg.id}: {e}")
-                print(f"Error: {e}")
+
 
             await asyncio.sleep(0.5)
 
-        print("\nDone processing messages.")
+        logger.info("\nDone processing messages.")
 
     async def process_and_simulate(self, message):
         parsed = parse_yeetz_alert(message.embeds[0])
         if not parsed:
-            print("   -> Failed to parse embed.")
+            logger.error("   -> Failed to parse embed.")
             return False
 
         alert_dt = message.created_at.astimezone(EST)
-        print(f"   -> Found: {parsed['ticker']} {parsed['strike']} ({alert_dt.date()})")
+        logger.info(f"   -> Found: {parsed['ticker']} {parsed['strike']} ({alert_dt.date()})")
 
         trade = {
             "discord_message_id": str(message.id),
@@ -157,7 +154,7 @@ class BackfillBot(discord.Client):
             "entry_size": parsed['entry_size'],
             "entry_oi": parsed['entry_oi'],
             "profit_target": parsed['entry_price'] * 1.20,
-            "stop_oi_level": int((parsed['entry_oi'] + parsed['entry_size']) * 0.80),
+            "stop_oi_level": int((parsed['entry_oi'] + parsed['entry_size']) * 0.20),
             "discord_timestamp": alert_dt.isoformat(),
             "status": "OPEN",
             "highest_price": parsed['entry_price'],
@@ -166,7 +163,7 @@ class BackfillBot(discord.Client):
 
         res = supabase.table("whale_alerts").upsert(trade, on_conflict="discord_message_id").execute()
         if not res.data:
-            print("   -> DB Upsert failed.")
+            logger.info("   -> DB Upsert failed.")
             return False
 
         trade['id'] = res.data[0]['id']
@@ -215,6 +212,29 @@ class BackfillBot(discord.Client):
                 current_date=check_date
             )
 
+            # --- START UPDATE: Verbose OI Logging ---
+            current_oi = market_data.get('oi', 0)
+            # Safely get stop level (it might be in payload OR existing trade dict)
+            current_stop = update_payload.get('stop_oi_level', trade.get('stop_oi_level', 0))
+
+            # Create a visual flag if OI is near the stop
+            oi_status_icon = "🟢"
+            if current_stop > 0:
+                if current_oi < current_stop:
+                    oi_status_icon = "🛑 STOP HIT"
+                elif current_oi < (current_stop * 1.5):
+                    oi_status_icon = "⚠️ LOW"
+
+            contract_str = f"{trade['ticker']} {trade['expiration_date']} {trade['strike']} {trade['option_type']}"
+
+            logger.info(
+                f"      [{check_date}] {contract_str} | "
+                f"Price: ${market_data['close']:.2f} | "
+                f"OI: {current_oi} (Stop: {current_stop}) {oi_status_icon} | "
+                f"Status: {new_status}"
+            )
+            # --- END UPDATE ---
+
             # Update the local trade object so next iteration has current status
             trade.update(update_payload)
 
@@ -233,25 +253,37 @@ class BackfillBot(discord.Client):
 
             # KEEP DEBUG LOGS ACTIVE
             contract_str = f"{trade['ticker']} {trade['expiration_date'].replace('-', '')} {trade['strike']} {trade['option_type']}"
-            print(
-                f"      [{check_date}] {contract_str} | Entry: ${trade['entry_price']:.2f} | High: ${market_data['high']:.2f} | Low: ${market_data['low']:.2f} | Status: {new_status}")
+            # logger.info(
+            #     f"      [{check_date}] {contract_str} | Entry: ${trade['entry_price']:.2f} | High: ${market_data['high']:.2f} | Low: ${market_data['low']:.2f} | Status: {new_status}")
 
-            if new_status in ["EXPIRED", "STOP_OI"]:
+            if new_status in ["EXPIRED", "STOP_OI", "SCALED_EXP"]:
+                break
+
+                # Safety: Ensure we don't accidentally loop past expiration if status didn't update for some reason
+            exp_dt = datetime.strptime(trade['expiration_date'], "%Y-%m-%d").date()
+            if check_date >= exp_dt:
                 break
 
             check_date += timedelta(days=1)
             await asyncio.sleep(0.01)
 
-        # 2. PERFORM BULK UPSERTS (Outside the while loop)
+        # 2. PERFORM FINAL UPDATE (Safe & Duplicate-Proof)
+        # We use .update() specifically on the ID we secured at the start.
+        # This CANNOT create a duplicate; it only modifies the existing record.
         if trade_updates:
-            # We use upsert on 'id' to ensure we only have one final record per alert
-            supabase.table("whale_alerts").upsert(trade_updates, on_conflict="id").execute()
+            final_payload = trade_updates[-1]
+            supabase.table("whale_alerts").update(final_payload).eq("id", trade['id']).execute()
+
+            if 'close_date' in trade and 'close_date' not in final_payload:
+                final_payload['close_date'] = trade['close_date']
+
+            supabase.table("whale_alerts").update(final_payload).eq("id", trade['id']).execute()
 
         if performance_history:
             # This records every single day of the backfill into the performance table
             supabase.table("whale_performance").upsert(performance_history, on_conflict="alert_id, date").execute()
 
-        print(f"   ✅ Bulk sync complete for {trade['ticker']}")
+        logger.info(f"   ✅ Bulk sync complete for {trade['ticker']}")
         return True
 
 

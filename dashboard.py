@@ -234,7 +234,7 @@ def render_equity_chart(df):
 
     fig.update_layout(title="Equity Curves", template="plotly_dark", hovermode="x unified",
                       margin=dict(t=30, b=0, l=0, r=0))
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, key="equity_chart", width="stretch")
 
 
 @st.fragment
@@ -365,39 +365,7 @@ def main():
     # Or we could calculate it from raw_df to always show ALL active. 
     # Given the prompt "Time-based filters to view performance", consistent filtering is usually better.
     
-    active_now = sim_df[sim_df['status'].isin(['OPEN', 'SCALED'])]
-    
-    with st.sidebar:
-        st.divider()
-        with st.expander("🟢 Active Pulse", expanded=True):
-            if active_now.empty:
-                st.caption("No active positions in this period.")
-            else:
-                # Count 'Winning' as currently green PnL
-                # Note: SCALED trades are always 'Winning' partially, but let's check their current total PnL
-                # Actually, SCALED trades have Realized profit, but the moonshot part might be red?
-                # Usually SCALED means we locked profit. Let's count SCALED as Winners.
-                # For OPEN, check sim_pnl > 0.
-                
-                wins = active_now[
-                    (active_now['status'] == 'SCALED') | 
-                    ((active_now['status'] == 'OPEN') & (active_now['sim_pnl'] > 0))
-                ]
-                losses = active_now[
-                    (active_now['status'] == 'OPEN') & (active_now['sim_pnl'] <= 0)
-                ]
-                
-                cnt_win = len(wins)
-                cnt_loss = len(losses)
-                total_active = len(active_now)
-                
-                win_pct = (cnt_win / total_active) if total_active > 0 else 0
-                
-                k1, k2 = st.columns(2)
-                k1.metric("Green", cnt_win)
-                k2.metric("Red", cnt_loss)
-                
-                st.progress(win_pct, text=f"{win_pct:.0%} Green")
+    # REMOVED SIDEBAR ACTIVE PULSE AS PER USER REQUEST
 
     render_todays_activity(sim_df)
 
@@ -456,6 +424,30 @@ def main():
 
         st.divider()
 
+        # --- THIS MONTH'S PERFORMANCE ---
+        st.subheader("📅 This Month's Performance")
+        
+        # Filter for current month based on Entry Date (discord_timestamp)
+        current_month_str = datetime.now().strftime('%Y-%m')
+        this_month_df = sim_df[sim_df['Month'] == current_month_str]
+        
+        tm1, tm2, tm3 = st.columns(3)
+        
+        if this_month_df.empty:
+            tm1.metric("Realized (This Month)", "$0")
+            tm2.metric("Unrealized (This Month)", "$0")
+            tm3.metric("Best Winner %", "0%")
+        else:
+            tm_realized = this_month_df['realized_pnl_dollars'].sum()
+            tm_unrealized = this_month_df['unrealized_pnl_dollars'].sum()
+            tm_best_win = this_month_df['peak_ret_pct'].max()
+            
+            tm1.metric("Realized (This Month)", f"${tm_realized:,.0f}", help="Realized PnL for trades entered this month.")
+            tm2.metric("Unrealized (This Month)", f"${tm_unrealized:,.0f}", help="Unrealized PnL for trades entered this month.")
+            tm3.metric("Best Winner %", f"{tm_best_win:.1f}%", help="Highest peak return % for a trade entered this month.")
+
+        st.divider()
+
         # 3. Returns Comparison (Strategy vs Baseline vs Max)
         st.subheader("Returns Comparison")
         r1, r2, r3 = st.columns(3)
@@ -497,7 +489,7 @@ def main():
                 title="Trade Distribution"
             )
             fig_pie.update_layout(showlegend=True, margin=dict(t=40, b=0, l=0, r=0), height=300)
-            st.plotly_chart(fig_pie, use_container_width=True)
+            st.plotly_chart(fig_pie, key="pie_chart", width="stretch")
 
         with col_stats:
             st.markdown("### Strategy Deep Dive")
@@ -518,14 +510,23 @@ def main():
 
             expired_worthless = sim_df[sim_df['status'] == 'EXPIRED']
             expired_pct = (len(expired_worthless) / total_trades * 100) if total_trades > 0 else 0
-
+            
+            # --- OPEN POSITIONS BREAKDOWN ---
+            # Breakdown open positions into Green (Winning) and Red (Losing)
+            open_wins = open_df[open_df['sim_pnl'] > 0]
+            open_losses = open_df[open_df['sim_pnl'] <= 0]
+            
+            open_green_count = len(open_wins)
+            open_red_count = len(open_losses)
+            
             open_pct = (len(open_df) / total_trades * 100) if total_trades > 0 else 0
 
             # Row 1: Totals
             s1.metric("Total Wins", f"{len(wins_df)}", f"{wr:.1f}%")
             s2.metric("Total Losses", f"{len(losses_df)}", f"{(len(losses_df) / total_trades * 100):.1f}%",
                       delta_color="inverse")
-            s3.metric("Open Positions", f"{len(open_df)}", f"{open_pct:.1f}%")
+            s3.metric("Open Positions", f"{len(open_df)}", f"{open_pct:.1f}%", 
+                      help=f"Breakdown: {open_green_count} Green 🟢 / {open_red_count} Red 🔴")
 
             # Row 2: Details
             s4.metric("100%+ Runners", f"{len(runners)}", f"{runner_pct:.1f}% Home Run Rate")
