@@ -24459,3 +24459,1051 @@ Done processing messages.
 2026-01-17 06:01:03 - daily_tracker - INFO     -    ✅ Batch 2026-01-15 Complete. Updated 63 trades.
 2026-01-17 06:01:03 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-15
 2026-01-17 06:01:03 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-18 06:00:17 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-18 06:00:17 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-16 to 2026-01-16
+2026-01-18 06:00:17 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-01-16
+2026-01-18 06:00:20 - daily_tracker - INFO     - 🏁 HYFT (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:20 - daily_tracker - INFO     -       👉 HYFT updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:21 - daily_tracker - INFO     - 🏁 PLRX (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:21 - daily_tracker - INFO     -       👉 PLRX updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:24 - daily_tracker - INFO     - 🏁 ASST (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:24 - daily_tracker - INFO     -       👉 ASST updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:25 - daily_tracker - INFO     - 🏁 ASST (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:25 - daily_tracker - INFO     -       👉 ASST updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:28 - daily_tracker - INFO     - 🏁 RR (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:28 - daily_tracker - INFO     -       👉 RR updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:29 - daily_tracker - INFO     - 🏁 RR (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:29 - daily_tracker - INFO     -       👉 RR updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:31 - daily_tracker - INFO     -       👉 ASST updated: OPEN -> EXPIRED
+2026-01-18 06:00:31 - daily_tracker - INFO     - 🏁 JBLU (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:32 - daily_tracker - INFO     -       👉 JBLU updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:33 - daily_tracker - INFO     - 🏁 GOSS (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:33 - daily_tracker - INFO     -       👉 GOSS updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:35 - daily_tracker - INFO     - 🏁 PLBY (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:35 - daily_tracker - INFO     -       👉 PLBY updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-01-16. Skipping.
+2026-01-18 06:00:36 - daily_tracker - INFO     - 🏁 NXDR (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:37 - daily_tracker - INFO     -       👉 NXDR updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:38 - daily_tracker - INFO     - 🏁 ALLT (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:38 - daily_tracker - INFO     -       👉 ALLT updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:39 - daily_tracker - INFO     -       👉 XRX updated: OPEN -> EXPIRED
+2026-01-18 06:00:41 - daily_tracker - INFO     - 🏁 HTZ (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:41 - daily_tracker - INFO     -       👉 HTZ updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:43 - daily_tracker - INFO     - 🏁 TMQ (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:43 - daily_tracker - INFO     -       👉 TMQ updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:44 - daily_tracker - INFO     -       👉 SAVA updated: OPEN -> EXPIRED
+2026-01-18 06:00:45 - daily_tracker - INFO     - 🏁 SPCE (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:45 - daily_tracker - INFO     -       👉 SPCE updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:45 - daily_tracker - INFO     - 🏁 ABR (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:45 - daily_tracker - INFO     -       👉 ABR updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:50 - daily_tracker - INFO     -       👉 CYPH updated: OPEN -> EXPIRED
+2026-01-18 06:00:52 - daily_tracker - INFO     - 🏁 PLCE (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:52 - daily_tracker - INFO     -       👉 PLCE updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:54 - daily_tracker - INFO     - 🏁 NVAX (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:55 - daily_tracker - INFO     -       👉 NVAX updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:55 - daily_tracker - INFO     -       👉 SABR updated: OPEN -> EXPIRED
+2026-01-18 06:00:57 - daily_tracker - INFO     - 🏁 ABTC (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:57 - daily_tracker - INFO     -       👉 ABTC updated: SCALED -> SCALED_EXP
+2026-01-18 06:00:58 - daily_tracker - INFO     - 🏁 ABTC (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:00:59 - daily_tracker - INFO     -       👉 ABTC updated: SCALED -> SCALED_EXP
+2026-01-18 06:01:02 - daily_tracker - INFO     - 🏁 DHX (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-18 06:01:02 - daily_tracker - INFO     -       👉 DHX updated: SCALED -> SCALED_EXP
+2026-01-18 06:01:03 - daily_tracker - INFO     -    ✅ Batch 2026-01-16 Complete. Updated 63 trades.
+2026-01-18 06:01:03 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-16
+2026-01-18 06:01:03 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-19 06:00:20 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-19 06:00:20 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-17 to 2026-01-17
+2026-01-19 06:00:20 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-17
+2026-01-19 06:00:20 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-20 06:00:18 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-20 06:00:19 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-17 to 2026-01-18
+2026-01-20 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-17
+2026-01-20 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-18
+2026-01-20 06:00:19 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-21 06:00:21 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-21 06:00:21 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-17 to 2026-01-19
+2026-01-21 06:00:21 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-17
+2026-01-21 06:00:21 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-18
+2026-01-21 06:00:21 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-01-19
+2026-01-21 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for BZAI on 2026-01-19. Skipping.
+2026-01-21 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN on 2026-01-19. Skipping.
+2026-01-21 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-01-19. Skipping.
+2026-01-21 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for NRDY on 2026-01-19. Skipping.
+2026-01-21 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for EU on 2026-01-19. Skipping.
+2026-01-21 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-01-19. Skipping.
+2026-01-21 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for CGC on 2026-01-19. Skipping.
+2026-01-21 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for SABR on 2026-01-19. Skipping.
+2026-01-21 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for MOMO on 2026-01-19. Skipping.
+2026-01-21 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-01-19. Skipping.
+2026-01-21 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for OGN on 2026-01-19. Skipping.
+2026-01-21 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for SNDL on 2026-01-19. Skipping.
+2026-01-21 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for BLNK on 2026-01-19. Skipping.
+2026-01-21 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-01-19. Skipping.
+2026-01-21 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-01-19. Skipping.
+2026-01-21 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-01-19. Skipping.
+2026-01-21 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for MAPS on 2026-01-19. Skipping.
+2026-01-21 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for RC on 2026-01-19. Skipping.
+2026-01-21 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-01-19. Skipping.
+2026-01-21 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for RR on 2026-01-19. Skipping.
+2026-01-21 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for GPRO on 2026-01-19. Skipping.
+2026-01-21 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for LAC on 2026-01-19. Skipping.
+2026-01-21 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-01-19. Skipping.
+2026-01-21 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for ALTS on 2026-01-19. Skipping.
+2026-01-21 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for INVZ on 2026-01-19. Skipping.
+2026-01-21 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for BYND on 2026-01-19. Skipping.
+2026-01-21 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for FLUX on 2026-01-19. Skipping.
+2026-01-21 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for CAN on 2026-01-19. Skipping.
+2026-01-21 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for UAA on 2026-01-19. Skipping.
+2026-01-21 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for SABR on 2026-01-19. Skipping.
+2026-01-21 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for SGMO on 2026-01-19. Skipping.
+2026-01-21 06:00:38 - daily_tracker - WARNING  -       ⚠️ No data found for DGXX on 2026-01-19. Skipping.
+2026-01-21 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for AMC on 2026-01-19. Skipping.
+2026-01-21 06:00:39 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE on 2026-01-19. Skipping.
+2026-01-21 06:00:40 - daily_tracker - WARNING  -       ⚠️ No data found for UP on 2026-01-19. Skipping.
+2026-01-21 06:00:40 - daily_tracker - WARNING  -       ⚠️ No data found for UWMC on 2026-01-19. Skipping.
+2026-01-21 06:00:41 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU on 2026-01-19. Skipping.
+2026-01-21 06:00:41 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU on 2026-01-19. Skipping.
+2026-01-21 06:00:42 - daily_tracker - WARNING  -       ⚠️ No data found for ALTO on 2026-01-19. Skipping.
+2026-01-21 06:00:42 - daily_tracker - INFO     -    ✅ Batch 2026-01-19 Complete. Updated 0 trades.
+2026-01-21 06:00:42 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-19
+2026-01-21 06:00:42 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-22 06:00:22 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-22 06:00:22 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-20 to 2026-01-20
+2026-01-22 06:00:22 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-01-20
+2026-01-22 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-01-20. Skipping.
+2026-01-22 06:00:54 - daily_tracker - INFO     -    ✅ Batch 2026-01-20 Complete. Updated 38 trades.
+2026-01-22 06:00:54 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-20
+2026-01-22 06:00:54 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-23 06:00:17 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-23 06:00:17 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-21 to 2026-01-21
+2026-01-23 06:00:17 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-01-21
+2026-01-23 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-01-21. Skipping.
+2026-01-23 06:00:44 - daily_tracker - INFO     -    ✅ Batch 2026-01-21 Complete. Updated 38 trades.
+2026-01-23 06:00:44 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-21
+2026-01-23 06:00:44 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-24 06:00:19 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-24 06:00:19 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-22 to 2026-01-22
+2026-01-24 06:00:19 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-01-22
+2026-01-24 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-01-22. Skipping.
+2026-01-24 06:00:45 - daily_tracker - INFO     -    ✅ Batch 2026-01-22 Complete. Updated 38 trades.
+2026-01-24 06:00:45 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-22
+2026-01-24 06:00:45 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-25 06:00:18 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-25 06:00:18 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-23 to 2026-01-23
+2026-01-25 06:00:18 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-01-23
+2026-01-25 06:00:26 - daily_tracker - INFO     - 🏁 CGC (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-25 06:00:26 - daily_tracker - INFO     -       👉 CGC updated: SCALED -> SCALED_EXP
+2026-01-25 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-01-23. Skipping.
+2026-01-25 06:00:32 - daily_tracker - INFO     - 🏁 LAC (SCALED) has expired. Moving to SCALED_EXP.
+2026-01-25 06:00:32 - daily_tracker - INFO     -       👉 LAC updated: SCALED -> SCALED_EXP
+2026-01-25 06:00:45 - daily_tracker - INFO     -    ✅ Batch 2026-01-23 Complete. Updated 38 trades.
+2026-01-25 06:00:45 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-23
+2026-01-25 06:00:45 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-26 06:00:21 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-26 06:00:21 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-24 to 2026-01-24
+2026-01-26 06:00:21 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-24
+2026-01-26 06:00:21 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-27 06:00:17 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-27 06:00:17 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-24 to 2026-01-25
+2026-01-27 06:00:17 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-24
+2026-01-27 06:00:17 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-25
+2026-01-27 06:00:17 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-28 06:00:19 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-28 06:00:19 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-24 to 2026-01-26
+2026-01-28 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-24
+2026-01-28 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-25
+2026-01-28 06:00:19 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-01-26
+2026-01-28 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-01-26. Skipping.
+2026-01-28 06:00:45 - daily_tracker - INFO     -    ✅ Batch 2026-01-26 Complete. Updated 36 trades.
+2026-01-28 06:00:45 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-26
+2026-01-28 06:00:45 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-29 06:00:19 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-29 06:00:19 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-27 to 2026-01-27
+2026-01-29 06:00:19 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-01-27
+2026-01-29 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-01-27. Skipping.
+2026-01-29 06:00:46 - daily_tracker - INFO     -    ✅ Batch 2026-01-27 Complete. Updated 36 trades.
+2026-01-29 06:00:46 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-27
+2026-01-29 06:00:46 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-30 06:00:18 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-30 06:00:18 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-28 to 2026-01-28
+2026-01-30 06:00:18 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-01-28
+2026-01-30 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-01-28. Skipping.
+2026-01-30 06:00:44 - daily_tracker - INFO     -    ✅ Batch 2026-01-28 Complete. Updated 36 trades.
+2026-01-30 06:00:44 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-28
+2026-01-30 06:00:44 - daily_tracker - INFO     - 🏁 All caught up!
+2026-01-31 06:00:20 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-01-31 06:00:20 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-29 to 2026-01-29
+2026-01-31 06:00:20 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-01-29
+2026-01-31 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-01-29. Skipping.
+2026-01-31 06:00:47 - daily_tracker - INFO     -    ✅ Batch 2026-01-29 Complete. Updated 36 trades.
+2026-01-31 06:00:47 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-29
+2026-01-31 06:00:47 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-01 02:57:36 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2026-02-01 02:57:36 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2026-02-01 06:00:25 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-01 06:00:25 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-30 to 2026-01-30
+2026-02-01 06:00:25 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-01-30
+2026-02-01 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-01-30. Skipping.
+2026-02-01 06:00:38 - daily_tracker - INFO     - 🏁 RR (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-01 06:00:39 - daily_tracker - INFO     -       👉 RR updated: SCALED -> SCALED_EXP
+2026-02-01 06:00:42 - daily_tracker - INFO     - 🏁 BYND (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-01 06:00:42 - daily_tracker - INFO     -       👉 BYND updated: SCALED -> SCALED_EXP
+2026-02-01 06:00:44 - daily_tracker - INFO     - 🏁 JBLU (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-01 06:00:44 - daily_tracker - INFO     -       👉 JBLU updated: SCALED -> SCALED_EXP
+2026-02-01 06:00:51 - daily_tracker - INFO     -    ✅ Batch 2026-01-30 Complete. Updated 36 trades.
+2026-02-01 06:00:51 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-01-30
+2026-02-01 06:00:51 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-02 05:02:27 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2026-02-02 05:02:27 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2026-02-02 06:00:20 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-02 06:00:20 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-31 to 2026-01-31
+2026-02-02 06:00:20 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-31
+2026-02-02 06:00:20 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-03 06:00:20 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-03 06:00:21 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-31 to 2026-02-01
+2026-02-03 06:00:21 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-31
+2026-02-03 06:00:21 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-01
+2026-02-03 06:00:21 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-04 06:00:19 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-04 06:00:19 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-01-31 to 2026-02-02
+2026-02-04 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-01-31
+2026-02-04 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-01
+2026-02-04 06:00:19 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-02
+2026-02-04 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-02. Skipping.
+2026-02-04 06:00:44 - daily_tracker - INFO     -    ✅ Batch 2026-02-02 Complete. Updated 33 trades.
+2026-02-04 06:00:44 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-02
+2026-02-04 06:00:44 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-05 06:00:20 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-05 06:00:20 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-03 to 2026-02-03
+2026-02-05 06:00:20 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-03
+2026-02-05 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-03. Skipping.
+2026-02-05 06:00:44 - daily_tracker - INFO     -    ✅ Batch 2026-02-03 Complete. Updated 33 trades.
+2026-02-05 06:00:44 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-03
+2026-02-05 06:00:44 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-06 06:00:21 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-06 06:00:21 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-04 to 2026-02-04
+2026-02-06 06:00:21 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-04
+2026-02-06 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-04. Skipping.
+2026-02-06 06:00:47 - daily_tracker - INFO     -    ✅ Batch 2026-02-04 Complete. Updated 33 trades.
+2026-02-06 06:00:47 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-04
+2026-02-06 06:00:47 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-07 06:00:16 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-07 06:00:16 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-05 to 2026-02-05
+2026-02-07 06:00:16 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-05
+2026-02-07 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-05. Skipping.
+2026-02-07 06:00:40 - daily_tracker - INFO     -    ✅ Batch 2026-02-05 Complete. Updated 33 trades.
+2026-02-07 06:00:40 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-05
+2026-02-07 06:00:40 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-08 06:00:19 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-08 06:00:19 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-06 to 2026-02-06
+2026-02-08 06:00:19 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-06
+2026-02-08 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-06. Skipping.
+2026-02-08 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-06. Skipping.
+2026-02-08 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-06. Skipping.
+2026-02-08 06:00:31 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-06. Skipping.
+2026-02-08 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-06. Skipping.
+2026-02-08 06:00:42 - daily_tracker - INFO     -    ✅ Batch 2026-02-06 Complete. Updated 29 trades.
+2026-02-08 06:00:42 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-06
+2026-02-08 06:00:42 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-09 05:02:34 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2026-02-09 05:02:34 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2026-02-09 06:00:18 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-09 06:00:19 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-07 to 2026-02-07
+2026-02-09 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-07
+2026-02-09 06:00:19 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-10 06:00:18 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-10 06:00:18 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-07 to 2026-02-08
+2026-02-10 06:00:18 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-07
+2026-02-10 06:00:18 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-08
+2026-02-10 06:00:18 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-15 21:31:52 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2026-02-15 21:31:52 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2026-02-16 05:02:28 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2026-02-16 05:02:28 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2026-02-16 06:00:22 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-16 06:00:23 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-07 to 2026-02-14
+2026-02-16 06:00:23 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-07
+2026-02-16 06:00:23 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-08
+2026-02-16 06:00:23 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-09
+2026-02-16 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-09. Skipping.
+2026-02-16 06:00:30 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-09. Skipping.
+2026-02-16 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-09. Skipping.
+2026-02-16 06:00:36 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-09. Skipping.
+2026-02-16 06:00:37 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-09. Skipping.
+2026-02-16 06:00:47 - daily_tracker - INFO     -    ✅ Batch 2026-02-09 Complete. Updated 29 trades.
+2026-02-16 06:00:47 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-09
+2026-02-16 06:00:47 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-10
+2026-02-16 06:00:51 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-10. Skipping.
+2026-02-16 06:00:57 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-10. Skipping.
+2026-02-16 06:00:59 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-10. Skipping.
+2026-02-16 06:01:01 - daily_tracker - INFO     -       👉 ASST updated: OPEN -> STOP_OI
+2026-02-16 06:01:10 - daily_tracker - INFO     -    ✅ Batch 2026-02-10 Complete. Updated 31 trades.
+2026-02-16 06:01:10 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-10
+2026-02-16 06:01:10 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-11
+2026-02-16 06:01:14 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-11. Skipping.
+2026-02-16 06:01:20 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-11. Skipping.
+2026-02-16 06:01:22 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-11. Skipping.
+2026-02-16 06:01:32 - daily_tracker - INFO     -    ✅ Batch 2026-02-11 Complete. Updated 30 trades.
+2026-02-16 06:01:32 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-11
+2026-02-16 06:01:32 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-12
+2026-02-16 06:01:36 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-12. Skipping.
+2026-02-16 06:01:42 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-12. Skipping.
+2026-02-16 06:01:44 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-12. Skipping.
+2026-02-16 06:01:54 - daily_tracker - INFO     -    ✅ Batch 2026-02-12 Complete. Updated 30 trades.
+2026-02-16 06:01:54 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-12
+2026-02-16 06:01:54 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-13
+2026-02-16 06:01:58 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-13. Skipping.
+2026-02-16 06:02:04 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-13. Skipping.
+2026-02-16 06:02:06 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-13. Skipping.
+2026-02-16 06:02:18 - daily_tracker - INFO     -    ✅ Batch 2026-02-13 Complete. Updated 30 trades.
+2026-02-16 06:02:18 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-13
+2026-02-16 06:02:18 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-14
+2026-02-16 06:02:18 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-16 19:37:00 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2026-02-16 19:37:00 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2026-02-17 06:00:21 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-17 06:00:21 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-14 to 2026-02-15
+2026-02-17 06:00:21 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-14
+2026-02-17 06:00:21 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-15
+2026-02-17 06:00:21 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-18 06:00:21 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-18 06:00:21 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-14 to 2026-02-16
+2026-02-18 06:00:21 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-14
+2026-02-18 06:00:21 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-15
+2026-02-18 06:00:21 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-16
+2026-02-18 06:01:01 - daily_tracker - ERROR    - OI Fetch Error for EU: timed out
+2026-02-18 06:01:01 - daily_tracker - WARNING  -       ⚠️ No data found for EU on 2026-02-16. Skipping.
+2026-02-18 06:01:42 - daily_tracker - ERROR    - OI Fetch Error for BZAI: timed out
+2026-02-18 06:01:42 - daily_tracker - WARNING  -       ⚠️ No data found for BZAI on 2026-02-16. Skipping.
+2026-02-18 06:02:22 - daily_tracker - ERROR    - OI Fetch Error for KOPN: timed out
+2026-02-18 06:02:22 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN on 2026-02-16. Skipping.
+2026-02-18 06:03:02 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-18 06:03:02 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-16. Skipping.
+2026-02-18 06:03:42 - daily_tracker - ERROR    - OI Fetch Error for NRDY: timed out
+2026-02-18 06:03:42 - daily_tracker - WARNING  -       ⚠️ No data found for NRDY on 2026-02-16. Skipping.
+2026-02-18 06:04:22 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-18 06:04:22 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-16. Skipping.
+2026-02-18 06:05:02 - daily_tracker - ERROR    - OI Fetch Error for SABR: timed out
+2026-02-18 06:05:02 - daily_tracker - WARNING  -       ⚠️ No data found for SABR on 2026-02-16. Skipping.
+2026-02-18 06:05:42 - daily_tracker - ERROR    - OI Fetch Error for MOMO: timed out
+2026-02-18 06:05:42 - daily_tracker - WARNING  -       ⚠️ No data found for MOMO on 2026-02-16. Skipping.
+2026-02-18 06:06:22 - daily_tracker - ERROR    - OI Fetch Error for OGN: timed out
+2026-02-18 06:06:22 - daily_tracker - WARNING  -       ⚠️ No data found for OGN on 2026-02-16. Skipping.
+2026-02-18 06:07:02 - daily_tracker - ERROR    - OI Fetch Error for SNDL: timed out
+2026-02-18 06:07:02 - daily_tracker - WARNING  -       ⚠️ No data found for SNDL on 2026-02-16. Skipping.
+2026-02-18 06:07:43 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-18 06:07:43 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-16. Skipping.
+2026-02-18 06:08:23 - daily_tracker - ERROR    - OI Fetch Error for BLNK: timed out
+2026-02-18 06:08:23 - daily_tracker - WARNING  -       ⚠️ No data found for BLNK on 2026-02-16. Skipping.
+2026-02-18 06:09:03 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-18 06:09:03 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-16. Skipping.
+2026-02-18 06:09:43 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-18 06:09:43 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-16. Skipping.
+2026-02-18 06:10:23 - daily_tracker - ERROR    - OI Fetch Error for TLRY: timed out
+2026-02-18 06:10:23 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-16. Skipping.
+2026-02-18 06:11:03 - daily_tracker - ERROR    - OI Fetch Error for MAPS: timed out
+2026-02-18 06:11:03 - daily_tracker - WARNING  -       ⚠️ No data found for MAPS on 2026-02-16. Skipping.
+2026-02-18 06:11:43 - daily_tracker - ERROR    - OI Fetch Error for RC: timed out
+2026-02-18 06:11:43 - daily_tracker - WARNING  -       ⚠️ No data found for RC on 2026-02-16. Skipping.
+2026-02-18 06:12:23 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-18 06:12:23 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-16. Skipping.
+2026-02-18 06:13:03 - daily_tracker - ERROR    - OI Fetch Error for GPRO: timed out
+2026-02-18 06:13:03 - daily_tracker - WARNING  -       ⚠️ No data found for GPRO on 2026-02-16. Skipping.
+2026-02-18 06:13:43 - daily_tracker - ERROR    - OI Fetch Error for ALTS: timed out
+2026-02-18 06:13:43 - daily_tracker - WARNING  -       ⚠️ No data found for ALTS on 2026-02-16. Skipping.
+2026-02-18 06:14:24 - daily_tracker - ERROR    - OI Fetch Error for INVZ: timed out
+2026-02-18 06:14:24 - daily_tracker - WARNING  -       ⚠️ No data found for INVZ on 2026-02-16. Skipping.
+2026-02-18 06:15:04 - daily_tracker - ERROR    - OI Fetch Error for UWMC: timed out
+2026-02-18 06:15:04 - daily_tracker - WARNING  -       ⚠️ No data found for UWMC on 2026-02-16. Skipping.
+2026-02-18 06:15:44 - daily_tracker - ERROR    - OI Fetch Error for JBLU: timed out
+2026-02-18 06:15:44 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU on 2026-02-16. Skipping.
+2026-02-18 06:16:24 - daily_tracker - ERROR    - OI Fetch Error for ALTO: timed out
+2026-02-18 06:16:24 - daily_tracker - WARNING  -       ⚠️ No data found for ALTO on 2026-02-16. Skipping.
+2026-02-18 06:17:04 - daily_tracker - ERROR    - OI Fetch Error for FLUX: timed out
+2026-02-18 06:17:04 - daily_tracker - WARNING  -       ⚠️ No data found for FLUX on 2026-02-16. Skipping.
+2026-02-18 06:17:44 - daily_tracker - ERROR    - OI Fetch Error for CAN: timed out
+2026-02-18 06:17:44 - daily_tracker - WARNING  -       ⚠️ No data found for CAN on 2026-02-16. Skipping.
+2026-02-18 06:18:24 - daily_tracker - ERROR    - OI Fetch Error for UAA: timed out
+2026-02-18 06:18:24 - daily_tracker - WARNING  -       ⚠️ No data found for UAA on 2026-02-16. Skipping.
+2026-02-18 06:19:04 - daily_tracker - ERROR    - OI Fetch Error for SABR: timed out
+2026-02-18 06:19:04 - daily_tracker - WARNING  -       ⚠️ No data found for SABR on 2026-02-16. Skipping.
+2026-02-18 06:19:44 - daily_tracker - ERROR    - OI Fetch Error for SGMO: timed out
+2026-02-18 06:19:44 - daily_tracker - WARNING  -       ⚠️ No data found for SGMO on 2026-02-16. Skipping.
+2026-02-18 06:20:25 - daily_tracker - ERROR    - OI Fetch Error for ARBE: timed out
+2026-02-18 06:20:25 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE on 2026-02-16. Skipping.
+2026-02-18 06:21:05 - daily_tracker - ERROR    - OI Fetch Error for UP: timed out
+2026-02-18 06:21:05 - daily_tracker - WARNING  -       ⚠️ No data found for UP on 2026-02-16. Skipping.
+2026-02-18 06:21:45 - daily_tracker - ERROR    - OI Fetch Error for DGXX: timed out
+2026-02-18 06:21:45 - daily_tracker - WARNING  -       ⚠️ No data found for DGXX on 2026-02-16. Skipping.
+2026-02-18 06:22:25 - daily_tracker - ERROR    - OI Fetch Error for AMC: timed out
+2026-02-18 06:22:25 - daily_tracker - WARNING  -       ⚠️ No data found for AMC on 2026-02-16. Skipping.
+2026-02-18 06:22:25 - daily_tracker - INFO     -    ✅ Batch 2026-02-16 Complete. Updated 0 trades.
+2026-02-18 06:22:25 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-16
+2026-02-18 06:22:25 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-19 06:00:21 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-19 06:00:21 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-17 to 2026-02-17
+2026-02-19 06:00:21 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-17
+2026-02-19 06:01:02 - daily_tracker - ERROR    - OI Fetch Error for EU: timed out
+2026-02-19 06:01:02 - daily_tracker - WARNING  -       ⚠️ No data found for EU on 2026-02-17. Skipping.
+2026-02-19 06:01:42 - daily_tracker - ERROR    - OI Fetch Error for BZAI: timed out
+2026-02-19 06:01:42 - daily_tracker - WARNING  -       ⚠️ No data found for BZAI on 2026-02-17. Skipping.
+2026-02-19 06:02:22 - daily_tracker - ERROR    - OI Fetch Error for KOPN: timed out
+2026-02-19 06:02:22 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN on 2026-02-17. Skipping.
+2026-02-19 06:03:02 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-19 06:03:02 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-17. Skipping.
+2026-02-19 06:03:42 - daily_tracker - ERROR    - OI Fetch Error for NRDY: timed out
+2026-02-19 06:03:42 - daily_tracker - WARNING  -       ⚠️ No data found for NRDY on 2026-02-17. Skipping.
+2026-02-19 06:04:22 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-19 06:04:22 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-17. Skipping.
+2026-02-19 06:05:03 - daily_tracker - ERROR    - OI Fetch Error for SABR: timed out
+2026-02-19 06:05:03 - daily_tracker - WARNING  -       ⚠️ No data found for SABR on 2026-02-17. Skipping.
+2026-02-19 06:05:43 - daily_tracker - ERROR    - OI Fetch Error for MOMO: timed out
+2026-02-19 06:05:43 - daily_tracker - WARNING  -       ⚠️ No data found for MOMO on 2026-02-17. Skipping.
+2026-02-19 06:06:23 - daily_tracker - ERROR    - OI Fetch Error for OGN: timed out
+2026-02-19 06:06:23 - daily_tracker - WARNING  -       ⚠️ No data found for OGN on 2026-02-17. Skipping.
+2026-02-19 06:07:03 - daily_tracker - ERROR    - OI Fetch Error for SNDL: timed out
+2026-02-19 06:07:03 - daily_tracker - WARNING  -       ⚠️ No data found for SNDL on 2026-02-17. Skipping.
+2026-02-19 06:07:43 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-19 06:07:43 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-17. Skipping.
+2026-02-19 06:08:23 - daily_tracker - ERROR    - OI Fetch Error for BLNK: timed out
+2026-02-19 06:08:23 - daily_tracker - WARNING  -       ⚠️ No data found for BLNK on 2026-02-17. Skipping.
+2026-02-19 06:09:03 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-19 06:09:03 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-17. Skipping.
+2026-02-19 06:09:43 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-19 06:09:43 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-17. Skipping.
+2026-02-19 06:10:23 - daily_tracker - ERROR    - OI Fetch Error for TLRY: timed out
+2026-02-19 06:10:23 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-17. Skipping.
+2026-02-19 06:11:03 - daily_tracker - ERROR    - OI Fetch Error for MAPS: timed out
+2026-02-19 06:11:03 - daily_tracker - WARNING  -       ⚠️ No data found for MAPS on 2026-02-17. Skipping.
+2026-02-19 06:11:44 - daily_tracker - ERROR    - OI Fetch Error for RC: timed out
+2026-02-19 06:11:44 - daily_tracker - WARNING  -       ⚠️ No data found for RC on 2026-02-17. Skipping.
+2026-02-19 06:12:24 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-19 06:12:24 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-17. Skipping.
+2026-02-19 06:13:04 - daily_tracker - ERROR    - OI Fetch Error for GPRO: timed out
+2026-02-19 06:13:04 - daily_tracker - WARNING  -       ⚠️ No data found for GPRO on 2026-02-17. Skipping.
+2026-02-19 06:13:44 - daily_tracker - ERROR    - OI Fetch Error for ALTS: timed out
+2026-02-19 06:13:44 - daily_tracker - WARNING  -       ⚠️ No data found for ALTS on 2026-02-17. Skipping.
+2026-02-19 06:14:24 - daily_tracker - ERROR    - OI Fetch Error for INVZ: timed out
+2026-02-19 06:14:24 - daily_tracker - WARNING  -       ⚠️ No data found for INVZ on 2026-02-17. Skipping.
+2026-02-19 06:15:04 - daily_tracker - ERROR    - OI Fetch Error for UWMC: timed out
+2026-02-19 06:15:04 - daily_tracker - WARNING  -       ⚠️ No data found for UWMC on 2026-02-17. Skipping.
+2026-02-19 06:15:44 - daily_tracker - ERROR    - OI Fetch Error for JBLU: timed out
+2026-02-19 06:15:44 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU on 2026-02-17. Skipping.
+2026-02-19 06:16:24 - daily_tracker - ERROR    - OI Fetch Error for ALTO: timed out
+2026-02-19 06:16:24 - daily_tracker - WARNING  -       ⚠️ No data found for ALTO on 2026-02-17. Skipping.
+2026-02-19 06:17:04 - daily_tracker - ERROR    - OI Fetch Error for FLUX: timed out
+2026-02-19 06:17:04 - daily_tracker - WARNING  -       ⚠️ No data found for FLUX on 2026-02-17. Skipping.
+2026-02-19 06:17:45 - daily_tracker - ERROR    - OI Fetch Error for CAN: timed out
+2026-02-19 06:17:45 - daily_tracker - WARNING  -       ⚠️ No data found for CAN on 2026-02-17. Skipping.
+2026-02-19 06:18:25 - daily_tracker - ERROR    - OI Fetch Error for UAA: timed out
+2026-02-19 06:18:25 - daily_tracker - WARNING  -       ⚠️ No data found for UAA on 2026-02-17. Skipping.
+2026-02-19 06:19:05 - daily_tracker - ERROR    - OI Fetch Error for SABR: timed out
+2026-02-19 06:19:05 - daily_tracker - WARNING  -       ⚠️ No data found for SABR on 2026-02-17. Skipping.
+2026-02-19 06:19:45 - daily_tracker - ERROR    - OI Fetch Error for SGMO: timed out
+2026-02-19 06:19:45 - daily_tracker - WARNING  -       ⚠️ No data found for SGMO on 2026-02-17. Skipping.
+2026-02-19 06:20:25 - daily_tracker - ERROR    - OI Fetch Error for ARBE: timed out
+2026-02-19 06:20:25 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE on 2026-02-17. Skipping.
+2026-02-19 06:21:05 - daily_tracker - ERROR    - OI Fetch Error for UP: timed out
+2026-02-19 06:21:05 - daily_tracker - WARNING  -       ⚠️ No data found for UP on 2026-02-17. Skipping.
+2026-02-19 06:21:45 - daily_tracker - ERROR    - OI Fetch Error for DGXX: timed out
+2026-02-19 06:21:45 - daily_tracker - WARNING  -       ⚠️ No data found for DGXX on 2026-02-17. Skipping.
+2026-02-19 06:22:25 - daily_tracker - ERROR    - OI Fetch Error for AMC: timed out
+2026-02-19 06:22:25 - daily_tracker - WARNING  -       ⚠️ No data found for AMC on 2026-02-17. Skipping.
+2026-02-19 06:22:25 - daily_tracker - INFO     -    ✅ Batch 2026-02-17 Complete. Updated 0 trades.
+2026-02-19 06:22:25 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-17
+2026-02-19 06:22:25 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-20 06:00:21 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-20 06:00:21 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-18 to 2026-02-18
+2026-02-20 06:00:21 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-18
+2026-02-20 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-18. Skipping.
+2026-02-20 06:00:41 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-18. Skipping.
+2026-02-20 06:00:50 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-18. Skipping.
+2026-02-20 06:01:15 - daily_tracker - INFO     -    ✅ Batch 2026-02-18 Complete. Updated 30 trades.
+2026-02-20 06:01:15 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-18
+2026-02-20 06:01:15 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-21 06:00:23 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-21 06:00:23 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-19 to 2026-02-19
+2026-02-21 06:00:23 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-19
+2026-02-21 06:01:03 - daily_tracker - ERROR    - OI Fetch Error for BZAI: timed out
+2026-02-21 06:01:03 - daily_tracker - WARNING  -       ⚠️ No data found for BZAI on 2026-02-19. Skipping.
+2026-02-21 06:01:43 - daily_tracker - ERROR    - OI Fetch Error for KOPN: timed out
+2026-02-21 06:01:43 - daily_tracker - WARNING  -       ⚠️ No data found for KOPN on 2026-02-19. Skipping.
+2026-02-21 06:02:23 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-21 06:02:23 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-19. Skipping.
+2026-02-21 06:03:03 - daily_tracker - ERROR    - OI Fetch Error for NRDY: timed out
+2026-02-21 06:03:03 - daily_tracker - WARNING  -       ⚠️ No data found for NRDY on 2026-02-19. Skipping.
+2026-02-21 06:03:44 - daily_tracker - ERROR    - OI Fetch Error for EU: timed out
+2026-02-21 06:03:44 - daily_tracker - WARNING  -       ⚠️ No data found for EU on 2026-02-19. Skipping.
+2026-02-21 06:04:24 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-21 06:04:24 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-19. Skipping.
+2026-02-21 06:05:04 - daily_tracker - ERROR    - OI Fetch Error for MOMO: timed out
+2026-02-21 06:05:04 - daily_tracker - WARNING  -       ⚠️ No data found for MOMO on 2026-02-19. Skipping.
+2026-02-21 06:05:44 - daily_tracker - ERROR    - OI Fetch Error for OGN: timed out
+2026-02-21 06:05:44 - daily_tracker - WARNING  -       ⚠️ No data found for OGN on 2026-02-19. Skipping.
+2026-02-21 06:06:24 - daily_tracker - ERROR    - OI Fetch Error for SNDL: timed out
+2026-02-21 06:06:24 - daily_tracker - WARNING  -       ⚠️ No data found for SNDL on 2026-02-19. Skipping.
+2026-02-21 06:07:04 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-21 06:07:04 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-19. Skipping.
+2026-02-21 06:07:44 - daily_tracker - ERROR    - OI Fetch Error for BLNK: timed out
+2026-02-21 06:07:44 - daily_tracker - WARNING  -       ⚠️ No data found for BLNK on 2026-02-19. Skipping.
+2026-02-21 06:08:24 - daily_tracker - ERROR    - OI Fetch Error for SABR: timed out
+2026-02-21 06:08:24 - daily_tracker - WARNING  -       ⚠️ No data found for SABR on 2026-02-19. Skipping.
+2026-02-21 06:09:04 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-21 06:09:04 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-19. Skipping.
+2026-02-21 06:09:45 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-21 06:09:45 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-19. Skipping.
+2026-02-21 06:10:25 - daily_tracker - ERROR    - OI Fetch Error for TLRY: timed out
+2026-02-21 06:10:25 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-19. Skipping.
+2026-02-21 06:11:05 - daily_tracker - ERROR    - OI Fetch Error for MAPS: timed out
+2026-02-21 06:11:05 - daily_tracker - WARNING  -       ⚠️ No data found for MAPS on 2026-02-19. Skipping.
+2026-02-21 06:11:45 - daily_tracker - ERROR    - OI Fetch Error for RC: timed out
+2026-02-21 06:11:45 - daily_tracker - WARNING  -       ⚠️ No data found for RC on 2026-02-19. Skipping.
+2026-02-21 06:12:25 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-21 06:12:25 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-19. Skipping.
+2026-02-21 06:13:05 - daily_tracker - ERROR    - OI Fetch Error for ALTS: timed out
+2026-02-21 06:13:05 - daily_tracker - WARNING  -       ⚠️ No data found for ALTS on 2026-02-19. Skipping.
+2026-02-21 06:13:45 - daily_tracker - ERROR    - OI Fetch Error for INVZ: timed out
+2026-02-21 06:13:45 - daily_tracker - WARNING  -       ⚠️ No data found for INVZ on 2026-02-19. Skipping.
+2026-02-21 06:14:25 - daily_tracker - ERROR    - OI Fetch Error for GPRO: timed out
+2026-02-21 06:14:25 - daily_tracker - WARNING  -       ⚠️ No data found for GPRO on 2026-02-19. Skipping.
+2026-02-21 06:15:05 - daily_tracker - ERROR    - OI Fetch Error for JBLU: timed out
+2026-02-21 06:15:05 - daily_tracker - WARNING  -       ⚠️ No data found for JBLU on 2026-02-19. Skipping.
+2026-02-21 06:15:46 - daily_tracker - ERROR    - OI Fetch Error for ALTO: timed out
+2026-02-21 06:15:46 - daily_tracker - WARNING  -       ⚠️ No data found for ALTO on 2026-02-19. Skipping.
+2026-02-21 06:16:26 - daily_tracker - ERROR    - OI Fetch Error for FLUX: timed out
+2026-02-21 06:16:26 - daily_tracker - WARNING  -       ⚠️ No data found for FLUX on 2026-02-19. Skipping.
+2026-02-21 06:17:06 - daily_tracker - ERROR    - OI Fetch Error for CAN: timed out
+2026-02-21 06:17:06 - daily_tracker - WARNING  -       ⚠️ No data found for CAN on 2026-02-19. Skipping.
+2026-02-21 06:17:46 - daily_tracker - ERROR    - OI Fetch Error for UAA: timed out
+2026-02-21 06:17:46 - daily_tracker - WARNING  -       ⚠️ No data found for UAA on 2026-02-19. Skipping.
+2026-02-21 06:18:26 - daily_tracker - ERROR    - OI Fetch Error for SABR: timed out
+2026-02-21 06:18:26 - daily_tracker - WARNING  -       ⚠️ No data found for SABR on 2026-02-19. Skipping.
+2026-02-21 06:19:06 - daily_tracker - ERROR    - OI Fetch Error for SGMO: timed out
+2026-02-21 06:19:06 - daily_tracker - WARNING  -       ⚠️ No data found for SGMO on 2026-02-19. Skipping.
+2026-02-21 06:19:46 - daily_tracker - ERROR    - OI Fetch Error for ARBE: timed out
+2026-02-21 06:19:46 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE on 2026-02-19. Skipping.
+2026-02-21 06:20:26 - daily_tracker - ERROR    - OI Fetch Error for UP: timed out
+2026-02-21 06:20:26 - daily_tracker - WARNING  -       ⚠️ No data found for UP on 2026-02-19. Skipping.
+2026-02-21 06:21:06 - daily_tracker - ERROR    - OI Fetch Error for UWMC: timed out
+2026-02-21 06:21:06 - daily_tracker - WARNING  -       ⚠️ No data found for UWMC on 2026-02-19. Skipping.
+2026-02-21 06:21:47 - daily_tracker - ERROR    - OI Fetch Error for DGXX: timed out
+2026-02-21 06:21:47 - daily_tracker - WARNING  -       ⚠️ No data found for DGXX on 2026-02-19. Skipping.
+2026-02-21 06:22:27 - daily_tracker - ERROR    - OI Fetch Error for AMC: timed out
+2026-02-21 06:22:27 - daily_tracker - WARNING  -       ⚠️ No data found for AMC on 2026-02-19. Skipping.
+2026-02-21 06:22:27 - daily_tracker - INFO     -    ✅ Batch 2026-02-19 Complete. Updated 0 trades.
+2026-02-21 06:22:27 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-19
+2026-02-21 06:22:27 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-22 06:00:17 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-22 06:00:18 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-20 to 2026-02-20
+2026-02-22 06:00:18 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-20
+2026-02-22 06:00:58 - daily_tracker - ERROR    - OI Fetch Error for BZAI: timed out
+2026-02-22 06:00:58 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: BZAI (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:00:58 - daily_tracker - INFO     -       👉 BZAI updated: OPEN -> EXPIRED
+2026-02-22 06:01:38 - daily_tracker - ERROR    - OI Fetch Error for KOPN: timed out
+2026-02-22 06:01:38 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: KOPN (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:01:38 - daily_tracker - INFO     - 🏁 KOPN (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:01:39 - daily_tracker - INFO     -       👉 KOPN updated: SCALED -> SCALED_EXP
+2026-02-22 06:02:19 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-22 06:02:19 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-20. Skipping.
+2026-02-22 06:02:59 - daily_tracker - ERROR    - OI Fetch Error for NRDY: timed out
+2026-02-22 06:02:59 - daily_tracker - WARNING  -       ⚠️ No data found for NRDY on 2026-02-20. Skipping.
+2026-02-22 06:03:39 - daily_tracker - ERROR    - OI Fetch Error for EU: timed out
+2026-02-22 06:03:39 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: EU (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:03:39 - daily_tracker - INFO     - 🏁 EU (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:03:39 - daily_tracker - INFO     -       👉 EU updated: SCALED -> SCALED_EXP
+2026-02-22 06:04:19 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-22 06:04:19 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-20. Skipping.
+2026-02-22 06:04:59 - daily_tracker - ERROR    - OI Fetch Error for MOMO: timed out
+2026-02-22 06:04:59 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: MOMO (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:04:59 - daily_tracker - INFO     - 🏁 MOMO (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:05:00 - daily_tracker - INFO     -       👉 MOMO updated: SCALED -> SCALED_EXP
+2026-02-22 06:05:40 - daily_tracker - ERROR    - OI Fetch Error for OGN: timed out
+2026-02-22 06:05:40 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: OGN (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:05:40 - daily_tracker - INFO     - 🏁 OGN (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:05:40 - daily_tracker - INFO     -       👉 OGN updated: SCALED -> SCALED_EXP
+2026-02-22 06:06:20 - daily_tracker - ERROR    - OI Fetch Error for SNDL: timed out
+2026-02-22 06:06:20 - daily_tracker - WARNING  -       ⚠️ No data found for SNDL on 2026-02-20. Skipping.
+2026-02-22 06:07:00 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-22 06:07:00 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: ASST (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:07:00 - daily_tracker - INFO     - 🏁 ASST (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:07:00 - daily_tracker - INFO     -       👉 ASST updated: SCALED -> SCALED_EXP
+2026-02-22 06:07:41 - daily_tracker - ERROR    - OI Fetch Error for BLNK: timed out
+2026-02-22 06:07:41 - daily_tracker - WARNING  -       ⚠️ No data found for BLNK on 2026-02-20. Skipping.
+2026-02-22 06:08:21 - daily_tracker - ERROR    - OI Fetch Error for SABR: timed out
+2026-02-22 06:08:21 - daily_tracker - WARNING  -       ⚠️ No data found for SABR on 2026-02-20. Skipping.
+2026-02-22 06:09:01 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-22 06:09:01 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-20. Skipping.
+2026-02-22 06:09:41 - daily_tracker - ERROR    - OI Fetch Error for CRON: timed out
+2026-02-22 06:09:41 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-02-20. Skipping.
+2026-02-22 06:10:21 - daily_tracker - ERROR    - OI Fetch Error for TLRY: timed out
+2026-02-22 06:10:21 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-20. Skipping.
+2026-02-22 06:11:01 - daily_tracker - ERROR    - OI Fetch Error for MAPS: timed out
+2026-02-22 06:11:01 - daily_tracker - WARNING  -       ⚠️ No data found for MAPS on 2026-02-20. Skipping.
+2026-02-22 06:11:41 - daily_tracker - ERROR    - OI Fetch Error for RC: timed out
+2026-02-22 06:11:41 - daily_tracker - WARNING  -       ⚠️ No data found for RC on 2026-02-20. Skipping.
+2026-02-22 06:12:21 - daily_tracker - ERROR    - OI Fetch Error for ASST: timed out
+2026-02-22 06:12:21 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: ASST (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:12:21 - daily_tracker - INFO     - 🏁 ASST (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:12:21 - daily_tracker - INFO     -       👉 ASST updated: SCALED -> SCALED_EXP
+2026-02-22 06:13:01 - daily_tracker - ERROR    - OI Fetch Error for ALTS: timed out
+2026-02-22 06:13:01 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: ALTS (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:13:01 - daily_tracker - INFO     - 🏁 ALTS (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:13:02 - daily_tracker - INFO     -       👉 ALTS updated: SCALED -> SCALED_EXP
+2026-02-22 06:13:42 - daily_tracker - ERROR    - OI Fetch Error for INVZ: timed out
+2026-02-22 06:13:42 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: INVZ (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:13:42 - daily_tracker - INFO     -       👉 INVZ updated: OPEN -> EXPIRED
+2026-02-22 06:14:22 - daily_tracker - ERROR    - OI Fetch Error for GPRO: timed out
+2026-02-22 06:14:22 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: GPRO (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:14:23 - daily_tracker - INFO     -       👉 GPRO updated: OPEN -> EXPIRED
+2026-02-22 06:15:03 - daily_tracker - ERROR    - OI Fetch Error for JBLU: timed out
+2026-02-22 06:15:03 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: JBLU (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:15:03 - daily_tracker - INFO     - 🏁 JBLU (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:15:03 - daily_tracker - INFO     -       👉 JBLU updated: SCALED -> SCALED_EXP
+2026-02-22 06:15:43 - daily_tracker - ERROR    - OI Fetch Error for ALTO: timed out
+2026-02-22 06:15:43 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: ALTO (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:15:43 - daily_tracker - INFO     - 🏁 ALTO (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:15:43 - daily_tracker - INFO     -       👉 ALTO updated: SCALED -> SCALED_EXP
+2026-02-22 06:16:23 - daily_tracker - ERROR    - OI Fetch Error for FLUX: timed out
+2026-02-22 06:16:23 - daily_tracker - WARNING  -       ⚠️ No data found for FLUX on 2026-02-20. Skipping.
+2026-02-22 06:17:04 - daily_tracker - ERROR    - OI Fetch Error for CAN: timed out
+2026-02-22 06:17:04 - daily_tracker - WARNING  -       ⚠️ No data found for CAN on 2026-02-20. Skipping.
+2026-02-22 06:17:44 - daily_tracker - ERROR    - OI Fetch Error for UAA: timed out
+2026-02-22 06:17:44 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: UAA (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:17:44 - daily_tracker - INFO     - 🏁 UAA (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:17:44 - daily_tracker - INFO     -       👉 UAA updated: SCALED -> SCALED_EXP
+2026-02-22 06:18:24 - daily_tracker - ERROR    - OI Fetch Error for SABR: timed out
+2026-02-22 06:18:24 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: SABR (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:18:24 - daily_tracker - INFO     - 🏁 SABR (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:18:24 - daily_tracker - INFO     -       👉 SABR updated: SCALED -> SCALED_EXP
+2026-02-22 06:19:04 - daily_tracker - ERROR    - OI Fetch Error for SGMO: timed out
+2026-02-22 06:19:04 - daily_tracker - WARNING  -       ⚠️ No data found for SGMO on 2026-02-20. Skipping.
+2026-02-22 06:19:44 - daily_tracker - ERROR    - OI Fetch Error for ARBE: timed out
+2026-02-22 06:19:44 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE on 2026-02-20. Skipping.
+2026-02-22 06:20:24 - daily_tracker - ERROR    - OI Fetch Error for UP: timed out
+2026-02-22 06:20:24 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: UP (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:20:24 - daily_tracker - INFO     - 🏁 UP (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:20:25 - daily_tracker - INFO     -       👉 UP updated: SCALED -> SCALED_EXP
+2026-02-22 06:21:05 - daily_tracker - ERROR    - OI Fetch Error for UWMC: timed out
+2026-02-22 06:21:05 - daily_tracker - WARNING  -       ⚠️ No data found for UWMC on 2026-02-20. Skipping.
+2026-02-22 06:21:45 - daily_tracker - ERROR    - OI Fetch Error for DGXX: timed out
+2026-02-22 06:21:45 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: DGXX (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:21:45 - daily_tracker - INFO     - 🏁 DGXX (SCALED) has expired. Moving to SCALED_EXP.
+2026-02-22 06:21:45 - daily_tracker - INFO     -       👉 DGXX updated: SCALED -> SCALED_EXP
+2026-02-22 06:22:25 - daily_tracker - ERROR    - OI Fetch Error for AMC: timed out
+2026-02-22 06:22:25 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: AMC (Exp: 2026-02-20 vs Date: 2026-02-20)
+2026-02-22 06:22:25 - daily_tracker - INFO     -       👉 AMC updated: OPEN -> EXPIRED
+2026-02-22 06:22:25 - daily_tracker - INFO     -    ✅ Batch 2026-02-20 Complete. Updated 17 trades.
+2026-02-22 06:22:25 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-20
+2026-02-22 06:22:25 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-23 05:02:25 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2026-02-23 05:02:25 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2026-02-23 06:00:17 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-23 06:00:17 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-21 to 2026-02-21
+2026-02-23 06:00:17 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-21
+2026-02-23 06:00:17 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-24 06:00:19 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-24 06:00:19 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-21 to 2026-02-22
+2026-02-24 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-21
+2026-02-24 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-22
+2026-02-24 06:00:19 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-25 06:00:19 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-25 06:00:19 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-21 to 2026-02-23
+2026-02-25 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-21
+2026-02-25 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-22
+2026-02-25 06:00:19 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-23
+2026-02-25 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-23. Skipping.
+2026-02-25 06:00:26 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-23. Skipping.
+2026-02-25 06:00:27 - daily_tracker - INFO     -       👉 MAPS updated: OPEN -> STOP_OI
+2026-02-25 06:00:28 - daily_tracker - INFO     -       👉 FLUX updated: OPEN -> STOP_OI
+2026-02-25 06:00:31 - daily_tracker - INFO     -    ✅ Batch 2026-02-23 Complete. Updated 14 trades.
+2026-02-25 06:00:31 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-23
+2026-02-25 06:00:31 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-26 06:00:20 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-26 06:00:20 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-24 to 2026-02-24
+2026-02-26 06:00:20 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-24
+2026-02-26 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-24. Skipping.
+2026-02-26 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-24. Skipping.
+2026-02-26 06:00:31 - daily_tracker - INFO     -    ✅ Batch 2026-02-24 Complete. Updated 12 trades.
+2026-02-26 06:00:31 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-24
+2026-02-26 06:00:31 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-27 06:00:20 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-27 06:00:20 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-25 to 2026-02-25
+2026-02-27 06:00:20 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-25
+2026-02-27 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-25. Skipping.
+2026-02-27 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-25. Skipping.
+2026-02-27 06:00:30 - daily_tracker - INFO     -    ✅ Batch 2026-02-25 Complete. Updated 12 trades.
+2026-02-27 06:00:30 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-25
+2026-02-27 06:00:30 - daily_tracker - INFO     - 🏁 All caught up!
+2026-02-27 23:29:21 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-02-27 23:29:21 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-02-27 23:29:21 - listener     - INFO     -       - Embed 1 Title: 🕑 ABR 8.5 C 3/6/2026 (7D) - yeet
+2026-02-27 23:29:21 - listener     - INFO     -    🧩 PARSED OK: ABR 8.5C Exp:2026-03-06 @ $0.05
+2026-02-27 23:29:21 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ABR (ID: 3298)
+2026-02-27 23:34:32 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-02-27 23:34:32 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: 'yeetz should be back soon @everyone'
+2026-02-27 23:37:04 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-02-27 23:37:04 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-02-27 23:37:04 - listener     - INFO     -       - Embed 1 Title: 🕑 SBET 7.5 C 3/6/2026 (7D) - yeet
+2026-02-27 23:37:04 - listener     - INFO     -    🧩 PARSED OK: SBET 7.5C Exp:2026-03-06 @ $0.16
+2026-02-27 23:37:04 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved SBET (ID: 3299)
+2026-02-28 01:25:09 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-02-28 01:25:09 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-02-28 01:25:09 - listener     - INFO     -       - Embed 1 Title: 🕑 NAT 6.0 C 4/17/2026 (49D) - yeet
+2026-02-28 01:25:09 - listener     - INFO     -    🧩 PARSED OK: NAT 6.0C Exp:2026-04-17 @ $0.23
+2026-02-28 01:25:09 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved NAT (ID: 3300)
+2026-02-28 01:30:06 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-02-28 01:30:06 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: 'careful these might be exits'
+2026-02-28 03:24:00 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-02-28 03:24:00 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-02-28 03:24:00 - listener     - INFO     -       - Embed 1 Title: 🕑 BITF 2.5 C 4/17/2026 (49D) - yeet
+2026-02-28 03:24:00 - listener     - INFO     -    🧩 PARSED OK: BITF 2.5C Exp:2026-04-17 @ $0.25
+2026-02-28 03:24:01 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved BITF (ID: 3301)
+2026-02-28 06:00:17 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-02-28 06:00:17 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-26 to 2026-02-26
+2026-02-28 06:00:17 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-26
+2026-02-28 06:00:18 - daily_tracker - WARNING  -       ⚠️ No data found for NRDY on 2026-02-26. Skipping.
+2026-02-28 06:00:19 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-26. Skipping.
+2026-02-28 06:00:20 - daily_tracker - WARNING  -       ⚠️ No data found for SABR on 2026-02-26. Skipping.
+2026-02-28 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for SNDL on 2026-02-26. Skipping.
+2026-02-28 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-26. Skipping.
+2026-02-28 06:00:26 - daily_tracker - INFO     -    ✅ Batch 2026-02-26 Complete. Updated 9 trades.
+2026-02-28 06:00:26 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-26
+2026-02-28 06:00:26 - daily_tracker - INFO     - 🏁 All caught up!
+2026-03-01 06:00:20 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-03-01 06:00:20 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-27 to 2026-02-27
+2026-03-01 06:00:20 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-02-27
+2026-03-01 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-02-27. Skipping.
+2026-03-01 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-02-27. Skipping.
+2026-03-01 06:00:38 - daily_tracker - INFO     -    ✅ Batch 2026-02-27 Complete. Updated 16 trades.
+2026-03-01 06:00:38 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-02-27
+2026-03-01 06:00:38 - daily_tracker - INFO     - 🏁 All caught up!
+2026-03-02 05:02:28 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2026-03-02 05:02:28 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2026-03-02 06:00:18 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-03-02 06:00:18 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-28 to 2026-02-28
+2026-03-02 06:00:18 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-28
+2026-03-02 06:00:18 - daily_tracker - INFO     - 🏁 All caught up!
+2026-03-02 22:46:51 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-02 22:46:51 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-02 22:46:51 - listener     - INFO     -       - Embed 1 Title: 🕑 NAT 6.0 C 3/20/2026 (18D) - yeet
+2026-03-02 22:46:51 - listener     - INFO     -    🧩 PARSED OK: NAT 6.0C Exp:2026-03-20 @ $0.32
+2026-03-02 22:46:52 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved NAT (ID: 3302)
+2026-03-02 22:47:40 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-02 22:47:40 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: ''
+2026-03-02 23:08:55 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-02 23:08:55 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-02 23:08:55 - listener     - INFO     -       - Embed 1 Title: 🕑 EOSE 6.5 C 3/13/2026 (11D) - yeet
+2026-03-02 23:08:55 - listener     - INFO     -    🧩 PARSED OK: EOSE 6.5C Exp:2026-03-13 @ $0.28
+2026-03-02 23:08:55 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved EOSE (ID: 3303)
+2026-03-02 23:14:58 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-02 23:14:58 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-02 23:14:58 - listener     - INFO     -       - Embed 1 Title: 🕑 SPCE 3.0 C 3/6/2026 (4D) - yeet
+2026-03-02 23:14:58 - listener     - INFO     -    🧩 PARSED OK: SPCE 3.0C Exp:2026-03-06 @ $0.04
+2026-03-02 23:14:58 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved SPCE (ID: 3304)
+2026-03-02 23:25:34 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-02 23:25:34 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-02 23:25:34 - listener     - INFO     -       - Embed 1 Title: 🕑 ABR 8.5 C 3/13/2026 (11D) - yeet
+2026-03-02 23:25:34 - listener     - INFO     -    🧩 PARSED OK: ABR 8.5C Exp:2026-03-13 @ $0.16
+2026-03-02 23:25:34 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ABR (ID: 3305)
+2026-03-02 23:39:45 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-02 23:39:45 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-02 23:39:45 - listener     - INFO     -       - Embed 1 Title: 🕑 FCEL 9.0 C 3/6/2026 (4D) - yeet
+2026-03-02 23:39:45 - listener     - INFO     -    🧩 PARSED OK: FCEL 9.0C Exp:2026-03-06 @ $0.15
+2026-03-02 23:39:45 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved FCEL (ID: 3306)
+2026-03-02 23:45:10 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-02 23:45:10 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-02 23:45:10 - listener     - INFO     -       - Embed 1 Title: 🕑 POET 7.5 C 3/6/2026 (4D) - yeet
+2026-03-02 23:45:10 - listener     - INFO     -    🧩 PARSED OK: POET 7.5C Exp:2026-03-06 @ $0.09
+2026-03-02 23:45:11 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved POET (ID: 3307)
+2026-03-03 01:57:21 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-03 01:57:21 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-03 01:57:21 - listener     - INFO     -       - Embed 1 Title: 🕑 OMEX 2.0 C 6/18/2026 (108D) - yeet
+2026-03-03 01:57:21 - listener     - INFO     -    🧩 PARSED OK: OMEX 2.0C Exp:2026-06-18 @ $0.29
+2026-03-03 01:57:21 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved OMEX (ID: 3308)
+2026-03-03 02:29:47 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-03 02:29:47 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-03 02:29:47 - listener     - INFO     -       - Embed 1 Title: 🕑 ABR 9.0 C 3/6/2026 (4D) - yeet
+2026-03-03 02:29:47 - listener     - INFO     -    🧩 PARSED OK: ABR 9.0C Exp:2026-03-06 @ $0.07
+2026-03-03 02:29:47 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ABR (ID: 3309)
+2026-03-03 06:00:17 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-03-03 06:00:17 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-28 to 2026-03-01
+2026-03-03 06:00:17 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-28
+2026-03-03 06:00:17 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-03-01
+2026-03-03 06:00:17 - daily_tracker - INFO     - 🏁 All caught up!
+2026-03-04 00:19:24 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-04 00:19:24 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-04 00:19:24 - listener     - INFO     -       - Embed 1 Title: 🕑 WTI 4.0 C 4/17/2026 (45D) - yeet
+2026-03-04 00:19:24 - listener     - INFO     -    🧩 PARSED OK: WTI 4.0C Exp:2026-04-17 @ $0.35
+2026-03-04 00:19:24 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved WTI (ID: 3310)
+2026-03-04 02:18:50 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-04 02:18:50 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-04 02:18:50 - listener     - INFO     -       - Embed 1 Title: 🕑 WEN 8.0 C 3/6/2026 (3D) - yeet
+2026-03-04 02:18:50 - listener     - INFO     -    🧩 PARSED OK: WEN 8.0C Exp:2026-03-06 @ $0.05
+2026-03-04 02:18:50 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved WEN (ID: 3311)
+2026-03-04 02:23:06 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-04 02:23:06 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-04 02:23:06 - listener     - INFO     -       - Embed 1 Title: 🕑 POET 7.5 C 3/13/2026 (10D) - yeet
+2026-03-04 02:23:06 - listener     - INFO     -    🧩 PARSED OK: POET 7.5C Exp:2026-03-13 @ $0.43
+2026-03-04 02:23:06 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved POET (ID: 3312)
+2026-03-04 06:00:19 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-03-04 06:00:19 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-02-28 to 2026-03-02
+2026-03-04 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-02-28
+2026-03-04 06:00:19 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-03-01
+2026-03-04 06:00:19 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-03-02
+2026-03-04 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for NRDY on 2026-03-02. Skipping.
+2026-03-04 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-03-02. Skipping.
+2026-03-04 06:00:22 - daily_tracker - WARNING  -       ⚠️ No data found for SNDL on 2026-03-02. Skipping.
+2026-03-04 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for SABR on 2026-03-02. Skipping.
+2026-03-04 06:00:23 - daily_tracker - WARNING  -       ⚠️ No data found for BLNK on 2026-03-02. Skipping.
+2026-03-04 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-03-02. Skipping.
+2026-03-04 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for CRON on 2026-03-02. Skipping.
+2026-03-04 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-03-02. Skipping.
+2026-03-04 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for RC on 2026-03-02. Skipping.
+2026-03-04 06:00:27 - daily_tracker - WARNING  -       ⚠️ No data found for ARBE on 2026-03-02. Skipping.
+2026-03-04 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for UWMC on 2026-03-02. Skipping.
+2026-03-04 06:00:28 - daily_tracker - INFO     - ⚓ SETTLEMENT: ABR OI settled at 3070. New Stop: 614
+2026-03-04 06:00:29 - daily_tracker - INFO     -       👉 ABR updated: OPEN -> SCALED
+2026-03-04 06:00:29 - daily_tracker - WARNING  -       ⚠️ No data found for SBET on 2026-03-02. Skipping.
+2026-03-04 06:00:30 - daily_tracker - INFO     - ⚓ SETTLEMENT: NAT OI settled at 7655. New Stop: 1531
+2026-03-04 06:00:30 - daily_tracker - INFO     - ⚓ SETTLEMENT: BITF OI settled at 1. New Stop: 0
+2026-03-04 06:00:32 - daily_tracker - WARNING  -       ⚠️ No data found for EOSE on 2026-03-02. Skipping.
+2026-03-04 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for SPCE on 2026-03-02. Skipping.
+2026-03-04 06:00:33 - daily_tracker - WARNING  -       ⚠️ No data found for ABR on 2026-03-02. Skipping.
+2026-03-04 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for FCEL on 2026-03-02. Skipping.
+2026-03-04 06:00:34 - daily_tracker - WARNING  -       ⚠️ No data found for POET on 2026-03-02. Skipping.
+2026-03-04 06:00:35 - daily_tracker - WARNING  -       ⚠️ No data found for OMEX on 2026-03-02. Skipping.
+2026-03-04 06:00:36 - daily_tracker - INFO     -    ✅ Batch 2026-03-02 Complete. Updated 8 trades.
+2026-03-04 06:00:36 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-03-02
+2026-03-04 06:00:36 - daily_tracker - INFO     - 🏁 All caught up!
+2026-03-04 22:48:52 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-04 22:48:52 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-04 22:48:52 - listener     - INFO     -       - Embed 1 Title: 🕑 ABR 9.0 C 3/6/2026 (2D) - yeet
+2026-03-04 22:48:52 - listener     - INFO     -    🧩 PARSED OK: ABR 9.0C Exp:2026-03-06 @ $0.06
+2026-03-04 22:48:53 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ABR (ID: 3313)
+2026-03-04 23:28:39 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-04 23:28:39 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-04 23:28:39 - listener     - INFO     -       - Embed 1 Title: 🕑 PTON 4.0 C 3/6/2026 (2D) - yeet
+2026-03-04 23:28:39 - listener     - INFO     -    🧩 PARSED OK: PTON 4.0C Exp:2026-03-06 @ $0.1
+2026-03-04 23:28:39 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved PTON (ID: 3314)
+2026-03-04 23:49:55 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-04 23:49:55 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-04 23:49:55 - listener     - INFO     -       - Embed 1 Title: 🕑 FUBO 1.5 C 3/13/2026 (9D) - yeet
+2026-03-04 23:49:55 - listener     - INFO     -    🧩 PARSED OK: FUBO 1.5C Exp:2026-03-13 @ $0.03
+2026-03-04 23:49:55 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved FUBO (ID: 3315)
+2026-03-05 01:01:53 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-05 01:01:53 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-05 01:01:53 - listener     - INFO     -       - Embed 1 Title: 🕑 ENVX 5.5 C 3/6/2026 (2D) - yeet
+2026-03-05 01:01:53 - listener     - INFO     -    🧩 PARSED OK: ENVX 5.5C Exp:2026-03-06 @ $0.1
+2026-03-05 01:01:53 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ENVX (ID: 3316)
+2026-03-05 01:18:32 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-05 01:18:32 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-05 01:18:32 - listener     - INFO     -       - Embed 1 Title: 🕑 CLOV 2.5 C 3/13/2026 (9D) - yeet
+2026-03-05 01:18:32 - listener     - INFO     -    🧩 PARSED OK: CLOV 2.5C Exp:2026-03-13 @ $0.03
+2026-03-05 01:18:32 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved CLOV (ID: 3317)
+2026-03-05 06:00:18 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-03-05 06:00:18 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-03-03 to 2026-03-03
+2026-03-05 06:00:18 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-03-03
+2026-03-05 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-03-03. Skipping.
+2026-03-05 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-03-03. Skipping.
+2026-03-05 06:00:30 - daily_tracker - INFO     -       👉 NAT updated: OPEN -> SCALED
+2026-03-05 06:00:31 - daily_tracker - INFO     - ⚓ SETTLEMENT: NAT OI settled at 4159. New Stop: 831
+2026-03-05 06:00:32 - daily_tracker - INFO     - ⚓ SETTLEMENT: ABR OI settled at 3205. New Stop: 641
+2026-03-05 06:00:32 - daily_tracker - INFO     -       👉 ABR updated: OPEN -> SCALED
+2026-03-05 06:00:33 - daily_tracker - INFO     - ⚓ SETTLEMENT: SBET OI settled at 4467. New Stop: 893
+2026-03-05 06:00:33 - daily_tracker - INFO     -       👉 SBET updated: OPEN -> SCALED
+2026-03-05 06:00:33 - daily_tracker - INFO     - ⚓ SETTLEMENT: EOSE OI settled at 3085. New Stop: 617
+2026-03-05 06:00:33 - daily_tracker - INFO     -       👉 EOSE updated: OPEN -> SCALED
+2026-03-05 06:00:34 - daily_tracker - INFO     - ⚓ SETTLEMENT: SPCE OI settled at 13454. New Stop: 2690
+2026-03-05 06:00:35 - daily_tracker - INFO     - ⚓ SETTLEMENT: ABR OI settled at 1909. New Stop: 381
+2026-03-05 06:00:35 - daily_tracker - INFO     -       👉 ABR updated: OPEN -> SCALED
+2026-03-05 06:00:35 - daily_tracker - INFO     - ⚓ SETTLEMENT: FCEL OI settled at 2424. New Stop: 484
+2026-03-05 06:00:36 - daily_tracker - INFO     - ⚓ SETTLEMENT: POET OI settled at 7670. New Stop: 1534
+2026-03-05 06:00:36 - daily_tracker - INFO     -       👉 POET updated: OPEN -> SCALED
+2026-03-05 06:00:37 - daily_tracker - INFO     - ⚓ SETTLEMENT: OMEX OI settled at 2316. New Stop: 463
+2026-03-05 06:00:40 - daily_tracker - INFO     -    ✅ Batch 2026-03-03 Complete. Updated 27 trades.
+2026-03-05 06:00:40 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-03-03
+2026-03-05 06:00:40 - daily_tracker - INFO     - 🏁 All caught up!
+2026-03-05 22:35:13 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-05 22:35:13 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-05 22:35:13 - listener     - INFO     -       - Embed 1 Title: 🕑 ALTO 4.0 C 3/20/2026 (15D) - yeet
+2026-03-05 22:35:13 - listener     - INFO     -    🧩 PARSED OK: ALTO 4.0C Exp:2026-03-20 @ $0.19
+2026-03-05 22:35:13 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ALTO (ID: 3318)
+2026-03-05 23:04:14 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-05 23:04:14 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-05 23:04:14 - listener     - INFO     -       - Embed 1 Title: 🕑 IQ 1.5 C 3/20/2026 (15D) - yeet
+2026-03-05 23:04:14 - listener     - INFO     -    🧩 PARSED OK: IQ 1.5C Exp:2026-03-20 @ $0.06
+2026-03-05 23:04:14 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved IQ (ID: 3319)
+2026-03-05 23:47:48 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-05 23:47:48 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-05 23:47:48 - listener     - INFO     -       - Embed 1 Title: 🕑 IOVA 4.5 C 3/6/2026 (1D) - yeet
+2026-03-05 23:47:48 - listener     - INFO     -    🧩 PARSED OK: IOVA 4.5C Exp:2026-03-06 @ $0.05
+2026-03-05 23:47:48 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved IOVA (ID: 3320)
+2026-03-05 23:55:33 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-05 23:55:33 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-05 23:55:33 - listener     - INFO     -       - Embed 1 Title: 🕑 NVAX 10.5 C 3/6/2026 (1D) - yeet
+2026-03-05 23:55:33 - listener     - INFO     -    🧩 PARSED OK: NVAX 10.5C Exp:2026-03-06 @ $0.06
+2026-03-05 23:55:33 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved NVAX (ID: 3321)
+2026-03-06 06:00:18 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-03-06 06:00:18 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-03-04 to 2026-03-04
+2026-03-06 06:00:18 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-03-04
+2026-03-06 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-03-04. Skipping.
+2026-03-06 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-03-04. Skipping.
+2026-03-06 06:00:42 - daily_tracker - INFO     - ⚓ SETTLEMENT: WTI OI settled at 4865. New Stop: 973
+2026-03-06 06:00:43 - daily_tracker - INFO     - ⚓ SETTLEMENT: WEN OI settled at 3670. New Stop: 734
+2026-03-06 06:00:43 - daily_tracker - INFO     -       👉 WEN updated: OPEN -> SCALED
+2026-03-06 06:00:44 - daily_tracker - INFO     - ⚓ SETTLEMENT: POET OI settled at 2297. New Stop: 459
+2026-03-06 06:00:44 - daily_tracker - INFO     -    ✅ Batch 2026-03-04 Complete. Updated 32 trades.
+2026-03-06 06:00:44 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-03-04
+2026-03-06 06:00:44 - daily_tracker - INFO     - 🏁 All caught up!
+2026-03-06 23:15:02 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-06 23:15:02 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-06 23:15:02 - listener     - INFO     -       - Embed 1 Title: 🕑 BBAI 4.5 C 3/13/2026 (7D) - yeet
+2026-03-06 23:15:02 - listener     - INFO     -    🧩 PARSED OK: BBAI 4.5C Exp:2026-03-13 @ $0.18
+2026-03-06 23:15:02 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved BBAI (ID: 3322)
+2026-03-06 23:38:32 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-06 23:38:32 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-06 23:38:32 - listener     - INFO     -       - Embed 1 Title: 🕑 ABR 9.0 C 3/13/2026 (7D) - yeet
+2026-03-06 23:38:32 - listener     - INFO     -    🧩 PARSED OK: ABR 9.0C Exp:2026-03-13 @ $0.09
+2026-03-06 23:38:32 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved ABR (ID: 3323)
+2026-03-07 00:08:26 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-07 00:08:26 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-07 00:08:26 - listener     - INFO     -       - Embed 1 Title: 🕑 CHPT 6.5 C 3/13/2026 (7D) - yeet
+2026-03-07 00:08:26 - listener     - INFO     -    🧩 PARSED OK: CHPT 6.5C Exp:2026-03-13 @ $0.16
+2026-03-07 00:08:26 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved CHPT (ID: 3324)
+2026-03-07 06:00:21 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-03-07 06:00:21 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-03-05 to 2026-03-05
+2026-03-07 06:00:21 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-03-05
+2026-03-07 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-03-05. Skipping.
+2026-03-07 06:00:28 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-03-05. Skipping.
+2026-03-07 06:00:45 - daily_tracker - INFO     - ⚓ SETTLEMENT: ABR OI settled at 6238. New Stop: 1247
+2026-03-07 06:00:46 - daily_tracker - INFO     - ⚓ SETTLEMENT: PTON OI settled at 3234. New Stop: 646
+2026-03-07 06:00:46 - daily_tracker - INFO     - ⚓ SETTLEMENT: FUBO OI settled at 14038. New Stop: 2807
+2026-03-07 06:00:47 - daily_tracker - INFO     -       👉 FUBO updated: OPEN -> SCALED
+2026-03-07 06:00:47 - daily_tracker - INFO     - ⚓ SETTLEMENT: ENVX OI settled at 4347. New Stop: 869
+2026-03-07 06:00:48 - daily_tracker - INFO     - ⚓ SETTLEMENT: CLOV OI settled at 14853. New Stop: 2970
+2026-03-07 06:00:48 - daily_tracker - INFO     -       👉 CLOV updated: OPEN -> SCALED
+2026-03-07 06:00:50 - daily_tracker - INFO     -    ✅ Batch 2026-03-05 Complete. Updated 36 trades.
+2026-03-07 06:00:50 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-03-05
+2026-03-07 06:00:50 - daily_tracker - INFO     - 🏁 All caught up!
+2026-03-08 06:00:18 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-03-08 06:00:18 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-03-06 to 2026-03-06
+2026-03-08 06:00:18 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-03-06
+2026-03-08 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-03-06. Skipping.
+2026-03-08 06:00:24 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-03-06. Skipping.
+2026-03-08 06:00:29 - daily_tracker - INFO     - 🏁 ABR (SCALED) has expired. Moving to SCALED_EXP.
+2026-03-08 06:00:29 - daily_tracker - INFO     -       👉 ABR updated: SCALED -> SCALED_EXP
+2026-03-08 06:00:29 - daily_tracker - INFO     - 🏁 SBET (SCALED) has expired. Moving to SCALED_EXP.
+2026-03-08 06:00:29 - daily_tracker - INFO     -       👉 SBET updated: SCALED -> SCALED_EXP
+2026-03-08 06:00:31 - daily_tracker - INFO     -       👉 SPCE updated: OPEN -> SCALED
+2026-03-08 06:00:32 - daily_tracker - INFO     -       👉 FCEL updated: OPEN -> EXPIRED
+2026-03-08 06:00:33 - daily_tracker - INFO     - 🏁 POET (SCALED) has expired. Moving to SCALED_EXP.
+2026-03-08 06:00:33 - daily_tracker - INFO     -       👉 POET updated: SCALED -> SCALED_EXP
+2026-03-08 06:00:34 - daily_tracker - INFO     - 🏁 ABR (SCALED) has expired. Moving to SCALED_EXP.
+2026-03-08 06:00:34 - daily_tracker - INFO     -       👉 ABR updated: SCALED -> SCALED_EXP
+2026-03-08 06:00:37 - daily_tracker - INFO     - 🏁 WEN (SCALED) has expired. Moving to SCALED_EXP.
+2026-03-08 06:00:37 - daily_tracker - INFO     -       👉 WEN updated: SCALED -> SCALED_EXP
+2026-03-08 06:00:41 - daily_tracker - INFO     - ⚓ SETTLEMENT: ALTO OI settled at 5960. New Stop: 1192
+2026-03-08 06:00:41 - daily_tracker - INFO     -       👉 ALTO updated: OPEN -> SCALED
+2026-03-08 06:00:41 - daily_tracker - INFO     - ⚓ SETTLEMENT: IQ OI settled at 4343. New Stop: 868
+2026-03-08 06:00:42 - daily_tracker - INFO     -       👉 IQ updated: OPEN -> SCALED
+2026-03-08 06:00:42 - daily_tracker - INFO     - ⚓ SETTLEMENT: IOVA OI settled at 2308. New Stop: 461
+2026-03-08 06:00:42 - daily_tracker - INFO     -       👉 IOVA updated: OPEN -> SCALED
+2026-03-08 06:00:43 - daily_tracker - INFO     - ⚓ SETTLEMENT: NVAX OI settled at 2619. New Stop: 523
+2026-03-08 06:00:43 - daily_tracker - INFO     -       👉 NVAX updated: OPEN -> EXPIRED
+2026-03-08 06:00:45 - daily_tracker - INFO     -       👉 ABR updated: OPEN -> EXPIRED
+2026-03-08 06:00:45 - daily_tracker - INFO     -       👉 PTON updated: OPEN -> EXPIRED
+2026-03-08 06:00:47 - daily_tracker - INFO     -       👉 ENVX updated: OPEN -> EXPIRED
+2026-03-08 06:00:48 - daily_tracker - INFO     -    ✅ Batch 2026-03-06 Complete. Updated 39 trades.
+2026-03-08 06:00:48 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-03-06
+2026-03-08 06:00:48 - daily_tracker - INFO     - 🏁 All caught up!
+2026-03-09 05:02:35 - listener     - INFO     - ✅ Logged in as yeetzTracker#4076
+2026-03-09 05:02:35 - listener     - INFO     - 👂 Listening to Target Channel ID: 1405240666337841152
+2026-03-09 06:00:21 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-03-09 06:00:21 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-03-07 to 2026-03-07
+2026-03-09 06:00:21 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-03-07
+2026-03-09 06:00:21 - daily_tracker - INFO     - 🏁 All caught up!
+2026-03-09 22:04:30 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-09 22:04:30 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-09 22:04:30 - listener     - INFO     -       - Embed 1 Title: 🕑 LAC 5.0 C 4/17/2026 (39D) - yeet
+2026-03-09 22:04:30 - listener     - INFO     -    🧩 PARSED OK: LAC 5.0C Exp:2026-04-17 @ $0.28
+2026-03-09 22:04:30 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved LAC (ID: 3325)
+2026-03-09 22:09:02 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-09 22:09:02 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: 'Da Cluck^ ???'
+2026-03-09 22:26:27 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-09 22:26:27 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-09 22:26:27 - listener     - INFO     -       - Embed 1 Title: 🕑 PAYO 5.0 C 4/17/2026 (39D) - yeet
+2026-03-09 22:26:27 - listener     - INFO     -    🧩 PARSED OK: PAYO 5.0C Exp:2026-04-17 @ $0.37
+2026-03-09 22:26:27 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved PAYO (ID: 3326)
+2026-03-09 22:28:18 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-09 22:28:18 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: 'Da cluck?? ^^^'
+2026-03-09 22:35:20 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-09 22:35:20 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: 'er 3/27 lac'
+2026-03-09 22:49:27 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-09 22:49:27 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: 'I’m in both'
+2026-03-09 23:21:39 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-09 23:21:39 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-09 23:21:39 - listener     - INFO     -       - Embed 1 Title: 🕑 PTON 4.0 C 3/13/2026 (4D) - yeet
+2026-03-09 23:21:39 - listener     - INFO     -    🧩 PARSED OK: PTON 4.0C Exp:2026-03-13 @ $0.07
+2026-03-09 23:21:39 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved PTON (ID: 3327)
+2026-03-09 23:22:17 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-09 23:22:17 - listener     - WARNING  -    ⚠️ Message has no embeds. Content: 'This is interesting^'
+2026-03-09 23:54:35 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-09 23:54:35 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-09 23:54:35 - listener     - INFO     -       - Embed 1 Title: 🕑 FCEL 8.0 C 3/13/2026 (4D) - yeet
+2026-03-09 23:54:35 - listener     - INFO     -    🧩 PARSED OK: FCEL 8.0C Exp:2026-03-13 @ $0.1
+2026-03-09 23:54:35 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved FCEL (ID: 3328)
+2026-03-10 03:26:12 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-10 03:26:12 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-10 03:26:12 - listener     - INFO     -       - Embed 1 Title: 🕑 LAC 5.0 C 3/20/2026 (11D) - yeet
+2026-03-10 03:26:12 - listener     - INFO     -    🧩 PARSED OK: LAC 5.0C Exp:2026-03-20 @ $0.15
+2026-03-10 03:26:13 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved LAC (ID: 3329)
+2026-03-10 03:29:15 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-10 03:29:15 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-10 03:29:15 - listener     - INFO     -       - Embed 1 Title: 🕑 RR 2.5 C 3/20/2026 (11D) - yeet
+2026-03-10 03:29:15 - listener     - INFO     -    🧩 PARSED OK: RR 2.5C Exp:2026-03-20 @ $0.16
+2026-03-10 03:29:15 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved RR (ID: 3330)
+2026-03-10 06:00:24 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-03-10 06:00:24 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-03-07 to 2026-03-08
+2026-03-10 06:00:24 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-03-07
+2026-03-10 06:00:24 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-03-08
+2026-03-10 06:00:24 - daily_tracker - INFO     - 🏁 All caught up!
+2026-03-10 21:39:53 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-10 21:39:53 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-10 21:39:53 - listener     - INFO     -       - Embed 1 Title: 🕑 SAVA 2.5 C 3/13/2026 (3D) - yeet
+2026-03-10 21:39:53 - listener     - INFO     -    🧩 PARSED OK: SAVA 2.5C Exp:2026-03-13 @ $0.07
+2026-03-10 21:39:53 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved SAVA (ID: 3331)
+2026-03-10 21:48:53 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-10 21:48:53 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-10 21:48:53 - listener     - INFO     -       - Embed 1 Title: 🕑 RXT 2.5 C 3/13/2026 (3D) - yeet
+2026-03-10 21:48:53 - listener     - INFO     -    🧩 PARSED OK: RXT 2.5C Exp:2026-03-13 @ $0.1
+2026-03-10 21:48:53 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved RXT (ID: 3332)
+2026-03-10 22:07:01 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-10 22:07:01 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-10 22:07:01 - listener     - INFO     -       - Embed 1 Title: 🕑 RILY 8.5 C 3/13/2026 (3D) - yeet
+2026-03-10 22:07:01 - listener     - INFO     -    🧩 PARSED OK: RILY 8.5C Exp:2026-03-13 @ $0.19
+2026-03-10 22:07:01 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved RILY (ID: 3333)
+2026-03-10 23:02:15 - listener     - INFO     - 🎯 MESSAGE RECEIVED in Target Channel (#yeetz)
+2026-03-10 23:02:15 - listener     - INFO     -    📄 Found 1 Embeds. Processing...
+2026-03-10 23:02:15 - listener     - INFO     -       - Embed 1 Title: 🕑 DFDV 5.0 C 3/20/2026 (10D) - yeet
+2026-03-10 23:02:15 - listener     - INFO     -    🧩 PARSED OK: DFDV 5.0C Exp:2026-03-20 @ $0.17
+2026-03-10 23:02:15 - listener     - INFO     -    ✅ 💾 DATABASE SUCCESS: Saved DFDV (ID: 3334)
+2026-03-11 06:00:18 - daily_tracker - INFO     - 🚀 Starting Smart Tracker...
+2026-03-11 06:00:18 - daily_tracker - INFO     - 📉 Gap Detected! Catching up from 2026-03-07 to 2026-03-09
+2026-03-11 06:00:18 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-03-07
+2026-03-11 06:00:18 - daily_tracker - INFO     - ⏭️ Skipping Weekend: 2026-03-08
+2026-03-11 06:00:18 - daily_tracker - INFO     - 🗓️ Processing Batch: 2026-03-09
+2026-03-11 06:00:21 - daily_tracker - WARNING  -       ⚠️ No data found for ASST on 2026-03-09. Skipping.
+2026-03-11 06:00:25 - daily_tracker - WARNING  -       ⚠️ No data found for TLRY on 2026-03-09. Skipping.
+2026-03-11 06:00:30 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: SPCE (Exp: 2026-03-06 vs Date: 2026-03-09)
+2026-03-11 06:00:30 - daily_tracker - INFO     - 🏁 SPCE (SCALED) has expired. Moving to SCALED_EXP.
+2026-03-11 06:00:30 - daily_tracker - INFO     -       👉 SPCE updated: SCALED -> SCALED_EXP
+2026-03-11 06:00:36 - daily_tracker - INFO     -       👉 WTI updated: OPEN -> SCALED
+2026-03-11 06:00:38 - daily_tracker - INFO     - ⚓ SETTLEMENT: BBAI OI settled at 15823. New Stop: 3164
+2026-03-11 06:00:38 - daily_tracker - INFO     - ⚓ SETTLEMENT: ABR OI settled at 5117. New Stop: 1023
+2026-03-11 06:00:43 - daily_tracker - INFO     - ⚓ SETTLEMENT: CHPT OI settled at 2032. New Stop: 406
+2026-03-11 06:00:45 - daily_tracker - WARNING  -       🧟 Zombie Trade Detected: IOVA (Exp: 2026-03-06 vs Date: 2026-03-09)
+2026-03-11 06:00:45 - daily_tracker - INFO     - 🏁 IOVA (SCALED) has expired. Moving to SCALED_EXP.
+2026-03-11 06:00:45 - daily_tracker - INFO     -       👉 IOVA updated: SCALED -> SCALED_EXP
+2026-03-11 06:00:47 - daily_tracker - INFO     -    ✅ Batch 2026-03-09 Complete. Updated 35 trades.
+2026-03-11 06:00:47 - daily_tracker - INFO     - 💾 Checkpoint saved: 2026-03-09
+2026-03-11 06:00:47 - daily_tracker - INFO     - 🏁 All caught up!
